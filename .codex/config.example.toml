@@ -1,0 +1,71 @@
+# Example Codex configuration for web development.
+# Copy only the entries you need into ~/.codex/config.toml.
+# Keep tokens in environment variables. Do not commit real secrets.
+
+# OpenAI developer docs. Useful for current OpenAI/Codex/API documentation.
+[mcp_servers.openai_docs]
+url = "https://developers.openai.com/mcp"
+enabled = false
+default_tools_approval_mode = "approve"
+
+# Context7. Useful for current library/framework documentation.
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
+enabled = false
+startup_timeout_sec = 20
+tool_timeout_sec = 60
+default_tools_approval_mode = "approve"
+
+# Playwright browser automation. Useful for frontend QA and interaction checks.
+[mcp_servers.playwright]
+command = "npx"
+args = ["@playwright/mcp@latest"]
+enabled = false
+startup_timeout_sec = 30
+tool_timeout_sec = 90
+default_tools_approval_mode = "prompt"
+
+# Chrome DevTools MCP. Use when you specifically need Chrome inspection.
+[mcp_servers.chrome_devtools]
+command = "npx"
+args = ["-y", "chrome-devtools-mcp@latest"]
+enabled = false
+startup_timeout_sec = 30
+tool_timeout_sec = 90
+default_tools_approval_mode = "prompt"
+
+# Local Git repository tools. Codex already has git/shell in many environments;
+# enable this only if your client needs MCP-native git operations.
+[mcp_servers.git]
+command = "uvx"
+args = ["mcp-server-git", "--repository", "."]
+enabled = false
+default_tools_approval_mode = "prompt"
+
+# Web fetch. Use only when browsing/fetching is allowed for the task.
+[mcp_servers.fetch]
+command = "uvx"
+args = ["mcp-server-fetch"]
+enabled = false
+default_tools_approval_mode = "prompt"
+
+# GitHub remote MCP. Requires authentication in the host/client.
+# Prefer the least-privileged token or OAuth flow.
+[mcp_servers.github]
+url = "https://api.githubcopilot.com/mcp/"
+enabled = false
+default_tools_approval_mode = "prompt"
+
+# PostgreSQL example for a local development database.
+# Keep this read-only where possible and never point it at production by default.
+# [mcp_servers.postgres_dev]
+# command = "npx"
+# args = ["-y", "@modelcontextprotocol/server-postgres", "postgresql://localhost/mydb"]
+# enabled = false
+# default_tools_approval_mode = "prompt"
+
+# Windows fallback for npx-based MCP servers:
+# If direct command = "npx" does not launch, use:
+# command = "cmd"
+# args = ["/c", "npx", "-y", "PACKAGE_NAME"]
