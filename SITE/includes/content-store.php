@@ -111,6 +111,23 @@ function split_lines(string $value): array
     $lines = preg_split('/\R+/', $value) ?: [];
     return array_values(array_filter(array_map('trim', $lines), static fn (string $line): bool => $line !== ''));
 }
+
+function content_date_today(): string
+{
+    return date('d/m/Y');
+}
+
+function touch_content_dates(array $item, bool $isNew = false): array
+{
+    if ($isNew || empty($item['post_date'])) {
+        $item['post_date'] = content_date_today();
+    }
+
+    $item['last_update'] = content_date_today();
+
+    return $item;
+}
+
 function collect_upload_paths(mixed $value): array
 {
     $paths = [];

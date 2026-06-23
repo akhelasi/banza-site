@@ -22,6 +22,8 @@ CREATE TABLE IF NOT EXISTS pages (
   body MEDIUMTEXT NOT NULL,
   hero_image VARCHAR(255) NULL,
   status ENUM('draft', 'published') NOT NULL DEFAULT 'draft',
+  post_date CHAR(10) NULL,
+  last_update CHAR(10) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP NULL DEFAULT NULL
@@ -39,6 +41,8 @@ CREATE TABLE IF NOT EXISTS posts (
   is_featured TINYINT(1) NOT NULL DEFAULT 0,
   view_count INT UNSIGNED NOT NULL DEFAULT 0,
   status ENUM('draft', 'published') NOT NULL DEFAULT 'draft',
+  post_date CHAR(10) NULL,
+  last_update CHAR(10) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP NULL DEFAULT NULL,
@@ -54,7 +58,10 @@ CREATE TABLE IF NOT EXISTS media (
   media_type ENUM('image', 'youtube') NOT NULL DEFAULT 'image',
   youtube_url VARCHAR(255) NULL,
   sort_order INT UNSIGNED NOT NULL DEFAULT 0,
+  post_date CHAR(10) NULL,
+  last_update CHAR(10) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP NULL DEFAULT NULL,
   CONSTRAINT fk_media_post FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE SET NULL,
   INDEX idx_media_post_deleted (post_id, deleted_at)
@@ -64,6 +71,9 @@ CREATE TABLE IF NOT EXISTS settings (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   setting_key VARCHAR(120) NOT NULL UNIQUE,
   setting_value TEXT NULL,
+  post_date CHAR(10) NULL,
+  last_update CHAR(10) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
@@ -73,6 +83,8 @@ CREATE TABLE IF NOT EXISTS social_links (
   url VARCHAR(255) NOT NULL,
   icon VARCHAR(80) NULL,
   sort_order INT UNSIGNED NOT NULL DEFAULT 0,
+  post_date CHAR(10) NULL,
+  last_update CHAR(10) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP NULL DEFAULT NULL
@@ -85,6 +97,8 @@ CREATE TABLE IF NOT EXISTS donation_accounts (
   account_holder VARCHAR(160) NULL,
   note VARCHAR(255) NULL,
   sort_order INT UNSIGNED NOT NULL DEFAULT 0,
+  post_date CHAR(10) NULL,
+  last_update CHAR(10) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP NULL DEFAULT NULL
@@ -98,8 +112,120 @@ CREATE TABLE IF NOT EXISTS contact_messages (
   subject VARCHAR(160) NOT NULL,
   message TEXT NOT NULL,
   read_at DATETIME NULL,
+  post_date CHAR(10) NULL,
+  last_update CHAR(10) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP NULL DEFAULT NULL,
   INDEX idx_contact_messages_deleted_created (deleted_at, created_at),
   INDEX idx_contact_messages_read (read_at)
 );
+
+DELIMITER //
+
+DROP TRIGGER IF EXISTS pages_dates_bi//
+CREATE TRIGGER pages_dates_bi BEFORE INSERT ON pages
+FOR EACH ROW
+BEGIN
+  IF NEW.post_date IS NULL OR NEW.post_date = '' THEN SET NEW.post_date = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y'); END IF;
+  SET NEW.last_update = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y');
+END//
+
+DROP TRIGGER IF EXISTS pages_dates_bu//
+CREATE TRIGGER pages_dates_bu BEFORE UPDATE ON pages
+FOR EACH ROW
+BEGIN
+  SET NEW.last_update = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y');
+END//
+
+DROP TRIGGER IF EXISTS posts_dates_bi//
+CREATE TRIGGER posts_dates_bi BEFORE INSERT ON posts
+FOR EACH ROW
+BEGIN
+  IF NEW.post_date IS NULL OR NEW.post_date = '' THEN SET NEW.post_date = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y'); END IF;
+  SET NEW.last_update = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y');
+END//
+
+DROP TRIGGER IF EXISTS posts_dates_bu//
+CREATE TRIGGER posts_dates_bu BEFORE UPDATE ON posts
+FOR EACH ROW
+BEGIN
+  SET NEW.last_update = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y');
+END//
+
+DROP TRIGGER IF EXISTS media_dates_bi//
+CREATE TRIGGER media_dates_bi BEFORE INSERT ON media
+FOR EACH ROW
+BEGIN
+  IF NEW.post_date IS NULL OR NEW.post_date = '' THEN SET NEW.post_date = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y'); END IF;
+  SET NEW.last_update = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y');
+END//
+
+DROP TRIGGER IF EXISTS media_dates_bu//
+CREATE TRIGGER media_dates_bu BEFORE UPDATE ON media
+FOR EACH ROW
+BEGIN
+  SET NEW.last_update = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y');
+END//
+
+DROP TRIGGER IF EXISTS settings_dates_bi//
+CREATE TRIGGER settings_dates_bi BEFORE INSERT ON settings
+FOR EACH ROW
+BEGIN
+  IF NEW.post_date IS NULL OR NEW.post_date = '' THEN SET NEW.post_date = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y'); END IF;
+  SET NEW.last_update = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y');
+END//
+
+DROP TRIGGER IF EXISTS settings_dates_bu//
+CREATE TRIGGER settings_dates_bu BEFORE UPDATE ON settings
+FOR EACH ROW
+BEGIN
+  SET NEW.last_update = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y');
+END//
+
+DROP TRIGGER IF EXISTS social_links_dates_bi//
+CREATE TRIGGER social_links_dates_bi BEFORE INSERT ON social_links
+FOR EACH ROW
+BEGIN
+  IF NEW.post_date IS NULL OR NEW.post_date = '' THEN SET NEW.post_date = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y'); END IF;
+  SET NEW.last_update = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y');
+END//
+
+DROP TRIGGER IF EXISTS social_links_dates_bu//
+CREATE TRIGGER social_links_dates_bu BEFORE UPDATE ON social_links
+FOR EACH ROW
+BEGIN
+  SET NEW.last_update = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y');
+END//
+
+DROP TRIGGER IF EXISTS donation_accounts_dates_bi//
+CREATE TRIGGER donation_accounts_dates_bi BEFORE INSERT ON donation_accounts
+FOR EACH ROW
+BEGIN
+  IF NEW.post_date IS NULL OR NEW.post_date = '' THEN SET NEW.post_date = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y'); END IF;
+  SET NEW.last_update = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y');
+END//
+
+DROP TRIGGER IF EXISTS donation_accounts_dates_bu//
+CREATE TRIGGER donation_accounts_dates_bu BEFORE UPDATE ON donation_accounts
+FOR EACH ROW
+BEGIN
+  SET NEW.last_update = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y');
+END//
+
+DROP TRIGGER IF EXISTS contact_messages_dates_bi//
+CREATE TRIGGER contact_messages_dates_bi BEFORE INSERT ON contact_messages
+FOR EACH ROW
+BEGIN
+  IF NEW.post_date IS NULL OR NEW.post_date = '' THEN SET NEW.post_date = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y'); END IF;
+  SET NEW.last_update = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y');
+END//
+
+DROP TRIGGER IF EXISTS contact_messages_dates_bu//
+CREATE TRIGGER contact_messages_dates_bu BEFORE UPDATE ON contact_messages
+FOR EACH ROW
+BEGIN
+  SET NEW.last_update = DATE_FORMAT(CURRENT_DATE(), '%d/%m/%Y');
+END//
+
+DELIMITER ;

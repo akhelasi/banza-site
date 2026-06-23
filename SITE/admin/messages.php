@@ -39,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'mark_read') {
         $content['contactMessages'][$index]['read_at'] = date('c');
+        $content['contactMessages'][$index] = touch_content_dates($content['contactMessages'][$index]);
         save_content_store($content);
         admin_flash('შეტყობინება მოინიშნა წაკითხულად.');
         redirect('messages.php');
@@ -46,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'soft_delete') {
         $content['contactMessages'][$index]['deleted_at'] = date('c');
+        $content['contactMessages'][$index] = touch_content_dates($content['contactMessages'][$index]);
         save_content_store($content);
         admin_flash('შეტყობინება გადავიდა სანაგვეში.');
         redirect('messages.php');

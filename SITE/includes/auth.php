@@ -66,7 +66,9 @@ function logout_admin(): void
 function require_admin(): void
 {
     if (!is_admin_logged_in()) {
-        redirect('login.php');
+        $scriptName = (string) ($_SERVER['SCRIPT_NAME'] ?? '/admin/index.php');
+        $adminPath = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
+        redirect(($adminPath !== '' ? $adminPath : '/admin') . '/login.php');
     }
 }
 

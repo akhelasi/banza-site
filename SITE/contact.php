@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($contactErrors === []) {
         $content = $contentStore ?? [];
         $content['contactMessages'] = is_array($content['contactMessages'] ?? null) ? $content['contactMessages'] : [];
-        $content['contactMessages'][] = [
+        $content['contactMessages'][] = touch_content_dates([
             'slug' => generate_slug('message-' . $oldContact['name'] . '-' . bin2hex(random_bytes(4)), 'message'),
             'name' => $oldContact['name'],
             'email' => $oldContact['email'],
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'created_at' => date('c'),
             'read_at' => '',
             'deleted_at' => '',
-        ];
+        ], true);
 
         if (save_content_store($content)) {
             $_SESSION['contact_flash'] = 'შეტყობინება გაიგზავნა. ადმინისტრატორი ნახავს მას მართვის პანელში.';

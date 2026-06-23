@@ -447,6 +447,31 @@ Known QA limitation:
 - Browser automation through Node REPL/Playwright remains blocked in this environment by an `EPERM` filesystem permission error, so responsive visual QA still needs a manual browser pass before production.
 
 
+## Phase 11: Admin Redirect And Content Date Metadata
+
+Fixed the `/admin` no-trailing-slash login redirect and added content date metadata.
+
+Changed:
+
+- `SITE/includes/auth.php`: admin-only redirects now point to the absolute admin login path, so `http://127.0.0.1:8082/admin` reaches `/admin/login.php` instead of `/login.php`.
+- `SITE/includes/content-store.php`: added `content_date_today()` and `touch_content_dates()` helpers.
+- `SITE/admin/content.php`: news, projects and static page saves now write `post_date` and update `last_update`; soft delete also refreshes `last_update`.
+- `SITE/contact.php`: submitted contact messages now include `post_date` and `last_update`.
+- `SITE/admin/messages.php`: mark-read and soft-delete actions refresh `last_update`.
+- `SITE/admin/trash.php`: restored records refresh `last_update`.
+- `SITE/database/schema.sql`: added `post_date` and `last_update` fields to content-oriented tables and MySQL triggers that fill/update them in `dd/mm/YYYY` format.
+
+Verification:
+
+- `/admin` now resolves to the admin login page instead of a root `/login.php` 404.
+- End-to-end admin content create flow verified that new content gets `post_date` and `last_update` in `dd/mm/YYYY` format.
+- Temporary QA content was restored/removed after testing.
+- Full PHP syntax pass across all `SITE/**/*.php` files passed.
+- `node --check SITE/assets/js/main.js` passed.
+- `SITE/storage/content.json` parsed successfully as JSON.
+- `git diff --check` passed with CRLF normalization warnings only.
+
+
 ## Current Known Limitations
 
 - MySQL-backed CRUD is not wired yet; current CRUD uses JSON storage for development.

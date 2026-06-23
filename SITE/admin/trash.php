@@ -61,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'restore') {
         $content[$key][$index]['deleted_at'] = '';
+        $content[$key][$index] = touch_content_dates($content[$key][$index]);
         save_content_store($content);
         admin_flash('ჩანაწერი აღდგენილია.');
         redirect('trash.php');
