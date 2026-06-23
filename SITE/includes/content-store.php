@@ -20,6 +20,7 @@ function content_storage_defaults(array $seed): array
         'bankAccounts' => $seed['bankAccounts'] ?? [],
         'camera' => $seed['camera'] ?? [],
         'weather' => $seed['weather'] ?? [],
+        'contactMessages' => $seed['contactMessages'] ?? [],
     ];
 }
 

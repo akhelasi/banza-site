@@ -8,6 +8,7 @@ $adminNav = [
     ['label' => 'პროექტები', 'href' => 'content.php?type=projects', 'key' => 'projects'],
     ['label' => 'გვერდები', 'href' => 'content.php?type=pages', 'key' => 'pages'],
     ['label' => 'ფაილები', 'href' => 'media.php', 'key' => 'media'],
+    ['label' => 'შეტყობინებები', 'href' => 'messages.php', 'key' => 'messages'],
     ['label' => 'პარამეტრები', 'href' => 'settings.php', 'key' => 'settings'],
     ['label' => 'სანაგვე', 'href' => 'trash.php', 'key' => 'trash'],
 ];

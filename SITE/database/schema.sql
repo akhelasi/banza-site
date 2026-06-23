@@ -89,3 +89,17 @@ CREATE TABLE IF NOT EXISTS donation_accounts (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP NULL DEFAULT NULL
 );
+
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  email VARCHAR(190) NOT NULL,
+  phone VARCHAR(60) NULL,
+  subject VARCHAR(160) NOT NULL,
+  message TEXT NOT NULL,
+  read_at DATETIME NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP NULL DEFAULT NULL,
+  INDEX idx_contact_messages_deleted_created (deleted_at, created_at),
+  INDEX idx_contact_messages_read (read_at)
+);

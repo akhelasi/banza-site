@@ -401,10 +401,56 @@ Known QA limitation:
 - Browser automation through Node REPL/Playwright remains blocked in this environment by an `EPERM` filesystem permission error, so final responsive/browser visual QA still needs a manual browser pass before production.
 
 
+## Phase 10: Contact Form And Admin Inbox
+
+Implemented public contact form handling and admin message management.
+
+Added:
+
+- `SITE/admin/messages.php`
+
+Changed:
+
+- `SITE/contact.php`: replaced disabled placeholder form with a working POST form.
+- `SITE/includes/content-store.php`: added `contactMessages` to storage defaults.
+- `SITE/includes/data.php`: exposes stored contact messages.
+- `SITE/includes/admin-layout.php`: added admin navigation link for messages.
+- `SITE/admin/index.php`: dashboard now shows unread contact message count.
+- `SITE/admin/trash.php`: contact messages now participate in restore/permanent-delete trash flow.
+- `SITE/assets/css/style.css`: added contact form grid, honeypot, message status and admin message preview styles.
+- `SITE/database/schema.sql`: added future MySQL `contact_messages` table.
+
+Implemented:
+
+- CSRF-protected public contact form.
+- Server-side validation for name, email, phone, subject and message.
+- Honeypot field for simple spam reduction.
+- Contact messages persist into `SITE/storage/content.json`.
+- Admin inbox lists submitted messages with sender, email, phone, subject, body and created date.
+- Admin can mark messages as read.
+- Admin can soft-delete messages into Trash.
+- Trash can restore or permanently delete contact messages.
+
+Verification:
+
+- Full PHP syntax pass across all `SITE/**/*.php` files passed.
+- `node --check SITE/assets/js/main.js` passed.
+- `SITE/storage/content.json` parsed successfully as JSON.
+- End-to-end contact flow passed through local HTTP before the current tool usage limit was reached: public submit, admin inbox visibility, mark read, soft delete, trash restore, soft delete again, permanent delete and cleanup.
+- Invalid contact form validation check passed.
+- Route smoke check passed for contact, admin dashboard, admin messages and trash pages.
+- `git diff --check` passed with CRLF normalization warnings only.
+- QA marker scan confirmed no temporary `QA_CONTACT_PHASE10` records remain in storage.
+
+Known QA limitation:
+
+- Browser automation through Node REPL/Playwright remains blocked in this environment by an `EPERM` filesystem permission error, so responsive visual QA still needs a manual browser pass before production.
+
+
 ## Current Known Limitations
 
 - MySQL-backed CRUD is not wired yet; current CRUD uses JSON storage for development.
-- Contact form is disabled until backend handling is added.
+- Contact form stores messages in JSON development storage; SMTP/email notifications are not wired yet.
 - Real weather API/live camera feed integration and official client-provided village data still need production values.
 
 ## Next Phase
@@ -414,7 +460,7 @@ Phase 10: Production Backend And Deployment Prep
 Planned:
 
 - Decide whether to keep JSON storage for handoff or wire MySQL-backed CRUD before production.
-- Wire contact form handling.
+- Wire SMTP/email notifications for contact messages if needed.
 - Replace demo weather/live camera values with production integrations.
 - Complete manual responsive browser QA in the target browser.
 - Prepare hosting/deployment notes for the real PHP host.

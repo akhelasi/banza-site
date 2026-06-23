@@ -24,7 +24,7 @@ function trash_item_index(array $items, string $slug): ?int
 function deleted_items(array $content): array
 {
     $deleted = [];
-    foreach (['news' => 'ახალი ამბავი', 'projects' => 'პროექტი'] as $key => $label) {
+    foreach (['news' => 'ახალი ამბავი', 'projects' => 'პროექტი', 'contactMessages' => 'შეტყობინება'] as $key => $label) {
         foreach (($content[$key] ?? []) as $item) {
             if (!empty($item['deleted_at'])) {
                 $item['_content_key'] = $key;
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $key = (string) ($_POST['content_key'] ?? '');
     $slug = (string) ($_POST['slug'] ?? '');
 
-    if (!in_array($key, ['news', 'projects'], true)) {
+    if (!in_array($key, ['news', 'projects', 'contactMessages'], true)) {
         admin_flash('კონტენტის ტიპი არასწორია.', 'error');
         redirect('trash.php');
     }
@@ -103,7 +103,7 @@ $items = deleted_items($content);
   <?php if ($items === []): ?>
     <div class="empty-admin-state">
       <h3>სანაგვე ცარიელია</h3>
-      <p>წაშლილი სიახლეები და პროექტები აქ გამოჩნდება restore და permanent delete მოქმედებებით.</p>
+      <p>წაშლილი სიახლეები, პროექტები და საკონტაქტო შეტყობინებები აქ გამოჩნდება restore და permanent delete მოქმედებებით.</p>
     </div>
   <?php else: ?>
     <div class="admin-table-wrap">
@@ -113,7 +113,7 @@ $items = deleted_items($content);
           <?php foreach ($items as $item): ?>
             <tr>
               <td><?php echo e($item['_type_label']); ?></td>
-              <td><?php echo e($item['title'] ?? ''); ?><small><?php echo e($item['slug'] ?? ''); ?></small></td>
+              <td><?php echo e($item['title'] ?? $item['subject'] ?? $item['name'] ?? ''); ?><small><?php echo e($item['slug'] ?? ''); ?></small></td>
               <td><?php echo e($item['deleted_at'] ?? ''); ?></td>
               <td><?php echo count(collect_upload_paths($item)); ?></td>
               <td class="admin-actions">
