@@ -371,6 +371,36 @@ Browser QA note:
 
 - Playwright/in-app browser automation was attempted through Node REPL but the local kernel failed with an `EPERM` filesystem permission error. This phase was verified with HTTP smoke tests, syntax checks and CSS/layout review.
 
+## Phase 9: Final QA, Polish And Security Review
+
+Ran a full final QA pass after the admin settings phase.
+
+Verification:
+
+- Full PHP syntax pass across all `SITE/**/*.php` files passed.
+- `node --check SITE/assets/js/main.js` passed.
+- `SITE/storage/content.json` parsed successfully as JSON.
+- Required PHP extensions checked for current features: `fileinfo` and `mbstring` are available.
+- Public route smoke test passed for home, news, news detail, history, projects, about, contact and football pages.
+- Missing news detail slug correctly returns 404.
+- Admin routes redirect when unauthenticated.
+- Authenticated admin routes return 200 for dashboard, content, media, settings and trash.
+- Listing pages contain live search/sort hooks, filter items and empty states.
+- Frontend JS contains the live filter/sort event wiring and DOM reorder behavior.
+
+Security/polish review:
+
+- State-changing admin forms use CSRF checks.
+- Admin login uses `password_verify`.
+- Output escaping is centralized through `e()` / `htmlspecialchars`.
+- Upload handling validates MIME/type, size and image shape before `move_uploaded_file`.
+- Permanent file deletion is constrained to safe uploaded paths and only deletes unreferenced uploads.
+
+Known QA limitation:
+
+- Browser automation through Node REPL/Playwright remains blocked in this environment by an `EPERM` filesystem permission error, so final responsive/browser visual QA still needs a manual browser pass before production.
+
+
 ## Current Known Limitations
 
 - MySQL-backed CRUD is not wired yet; current CRUD uses JSON storage for development.
@@ -379,15 +409,15 @@ Browser QA note:
 
 ## Next Phase
 
-Phase 9: Final QA, Polish And Security Review
+Phase 10: Production Backend And Deployment Prep
 
 Planned:
 
-- Full public route smoke check.
-- Full authenticated admin route smoke check.
-- Security pass for escaping, CSRF, upload validation and admin-only routes.
-- UI polish pass for mobile/desktop.
 - Decide whether to keep JSON storage for handoff or wire MySQL-backed CRUD before production.
+- Wire contact form handling.
+- Replace demo weather/live camera values with production integrations.
+- Complete manual responsive browser QA in the target browser.
+- Prepare hosting/deployment notes for the real PHP host.
 
 ## Local Development
 
