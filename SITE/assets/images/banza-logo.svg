@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 150" role="img" aria-labelledby="title desc">
+  <title id="title">ბანძა - ჩვენი სოფელი</title>
+  <desc id="desc">ბანძის მწვანე მთების ლოგო ქართული წარწერით.</desc>
+  <rect width="520" height="150" fill="transparent"/>
+  <g transform="translate(16 23)">
+    <path d="M0 88 48 23l27 32 15-22 71 55H0Z" fill="#0f6f34"/>
+    <path d="M34 66 58 35l29 39 33-15 34 29H84l-22-23-24 23H15l19-22Z" fill="#168142"/>
+    <path d="M70 88h42L83 68 70 88Z" fill="#f7f7ef"/>
+    <path d="M112 63 142 88h-54l24-25Z" fill="#0a5a2d"/>
+  </g>
+  <text x="213" y="69" fill="#080808" font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="800">ბანძა</text>
+  <text x="215" y="112" fill="#1f7a45" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="800">ჩვენი სოფელი</text>
+</svg>

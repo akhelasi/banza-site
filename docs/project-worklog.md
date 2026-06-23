@@ -1,0 +1,293 @@
+# Banza Site Worklog
+
+This file records what Codex changed during the Banza village site build so the work can continue from another machine or Codex thread.
+
+## Repository
+
+- GitHub: https://github.com/akhelasi/banza-site
+- Main site source: `SITE/`
+- Starter pack/instructions: `AGENTS.md`, `.agents/`, `docs/`, `templates/`, `scripts/`
+- Project type: PHP/SQL-oriented site, source stored on GitHub. GitHub Pages is not used because PHP will not run there.
+
+## Operating Rule Going Forward
+
+After each completed phase:
+
+1. Run the smallest meaningful checks for the changed files.
+2. Fix discovered bugs.
+3. Re-run checks until the phase has no known blocking issues.
+4. Update this worklog.
+5. Commit and push to GitHub.
+
+## Saved Prompts
+
+- `docs/banza-site-prompts.md` stores the full project prompt and phase 0-2 prompt.
+
+## Phase 0: Research And Seed Content
+
+Added seed/demo content for Banza so the site is not empty during UI and admin testing.
+
+Added:
+
+- `SITE/content-sources.md`
+- Seed content in `SITE/includes/data.php`
+
+Sources used:
+
+- Georgian Wikipedia: https://ka.wikipedia.org/wiki/ბანძა
+- English Wikipedia: https://en.wikipedia.org/wiki/Bandza
+- Geostat: https://www.geostat.ge/
+- Wikimedia Commons image redirect: https://commons.wikimedia.org/wiki/Special:Redirect/file/St.%20Virgin%20church%20of%20Bandza%20Angle.jpg
+
+Notes:
+
+- Some numbers are demo placeholders and must be checked with the client.
+- Donation accounts, social links, camera, weather and project/news records are demo until client provides official data.
+
+## Phase 1: Foundation
+
+Added/reworked:
+
+- `.gitignore`: added exception so `SITE/database/schema.sql` can be tracked.
+- `SITE/includes/helpers.php`: escaping, assets, CSRF, redirects, helpers.
+- `SITE/includes/database.php`: PDO connection scaffold.
+- `SITE/includes/config.example.php`: DB config plus demo admin credential hash.
+- `SITE/database/schema.sql`: starter schema for admins, pages, posts, media, settings, social links and donation accounts.
+- `SITE/assets/images/`: copied user-provided project images.
+
+Images added:
+
+- `SITE/assets/images/football-team.png`
+- `SITE/assets/images/donation-fund.png`
+- `SITE/assets/images/banza-logo-source.png`
+- `SITE/assets/images/banza-logo.svg`
+
+Verification:
+
+- PHP syntax checks passed for changed PHP files.
+
+## Phase 2: Public Homepage
+
+Rebuilt homepage into a real Banza village landing page.
+
+Changed:
+
+- `SITE/index.php`
+- `SITE/assets/css/style.css`
+- `SITE/assets/js/main.js`
+
+Implemented:
+
+- Header with Banza logo, nav, social links, donation button.
+- Hero section with village image, camera card and weather card.
+- Camera modal, weather modal, donation modal.
+- Sidebar with donation, popular projects and follow links.
+- Main content with football team feature, latest news, about preview and history preview.
+- Responsive layout and mobile overflow fixes.
+
+Verification:
+
+- PHP syntax checks passed.
+- JS syntax check passed.
+- Local PHP server returned 200.
+- Headless screenshot QA was attempted; Chrome/Edge was inconsistent in this Windows environment, but desktop screenshot was inspected and mobile overflow issue was fixed.
+
+## Logo Update
+
+User provided a Banza logo image for the header.
+
+Added:
+
+- `SITE/assets/images/banza-logo-source.png`
+- `SITE/assets/images/banza-logo.svg`
+
+Changed:
+
+- Header now uses the SVG logo for sharp rendering.
+- `SITE/assets/css/style.css` updated brand/logo sizing.
+
+Verification:
+
+- `php -l SITE/index.php` passed.
+- SVG XML parse passed.
+- Homepage and logo asset returned 200 locally.
+
+## Phase 3: Public Pages
+
+Added public navigation pages.
+
+Added:
+
+- `SITE/news.php`
+- `SITE/news-detail.php`
+- `SITE/history.php`
+- `SITE/projects.php`
+- `SITE/about.php`
+- `SITE/contact.php`
+- `SITE/football.php`
+- `SITE/includes/layout.php`
+
+Implemented:
+
+- Shared public header/footer/page hero layout.
+- News listing and news detail page.
+- Gallery lightbox hooks.
+- YouTube video modal hooks.
+- History, projects, about, contact and football pages.
+- Live search/filter with no page reload.
+
+Verification:
+
+- PHP syntax checks passed for all new pages.
+- JS syntax check passed.
+- Local route checks returned 200 for all public pages.
+- Missing news slug returned 404.
+- Rendered HTML checks confirmed filter and media hooks.
+
+## Phase 3.1: Sort For Filters
+
+User requested sort controls for search/filter pages.
+
+Changed:
+
+- `SITE/news.php`
+- `SITE/projects.php`
+- `SITE/history.php`
+- `SITE/about.php`
+- `SITE/contact.php`
+- `SITE/assets/js/main.js`
+- `SITE/assets/css/style.css`
+
+Implemented:
+
+- Sort by date asc/desc and title asc/desc on news.
+- Sort by title/status on projects.
+- Sort by title on about/history/contact filtered content.
+- Sorting happens live without page reload or scroll reset.
+
+Bug found and fixed:
+
+- A first replacement inserted literal `` `r`n `` text into HTML. Affected pages were rewritten cleanly and rechecked.
+
+Verification:
+
+- PHP syntax checks passed.
+- JS syntax check passed.
+- Rendered HTML checks confirmed `name="sort"`, `data-sort-*`, and no literal newline tokens.
+
+## Phase 4: Admin Panel Skeleton
+
+Added protected admin area.
+
+Added:
+
+- `SITE/includes/auth.php`
+- `SITE/includes/admin-layout.php`
+- `SITE/admin/login.php`
+- `SITE/admin/logout.php`
+- `SITE/admin/index.php`
+- `SITE/admin/content.php`
+- `SITE/admin/media.php`
+- `SITE/admin/settings.php`
+- `SITE/admin/trash.php`
+
+Implemented:
+
+- Admin login/logout.
+- Session protection.
+- CSRF validation on admin forms.
+- Admin dashboard.
+- Admin navigation shell.
+- Placeholder admin pages for content, media, settings and trash.
+
+Demo login:
+
+- Email: `admin@banza.local`
+- Password: `AdminDemo2026!`
+
+Security note:
+
+- Demo credentials are for local scaffold only. Replace `SITE/includes/config.php` or config values before production.
+
+Verification:
+
+- PHP syntax checks passed.
+- Protected dashboard redirects to login without session.
+- Correct login opens dashboard.
+- Wrong password is rejected.
+- Logout returns user to login.
+- Public routes still returned 200 after admin changes.
+
+## Phase 5: Content CRUD With Dev Storage
+
+Added a file-backed storage/repository layer so admin changes appear on public pages before MySQL CRUD is wired.
+
+Added:
+
+- `SITE/includes/content-store.php`
+- `SITE/storage/.gitkeep`
+- `SITE/storage/content.json`
+
+Changed:
+
+- `SITE/includes/data.php`: reads from storage when available.
+- `SITE/admin/content.php`: real CRUD for news/projects and static page edit forms.
+- `SITE/assets/css/style.css`: admin form and action styles.
+
+Implemented:
+
+- News create/edit/soft-delete.
+- Projects create/edit/soft-delete.
+- Static page editing for about, history, football and contact.
+- Public pages reflect admin changes from `SITE/storage/content.json`.
+- Storage fallback still uses seed content if JSON is absent/invalid.
+
+Bug found and fixed:
+
+- `helpers.php` was damaged by a bad regex replacement while updating asset paths. The file was rewritten cleanly and `php -l` passed.
+- Temporary QA CRUD record was removed from storage after testing.
+
+Verification:
+
+- PHP syntax checks passed.
+- JS syntax check passed.
+- JSON storage validation passed.
+- CRUD flow tested: create news, see it on public page, edit it, see updated detail, delete it, confirm list hides it and detail returns 404.
+- Static page edit/revert flow tested successfully.
+- Public smoke routes returned 200.
+- Authenticated admin CRUD routes returned 200 and showed admin shell.
+
+## Current Known Limitations
+
+- Uploads are not implemented yet.
+- Trash restore/permanent delete is not implemented yet.
+- MySQL-backed CRUD is not wired yet; current CRUD uses JSON storage for development.
+- Contact form is disabled until backend handling is added.
+- Real social links, bank accounts, weather API, live camera URL and official village data still need client-provided values.
+
+## Next Phase
+
+Phase 6: Uploads, Gallery And Videos
+
+Planned:
+
+- Image upload validation.
+- Upload folder structure.
+- Admin media upload view.
+- News main image and gallery selection/upload.
+- YouTube links managed from admin.
+- Public gallery/video modal verification.
+
+## Local Development
+
+Current local server used in this Codex session:
+
+```text
+http://127.0.0.1:8082/index.php
+```
+
+Typical XAMPP URL may also be:
+
+```text
+http://localhost/SITE/
+```

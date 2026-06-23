@@ -7,4 +7,10 @@ return [
         'pass' => '',
         'charset' => 'utf8mb4',
     ],
+    'admin' => [
+        'email' => 'admin@banza.local',
+        // Demo password for local scaffold only: AdminDemo2026!
+        // Replace this hash in SITE/includes/config.php before production use.
+        'password_hash' => '$2y$10$WIhw6opCD.vQ6/r.Wtw6huVNVtCfqHnPlX0wTrBpgPwU0dcJkCUpe',
+    ],
 ];
