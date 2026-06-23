@@ -34,3 +34,4 @@ backups/
 # Runtime uploads
 SITE/uploads/*
 !SITE/uploads/.gitkeep
+SITE/storage/weather-cache.json

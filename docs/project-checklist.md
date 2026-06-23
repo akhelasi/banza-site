@@ -135,9 +135,10 @@ This checklist is the project control document for finishing the Banza village w
 
 - `[DONE]` Camera/weather UI and modals exist.
 - `[DONE]` Camera/weather values are admin-editable as demo/config content.
-- `[TODO]` Replace camera preview with real live stream/embed once the camera is purchased/installed.
-- `[TODO]` Choose weather source/API and implement live weather fetch/cache.
-- `[TODO]` Add graceful fallback when weather/camera provider is unavailable.
+- `[DONE]` Add camera stream/embed URL support in admin and homepage modal.
+- `[WAITING]` Replace camera preview with real live stream/embed once the camera is purchased/installed.
+- `[DONE]` Choose weather source/API and implement live weather fetch/cache.
+- `[DONE]` Add graceful fallback when weather/camera provider is unavailable.
 - `[WAITING]` Client must provide camera stream URL/provider.
 - `[WAITING]` Client must approve weather provider/API key approach.
 - `[REVIEW]` Decide whether live weather should be server-side cached or browser-side fetched.
@@ -199,8 +200,8 @@ This checklist is the project control document for finishing the Banza village w
 4. `[DONE]` Phase 15: Expand MySQL runtime repository slice while keeping JSON fallback.
 5. `[DONE]` Phase 16: Production config, admin password change workflow, security hardening.
 6. `[WAITING]` Phase 17: Replace demo content/assets with client-approved content.
-7. `[NEXT]` Phase 18: Real weather/camera integrations.
-8. `[TODO]` Phase 19: Responsive/manual browser QA and accessibility pass.
+7. `[DONE]` Phase 18: Real weather/camera integration foundation.
+8. `[NEXT]` Phase 19: Responsive/manual browser QA and accessibility pass.
 9. `[TODO]` Phase 20: Hosting deployment prep and final release checklist.
 
 ## Definition Of Done For Production

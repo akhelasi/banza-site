@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/content-store.php';
+require_once __DIR__ . '/weather.php';
 
 $site = [
     'title' => 'ბანძა',
@@ -43,6 +44,7 @@ $camera = [
     'title' => 'ლაივ კამერა',
     'status' => 'LIVE demo',
     'preview_image' => $site['hero_image'],
+    'stream_url' => '',
     'description' => 'კამერის რეალური stream მისამართი დაემატება სოფელში მოწყობილობის დაყენების შემდეგ.',
 ];
 
@@ -227,5 +229,5 @@ $contact = $contentStore['contact'] ?? $contact;
 $socialLinks = visible_content_items($contentStore['socialLinks'] ?? []);
 $bankAccounts = visible_content_items($contentStore['bankAccounts'] ?? []);
 $camera = $contentStore['camera'] ?? $camera;
-$weather = $contentStore['weather'] ?? $weather;
+$weather = resolve_weather_data($contentStore['weather'] ?? $weather);
 $contactMessages = $contentStore['contactMessages'] ?? [];

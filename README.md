@@ -18,6 +18,7 @@ The current codebase includes:
 - Development storage through `SITE/storage/content.json`.
 - SQL schema draft in `SITE/database/schema.sql`.
 - Production config hardening: untracked config file, session cookie settings, security headers and password hash helper.
+- Weather integration foundation: Open-Meteo live fetch with server-side cache and admin fallback; camera stream URL support.
 
 See:
 
@@ -210,7 +211,7 @@ After each phase, run the relevant checks, update docs/project-worklog.md and do
 Recommended next phase:
 
 ```text
-Phase 18: Real weather/camera integrations, or continue replacing demo content once client-approved values are available.
+Phase 19: Responsive/manual browser QA and accessibility pass, or continue replacing demo content once client-approved values are available.
 ```
 
 ## Production Before-Launch Checklist
@@ -226,7 +227,7 @@ Must be completed before public launch:
 - Add backup plan for database and `SITE/uploads/`.
 - Complete manual responsive browser QA.
 - Complete final security review.
-- Add real weather and camera integrations if required for launch.
+- Add the real camera stream URL after the client buys/installs the camera.
 
 ## Deployment Note
 

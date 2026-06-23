@@ -724,17 +724,64 @@ Next phase notes:
 
 - MySQL-backed runtime is only partially wired for contact messages; expanded import coverage now exists for the rest of the JSON content, but runtime repositories still need to be wired.
 - Contact form stores messages in JSON by default; MySQL runtime support is currently wired for contact messages only when `content_storage.driver=mysql`.
-- Real weather API/live camera feed integration and official client-provided village data still need production values.
+- Real camera stream URL and official client-provided village data still need production values.
+
+## Phase 18: Real Weather And Camera Integration Foundation
+
+Added Open-Meteo weather integration foundation and camera stream URL support while keeping admin fallback content safe.
+
+Sources:
+
+- Open-Meteo Weather Forecast API docs: https://open-meteo.com/en/docs
+- Bandza coordinates/source context: https://en.wikipedia.org/wiki/Bandza
+
+Added:
+
+- `SITE/includes/weather.php`
+
+Changed:
+
+- `SITE/includes/data.php`: resolves weather through live provider/cache with fallback.
+- `SITE/index.php`: weather modal now displays the weather source/update note; camera modal can render a configured stream iframe.
+- `SITE/admin/settings.php`: added weather provider/cache/coordinate fields and camera stream URL field.
+- `SITE/assets/css/style.css`: added iframe sizing for camera stream embeds.
+- `.gitignore`: ignores runtime `SITE/storage/weather-cache.json`.
+- `README.md` and `docs/project-checklist.md`: documented Phase 18 status and remaining camera dependency.
+
+How it works:
+
+- Default weather provider is Open-Meteo using Bandza coordinates `42.34889, 42.28417`.
+- Weather requests use server-side PHP with a 30 minute cache.
+- If Open-Meteo or outbound HTTPS is unavailable, the homepage keeps showing the admin-managed fallback weather instead of failing.
+- Admin can switch weather to fallback-only, edit coordinates/cache minutes, and later paste a camera stream/embed URL.
+
+Problems found and fixed:
+
+- Local PHP could not fetch Open-Meteo from this environment even with `allow_url_fopen=1`; a `curl` fallback was added, and the page was verified to degrade to admin fallback cleanly.
+- The first homepage smoke script reused PowerShell's read-only `$HOME` variable as `$home`; it was rerun with `$homeResponse`.
+- Admin settings initially used live-resolved weather values, which could cause saving current weather into fallback fields. It now uses the raw stored weather config for editing.
+
+Verification:
+
+- `php -l SITE/includes/weather.php`, `SITE/includes/data.php`, `SITE/index.php` and `SITE/admin/settings.php` passed.
+- `node --check SITE/assets/js/main.js` passed.
+- Local homepage returned 200 and showed the fallback weather source when Open-Meteo could not be reached.
+- Authenticated admin settings returned 200 and showed `weather_provider` and `camera_stream_url` controls.
+
+Next phase notes:
+
+- Real camera stream remains WAITING until the client provides the camera provider/embed URL.
+- Phase 19 should do manual responsive/browser/accessibility QA, unless client-approved content arrives first.
 
 ## Next Phase
 
-Phase 18: Real Weather And Camera Integrations
+Phase 19: Responsive Browser QA And Accessibility Pass
 
 Planned:
 
-- Choose the weather source/API and decide server-side caching.
-- Add graceful fallback behavior for unavailable weather/camera providers.
-- Replace the demo camera preview with a real stream/embed after the client provides provider details.
+- Check desktop, tablet and mobile layouts manually.
+- Verify modals, contact form, admin forms and upload UI in browser.
+- Run keyboard navigation and visible focus checks.
 
 ## Local Development
 

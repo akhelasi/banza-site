@@ -9,6 +9,7 @@ require_once __DIR__ . '/../includes/content-store.php';
 require_admin();
 
 $content = $contentStore ?? [];
+$weather = is_array($content['weather'] ?? null) ? $content['weather'] : $weather;
 
 function parse_social_links(string $value): array
 {
@@ -94,8 +95,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'title' => trim((string) ($_POST['camera_title'] ?? 'ლაივ კამერა')),
         'status' => trim((string) ($_POST['camera_status'] ?? 'LIVE demo')),
         'preview_image' => trim((string) ($_POST['camera_preview_image'] ?? '')),
+        'stream_url' => trim((string) ($_POST['camera_stream_url'] ?? '')),
         'description' => trim((string) ($_POST['camera_description'] ?? '')),
     ];
+    $weatherProvider = (string) ($_POST['weather_provider'] ?? 'open_meteo');
+    if (!in_array($weatherProvider, ['open_meteo', 'demo'], true)) {
+        $weatherProvider = 'open_meteo';
+    }
+
     $content['weather'] = [
         'summary' => trim((string) ($_POST['weather_summary'] ?? '')),
         'temperature' => trim((string) ($_POST['weather_temperature'] ?? '')),
@@ -103,6 +110,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'humidity' => trim((string) ($_POST['weather_humidity'] ?? '')),
         'rain' => trim((string) ($_POST['weather_rain'] ?? '')),
         'nearby' => $nearby,
+        'live' => [
+            'provider' => $weatherProvider,
+            'enabled' => $weatherProvider === 'open_meteo',
+            'latitude' => (float) ($_POST['weather_latitude'] ?? 42.34889),
+            'longitude' => (float) ($_POST['weather_longitude'] ?? 42.28417),
+            'cache_minutes' => max(5, (int) ($_POST['weather_cache_minutes'] ?? 30)),
+        ],
     ];
 
     save_content_store($content);
@@ -129,12 +143,23 @@ render_admin_header('პარამეტრები', 'settings');
         <label><span>სტატუსი</span><input type="text" name="camera_status" value="<?php echo e($camera['status'] ?? ''); ?>"></label>
       </div>
       <label><span>Preview image URL/path</span><input type="text" name="camera_preview_image" value="<?php echo e($camera['preview_image'] ?? ''); ?>"></label>
+      <label><span>Stream embed URL</span><input type="url" name="camera_stream_url" value="<?php echo e($camera['stream_url'] ?? ''); ?>"></label>
       <label><span>აღწერა</span><textarea name="camera_description" rows="3"><?php echo e($camera['description'] ?? ''); ?></textarea></label>
     </fieldset>
 
     <fieldset class="admin-fieldset">
       <legend>ამინდი</legend>
+      <?php $weatherLive = is_array($weather['live'] ?? null) ? $weather['live'] : []; ?>
       <div class="admin-form-grid">
+        <label><span>Provider</span>
+          <select name="weather_provider">
+            <option value="open_meteo"<?php echo (($weatherLive['provider'] ?? 'open_meteo') === 'open_meteo') ? ' selected' : ''; ?>>Open-Meteo live</option>
+            <option value="demo"<?php echo (($weatherLive['provider'] ?? '') === 'demo') ? ' selected' : ''; ?>>Admin fallback only</option>
+          </select>
+        </label>
+        <label><span>Cache minutes</span><input type="number" min="5" name="weather_cache_minutes" value="<?php echo e($weatherLive['cache_minutes'] ?? 30); ?>"></label>
+        <label><span>Latitude</span><input type="number" step="0.00001" name="weather_latitude" value="<?php echo e($weatherLive['latitude'] ?? 42.34889); ?>"></label>
+        <label><span>Longitude</span><input type="number" step="0.00001" name="weather_longitude" value="<?php echo e($weatherLive['longitude'] ?? 42.28417); ?>"></label>
         <label><span>აღწერა</span><input type="text" name="weather_summary" value="<?php echo e($weather['summary'] ?? ''); ?>"></label>
         <label><span>ტემპერატურა</span><input type="text" name="weather_temperature" value="<?php echo e($weather['temperature'] ?? ''); ?>"></label>
         <label><span>ქარი</span><input type="text" name="weather_wind" value="<?php echo e($weather['wind'] ?? ''); ?>"></label>

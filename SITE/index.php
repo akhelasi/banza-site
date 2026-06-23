@@ -165,7 +165,11 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle);
       <button class="modal-close" type="button" data-modal-close aria-label="ფანჯრის დახურვა">×</button>
       <h2 id="cameraModalTitle">ლაივ კამერა</h2>
       <div class="video-placeholder">
-        <img src="<?php echo e($camera['preview_image']); ?>" alt="ბანძის კამერის დროებითი preview">
+        <?php if (!empty($camera['stream_url'])): ?>
+          <iframe src="<?php echo e($camera['stream_url']); ?>" title="ბანძის ლაივ კამერა" allowfullscreen loading="lazy"></iframe>
+        <?php else: ?>
+          <img src="<?php echo e($camera['preview_image']); ?>" alt="ბანძის კამერის დროებითი preview">
+        <?php endif; ?>
         <p><?php echo e($camera['description']); ?></p>
       </div>
     </div>
@@ -176,7 +180,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle);
     <div class="modal-panel" role="document">
       <button class="modal-close" type="button" data-modal-close aria-label="ფანჯრის დახურვა">×</button>
       <h2 id="weatherModalTitle">ბანძის ამინდი</h2>
-      <p class="modal-lead">ამ ეტაპზე ნაჩვენებია demo პროგნოზი. რეალური API შემდეგ ფაზაში ჩაირთვება.</p>
+      <p class="modal-lead"><?php echo e($weather['source_label'] ?? 'Admin fallback'); ?><?php echo !empty($weather['updated_at']) ? ' · განახლდა: ' . e($weather['updated_at']) : ''; ?></p>
       <dl class="weather-detail-list">
         <div><dt>ტემპერატურა</dt><dd><?php echo e($weather['temperature']); ?></dd></div>
         <div><dt>ქარი</dt><dd><?php echo e($weather['wind']); ?></dd></div>
