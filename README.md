@@ -183,8 +183,8 @@ After each phase, run the relevant checks, update docs/project-worklog.md and do
 Recommended next phase:
 
 ```text
-Phase 15: Expand MySQL migration.
-Keep JSON as the default fallback, then wire a runtime MySQL repository slice for one content area before expanding.
+Phase 16: Continue production hardening.
+Either expand MySQL runtime repositories beyond contact messages, or start production config/admin credential hardening if hosting details are known.
 ```
 
 ## Production Before-Launch Checklist

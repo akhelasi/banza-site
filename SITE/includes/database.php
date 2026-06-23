@@ -10,6 +10,12 @@ function db_config(): array
     return require file_exists($localConfig) ? $localConfig : $exampleConfig;
 }
 
+function content_storage_driver(): string
+{
+    $driver = strtolower(trim((string) (db_config()['content_storage']['driver'] ?? 'json')));
+    return in_array($driver, ['json', 'mysql'], true) ? $driver : 'json';
+}
+
 function db(): PDO
 {
     static $pdo = null;

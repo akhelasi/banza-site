@@ -5,11 +5,13 @@ require __DIR__ . '/../includes/auth.php';
 require __DIR__ . '/../includes/data.php';
 require __DIR__ . '/../includes/admin-layout.php';
 require_once __DIR__ . '/../includes/content-store.php';
+require __DIR__ . '/../includes/repositories/contact-message-repository.php';
 
 require_admin();
 
 $content = $contentStore ?? [];
-$messages = visible_content_items($content['contactMessages'] ?? []);
+$useMysqlMessages = content_storage_driver() === 'mysql';
+$messages = $useMysqlMessages ? fetch_contact_messages_from_mysql(db()) : visible_content_items($content['contactMessages'] ?? []);
 
 function contact_message_index(array $messages, string $slug): ?int
 {
@@ -30,6 +32,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $action = (string) ($_POST['action'] ?? '');
     $slug = (string) ($_POST['slug'] ?? '');
+
+    if ($useMysqlMessages) {
+        $message = find_contact_message_in_mysql(db(), $slug);
+        if ($message === null) {
+            admin_flash('შეტყობინება ვერ მოიძებნა.', 'error');
+            redirect('messages.php');
+        }
+
+        if ($action === 'mark_read') {
+            mark_contact_message_read_in_mysql(db(), $slug);
+            admin_flash('შეტყობინება მოინიშნა წაკითხულად.');
+            redirect('messages.php');
+        }
+
+        if ($action === 'soft_delete') {
+            soft_delete_contact_message_in_mysql(db(), $slug);
+            admin_flash('შეტყობინება გადავიდა სანაგვეში.');
+            redirect('messages.php');
+        }
+
+        admin_flash('ქმედება არასწორია.', 'error');
+        redirect('messages.php');
+    }
+
     $index = contact_message_index($content['contactMessages'] ?? [], $slug);
 
     if ($index === null || !empty($content['contactMessages'][$index]['deleted_at'])) {

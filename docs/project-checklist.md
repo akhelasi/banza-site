@@ -93,6 +93,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Dev JSON storage supports current admin/public flows.
 - `[DONE]` Storage direction decided in `docs/storage-decision.md`: JSON for development/approval, MySQL before production.
 - `[IN PROGRESS]` Implement MySQL-backed repositories for posts/pages/settings/messages/media.
+- `[DONE]` Contact messages have a runtime MySQL repository path behind `content_storage.driver=mysql`.
 - `[DONE]` Add first migration/import script from `storage/content.json` to MySQL for contact messages.
 - `[TODO]` Expand migration/import script to posts, pages, settings, social links, donation accounts and media.
 - `[TODO]` Add install/setup script for creating initial admin and default settings.
@@ -195,8 +196,8 @@ This checklist is the project control document for finishing the Banza village w
 1. `[DONE]` Phase 12: README/setup/handoff cleanup so workplace continuation is frictionless.
 2. `[DONE]` Phase 13: Decide storage direction: keep JSON for approval phase or wire MySQL now.
 3. `[DONE]` Phase 14: Start incremental MySQL-backed CRUD and import script.
-4. `[NEXT]` Phase 15: Expand MySQL runtime repository slice while keeping JSON fallback.
-5. `[TODO]` Phase 16: Production config, admin password change, security hardening.
+4. `[DONE]` Phase 15: Expand MySQL runtime repository slice while keeping JSON fallback.
+5. `[NEXT]` Phase 16: Production config, admin password change, security hardening.
 6. `[TODO]` Phase 17: Replace demo content/assets with client-approved content.
 7. `[TODO]` Phase 18: Real weather/camera integrations.
 8. `[TODO]` Phase 19: Responsive/manual browser QA and accessibility pass.

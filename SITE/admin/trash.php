@@ -5,10 +5,12 @@ require __DIR__ . '/../includes/auth.php';
 require __DIR__ . '/../includes/data.php';
 require __DIR__ . '/../includes/admin-layout.php';
 require_once __DIR__ . '/../includes/content-store.php';
+require __DIR__ . '/../includes/repositories/contact-message-repository.php';
 
 require_admin();
 
 $content = $contentStore ?? [];
+$useMysqlMessages = content_storage_driver() === 'mysql';
 
 function trash_item_index(array $items, string $slug): ?int
 {
@@ -53,6 +55,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect('trash.php');
     }
 
+    if ($useMysqlMessages && $key === 'contactMessages') {
+        $message = find_contact_message_in_mysql(db(), $slug, true);
+        if ($message === null || empty($message['deleted_at'])) {
+            admin_flash('წაშლილი ჩანაწერი ვერ მოიძებნა.', 'error');
+            redirect('trash.php');
+        }
+
+        if ($action === 'restore') {
+            restore_contact_message_in_mysql(db(), $slug);
+            admin_flash('ჩანაწერი აღდგენილია.');
+            redirect('trash.php');
+        }
+
+        if ($action === 'permanent_delete') {
+            permanently_delete_contact_message_from_mysql(db(), $slug);
+            admin_flash('ჩანაწერი პერმანენტულად წაიშალა.');
+            redirect('trash.php');
+        }
+
+        admin_flash('ქმედება არასწორია.', 'error');
+        redirect('trash.php');
+    }
+
     $index = trash_item_index($content[$key] ?? [], $slug);
     if ($index === null || empty($content[$key][$index]['deleted_at'])) {
         admin_flash('წაშლილი ჩანაწერი ვერ მოიძებნა.', 'error');
@@ -90,6 +115,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 render_admin_header('სანაგვე', 'trash');
 $items = deleted_items($content);
+if ($useMysqlMessages) {
+    foreach (fetch_contact_messages_from_mysql(db(), true) as $message) {
+        if (!empty($message['deleted_at'])) {
+            $message['_content_key'] = 'contactMessages';
+            $message['_type_label'] = 'შეტყობინება';
+            $items[] = $message;
+        }
+    }
+    usort($items, static fn (array $a, array $b): int => strcmp((string) ($b['deleted_at'] ?? ''), (string) ($a['deleted_at'] ?? '')));
+}
 ?>
 
 <section class="admin-card">

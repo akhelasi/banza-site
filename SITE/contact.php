@@ -1,7 +1,9 @@
 <?php
 require __DIR__ . '/includes/helpers.php';
+require __DIR__ . '/includes/database.php';
 require __DIR__ . '/includes/data.php';
 require __DIR__ . '/includes/layout.php';
+require __DIR__ . '/includes/repositories/contact-message-repository.php';
 
 $contactErrors = [];
 $contactFlash = null;
@@ -65,9 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($contactErrors === []) {
-        $content = $contentStore ?? [];
-        $content['contactMessages'] = is_array($content['contactMessages'] ?? null) ? $content['contactMessages'] : [];
-        $content['contactMessages'][] = touch_content_dates([
+        $message = touch_content_dates([
             'slug' => generate_slug('message-' . $oldContact['name'] . '-' . bin2hex(random_bytes(4)), 'message'),
             'name' => $oldContact['name'],
             'email' => $oldContact['email'],
@@ -79,7 +79,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'deleted_at' => '',
         ], true);
 
-        if (save_content_store($content)) {
+        $saved = false;
+        if (content_storage_driver() === 'mysql') {
+            create_contact_message_in_mysql(db(), $message);
+            $saved = true;
+        } else {
+            $content = $contentStore ?? [];
+            $content['contactMessages'] = is_array($content['contactMessages'] ?? null) ? $content['contactMessages'] : [];
+            $content['contactMessages'][] = $message;
+            $saved = save_content_store($content);
+        }
+
+        if ($saved) {
             $_SESSION['contact_flash'] = 'შეტყობინება გაიგზავნა. ადმინისტრატორი ნახავს მას მართვის პანელში.';
             redirect('contact.php#contactForm');
         }
