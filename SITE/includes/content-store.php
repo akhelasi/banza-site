@@ -110,3 +110,46 @@ function split_lines(string $value): array
     $lines = preg_split('/\R+/', $value) ?: [];
     return array_values(array_filter(array_map('trim', $lines), static fn (string $line): bool => $line !== ''));
 }
+function collect_upload_paths(mixed $value): array
+{
+    $paths = [];
+
+    if (is_array($value)) {
+        foreach ($value as $item) {
+            $paths = array_merge($paths, collect_upload_paths($item));
+        }
+        return array_values(array_unique($paths));
+    }
+
+    if (is_string($value) && str_starts_with($value, 'uploads/')) {
+        return [$value];
+    }
+
+    return [];
+}
+
+function uploaded_path_is_referenced(array $content, string $path): bool
+{
+    return in_array($path, collect_upload_paths($content), true);
+}
+
+function delete_uploaded_file_if_unreferenced(string $path, array $remainingContent): bool
+{
+    if (!str_starts_with($path, 'uploads/')) {
+        return false;
+    }
+
+    if (uploaded_path_is_referenced($remainingContent, $path)) {
+        return false;
+    }
+
+    $absolutePath = dirname(__DIR__) . '/' . $path;
+    $uploadsRoot = realpath(dirname(__DIR__) . '/uploads');
+    $target = realpath($absolutePath);
+
+    if ($uploadsRoot === false || $target === false || !str_starts_with($target, $uploadsRoot)) {
+        return false;
+    }
+
+    return is_file($target) && unlink($target);
+}

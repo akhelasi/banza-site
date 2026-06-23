@@ -309,24 +309,52 @@ Verification:
 - Admin news create route returned 200 and showed file inputs.
 - Public news detail route returned 200 and showed gallery/lightbox hooks.
 
+
+## Phase 7: Trash / Soft Delete Restore And Permanent Delete
+
+Implemented restore and permanent delete for soft-deleted content.
+
+Changed:
+
+- `SITE/admin/trash.php`: now lists deleted news/projects and supports restore/permanent delete.
+- `SITE/includes/content-store.php`: added upload path reference collection and safe uploaded-file deletion helpers.
+
+Implemented:
+
+- Trash listing for soft-deleted news and projects.
+- Restore action returns records to public pages.
+- Permanent delete removes records from storage.
+- Permanent delete checks uploaded paths and deletes files only when they are under `SITE/uploads/` and no remaining content references them.
+- Public pages continue to hide soft-deleted content through `visible_content_items()`.
+
+Bug found and fixed:
+
+- `admin/trash.php` initially required `content-store.php` twice because `data.php` already loads it. This caused a fatal redeclare error. Changed the direct include to `require_once` and re-ran QA.
+
+Verification:
+
+- `php -l SITE/admin/trash.php` passed.
+- `php -l SITE/includes/content-store.php` passed.
+- `SITE/storage/content.json` validated as JSON.
+- End-to-end trash flow tested: create test news, soft-delete it, confirm Trash lists it, restore it, confirm public detail returns 200, soft-delete again, permanent-delete it, confirm detail returns 404 and storage record is gone.
+- QA marker scan confirmed no temporary test records remain.
 ## Current Known Limitations
 
-- Trash restore/permanent delete is not implemented yet.
 - MySQL-backed CRUD is not wired yet; current CRUD uses JSON storage for development.
 - Contact form is disabled until backend handling is added.
 - Real social links, bank accounts, weather API, live camera URL and official village data still need client-provided values.
 
 ## Next Phase
 
-Phase 7: Trash / Soft Delete Restore And Permanent Delete
+Phase 8: Final QA, Polish And Security Review
 
 Planned:
 
-- Trash page listing soft-deleted content.
-- Restore soft-deleted records.
-- Permanent delete records.
-- Permanent file delete only when safe.
-- Public pages must keep hiding deleted content.
+- Full public route smoke check.
+- Full authenticated admin route smoke check.
+- Security pass for escaping, CSRF, upload validation and admin-only routes.
+- UI polish pass for mobile/desktop.
+- Decide whether to keep JSON storage for handoff or wire MySQL-backed CRUD before production.
 
 ## Local Development
 
