@@ -802,15 +802,51 @@ Next phase notes:
 - Phase 20 should prepare hosting/deployment instructions, upload permissions, backup/restore and final release checklist.
 - A real browser visual pass is still required before production launch.
 
+## Phase 20: Hosting Deployment Prep And Final Release Checklist
+
+Added production deployment documentation so the project can be moved to a PHP/MySQL host without losing the required order of operations.
+
+Added:
+
+- `docs/production-deployment-checklist.md`
+
+Changed:
+
+- `README.md`: linked the deployment checklist and updated the recommended next work.
+- `docs/project-checklist.md`: marked deployment instructions, upload permissions, backup/restore and rollback documentation as complete.
+
+Documented:
+
+- PHP/MySQL hosting requirements.
+- Production `SITE/includes/config.php` setup.
+- Admin password hash generation.
+- New database setup from `schema.sql`.
+- Existing database migration for import `source_key` columns.
+- JSON-to-MySQL dry-run/import order.
+- Upload/storage folder permissions.
+- Runtime backup list.
+- Rollback process by Git commit.
+- Launch smoke checks.
+- Launch blockers that still require client/hosting decisions.
+
+Verification:
+
+- Documentation was checked against current scripts, schema, migrations, `.gitignore`, README and checklist.
+- No product PHP/CSS/JS behavior changed in this phase.
+
+Next phase notes:
+
+- Remaining launch blockers are client-approved content, real donation/contact/social values, production credentials/domain/host, real browser visual QA and final security review after deployment decisions.
+
 ## Next Phase
 
-Phase 20: Hosting Deployment Prep And Final Release Checklist
+Remaining Production Blockers
 
 Planned:
 
-- Prepare production hosting checklist for PHP/MySQL.
-- Document upload folder permissions, database import order and backup/restore.
-- Add final release checklist and rollback notes.
+- Replace demo content and demo financial/contact/social values after client approval.
+- Configure real hosting/domain/admin credentials.
+- Complete real-browser visual QA and final security review.
 
 ## Local Development
 

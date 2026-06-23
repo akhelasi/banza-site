@@ -26,6 +26,7 @@ See:
 - `docs/project-checklist.md` for remaining work through production.
 - `docs/banza-site-prompts.md` for the original full project prompt.
 - `docs/storage-decision.md` for the JSON vs MySQL storage decision.
+- `docs/production-deployment-checklist.md` for production hosting/deploy steps.
 
 ## Project Layout
 
@@ -211,7 +212,7 @@ After each phase, run the relevant checks, update docs/project-worklog.md and do
 Recommended next phase:
 
 ```text
-Phase 20: Hosting deployment prep and final release checklist, or continue replacing demo content once client-approved values are available.
+Next: complete remaining production blockers, especially client-approved content, real donation/contact/social values, and final real-browser visual QA.
 ```
 
 ## Production Before-Launch Checklist

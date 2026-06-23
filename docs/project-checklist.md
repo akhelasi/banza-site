@@ -97,7 +97,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Add first migration/import script from `storage/content.json` to MySQL for contact messages.
 - `[DONE]` Expand migration/import script to posts, pages, settings, social links, donation accounts and media.
 - `[TODO]` Add install/setup script for creating initial admin and default settings.
-- `[TODO]` Add database backup/restore notes for production hosting.
+- `[DONE]` Add database backup/restore notes for production hosting.
 - `[PROBLEM]` Current JSON storage is fine for development but risky for production concurrency, backups and multi-admin editing.
 - `[RETHINK]` MySQL migration should be incremental, not an all-at-once rewrite.
 
@@ -174,10 +174,10 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` GitHub Pages was intentionally not used because PHP will not run there.
 - `[TODO]` Pick production hosting that supports PHP and MySQL.
 - `[DONE]` Prepare production config instructions.
-- `[TODO]` Prepare upload folder permissions instructions.
-- `[TODO]` Prepare deployment checklist for clone/install/config/database/import/admin password.
-- `[TODO]` Add backup plan for database and uploaded media.
-- `[TODO]` Add rollback plan for code deploys.
+- `[DONE]` Prepare upload folder permissions instructions.
+- `[DONE]` Prepare deployment checklist for clone/install/config/database/import/admin password.
+- `[DONE]` Add backup plan for database and uploaded media.
+- `[DONE]` Add rollback plan for code deploys.
 - `[WAITING]` Need hosting provider details.
 - `[WAITING]` Need production domain/subdomain.
 - `[REVIEW]` Decide whether to deploy manually first or add GitHub Actions/FTP/SSH deploy workflow later.
@@ -204,7 +204,7 @@ This checklist is the project control document for finishing the Banza village w
 6. `[WAITING]` Phase 17: Replace demo content/assets with client-approved content.
 7. `[DONE]` Phase 18: Real weather/camera integration foundation.
 8. `[DONE]` Phase 19: Responsive/browser QA fallback pass.
-9. `[NEXT]` Phase 20: Hosting deployment prep and final release checklist.
+9. `[DONE]` Phase 20: Hosting deployment prep and final release checklist.
 
 ## Definition Of Done For Production
 
@@ -213,7 +213,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[TODO]` Uploads, trash, contact messages and settings are verified after deployment.
 - `[TODO]` Demo credentials are replaced with a generated password hash in untracked production config.
 - `[TODO]` Real content, real links and real donation accounts are approved by the client.
-- `[TODO]` Database and uploads have backup/restore instructions.
+- `[DONE]` Database and uploads have backup/restore instructions.
 - `[TODO]` Mobile and desktop manual QA is complete.
 - `[TODO]` Security review is complete after final storage/deployment decisions.
 - `[TODO]` GitHub `main` contains final source and worklog/checklist are updated.
