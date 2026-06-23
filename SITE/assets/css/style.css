@@ -1698,3 +1698,17 @@ body {
     grid-template-columns: 1fr;
   }
 }
+.admin-media-grid code {
+  display: block;
+  margin-top: 8px;
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--green-dark);
+  padding: 8px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.admin-form input[type="file"] {
+  padding: 10px 13px;
+}

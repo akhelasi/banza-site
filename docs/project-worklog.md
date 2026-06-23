@@ -257,9 +257,60 @@ Verification:
 - Public smoke routes returned 200.
 - Authenticated admin CRUD routes returned 200 and showed admin shell.
 
+
+## Phase 6: Uploads, Gallery And Videos
+
+Implemented admin-managed image upload support.
+
+Added:
+
+- `SITE/includes/uploads.php`
+- `SITE/uploads/.gitkeep`
+
+Changed:
+
+- `.gitignore`: runtime uploads are ignored except `SITE/uploads/.gitkeep`.
+- `SITE/admin/media.php`: now supports secure image upload and lists uploaded images.
+- `SITE/admin/content.php`: news/project forms support main image upload; news form supports multiple gallery image uploads.
+- `SITE/assets/css/style.css`: file input and media path UI styles.
+
+Implemented:
+
+- Upload validation for JPG, PNG, WEBP and GIF.
+- Max upload size: 5MB.
+- MIME detection with `finfo`.
+- Image validation with `getimagesize`.
+- Randomized stored filenames under `SITE/uploads/YYYY/MM/`.
+- Admin media library displays uploaded file paths for reuse.
+- News detail page already renders gallery lightbox and YouTube video modal hooks from stored content.
+
+Runtime upload policy:
+
+- Real uploaded files are runtime content and are ignored by Git.
+- Only `SITE/uploads/.gitkeep` is committed so the folder exists after clone.
+- If production content must be migrated, copy the `SITE/uploads/` folder separately or use hosting backups.
+
+Bugs/edge cases checked:
+
+- CLI-style fake upload is rejected by `is_uploaded_file`, which is expected and safer.
+- Invalid text file upload through admin media is rejected.
+- Valid PNG upload through real HTTP multipart succeeds.
+- News create flow with main image upload and gallery upload shows uploaded paths on public detail.
+- Temporary QA records and uploaded test files were removed after testing.
+
+Verification:
+
+- `php -l SITE/includes/uploads.php` passed.
+- `php -l SITE/admin/media.php` passed.
+- `php -l SITE/admin/content.php` passed.
+- `node --check SITE/assets/js/main.js` passed.
+- `SITE/storage/content.json` validated as JSON.
+- Admin media route returned 200 and showed upload UI.
+- Admin news create route returned 200 and showed file inputs.
+- Public news detail route returned 200 and showed gallery/lightbox hooks.
+
 ## Current Known Limitations
 
-- Uploads are not implemented yet.
 - Trash restore/permanent delete is not implemented yet.
 - MySQL-backed CRUD is not wired yet; current CRUD uses JSON storage for development.
 - Contact form is disabled until backend handling is added.
@@ -267,16 +318,15 @@ Verification:
 
 ## Next Phase
 
-Phase 6: Uploads, Gallery And Videos
+Phase 7: Trash / Soft Delete Restore And Permanent Delete
 
 Planned:
 
-- Image upload validation.
-- Upload folder structure.
-- Admin media upload view.
-- News main image and gallery selection/upload.
-- YouTube links managed from admin.
-- Public gallery/video modal verification.
+- Trash page listing soft-deleted content.
+- Restore soft-deleted records.
+- Permanent delete records.
+- Permanent file delete only when safe.
+- Public pages must keep hiding deleted content.
 
 ## Local Development
 

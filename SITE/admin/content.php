@@ -4,6 +4,7 @@ require __DIR__ . '/../includes/database.php';
 require __DIR__ . '/../includes/auth.php';
 require __DIR__ . '/../includes/data.php';
 require __DIR__ . '/../includes/admin-layout.php';
+require __DIR__ . '/../includes/uploads.php';
 
 require_admin();
 
@@ -192,21 +193,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('content.php?type=' . urlencode($type) . ($originalSlug !== '' ? '&action=edit&slug=' . urlencode($originalSlug) : '&action=create'));
         }
 
+        $existing = $originalSlug !== '' ? (item_by_slug($items, $originalSlug) ?? []) : [];
+        $imagePath = trim((string) ($_POST['image'] ?? ($existing['image'] ?? '')));
+        $uploadError = null;
+        $uploadedImage = isset($_FILES['main_image']) ? store_uploaded_image($_FILES['main_image'], $uploadError) : null;
+        if ($uploadError !== null) {
+            admin_flash($uploadError, 'error');
+            redirect('content.php?type=' . urlencode($type) . ($originalSlug !== '' ? '&action=edit&slug=' . urlencode($originalSlug) : '&action=create'));
+        }
+        if ($uploadedImage !== null) {
+            $imagePath = $uploadedImage;
+        }
+
         $body = split_lines((string) ($_POST['body'] ?? ''));
         $item = [
             'slug' => $slug,
             'title' => $title,
             'excerpt' => trim((string) ($_POST['excerpt'] ?? '')),
             'body' => $body !== [] ? $body : [''],
-            'image' => trim((string) ($_POST['image'] ?? '')),
+            'image' => $imagePath,
             'category' => trim((string) ($_POST['category'] ?? '')),
             'deleted_at' => '',
         ];
 
         if ($type === 'news') {
+            $gallery = split_lines((string) ($_POST['gallery'] ?? ''));
+            if (isset($_FILES['gallery_images'])) {
+                foreach (normalize_files_array($_FILES['gallery_images']) as $galleryFile) {
+                    $galleryError = null;
+                    $galleryPath = store_uploaded_image($galleryFile, $galleryError);
+                    if ($galleryError !== null) {
+                        admin_flash($galleryError, 'error');
+                        redirect('content.php?type=' . urlencode($type) . ($originalSlug !== '' ? '&action=edit&slug=' . urlencode($originalSlug) : '&action=create'));
+                    }
+                    if ($galleryPath !== null) {
+                        $gallery[] = $galleryPath;
+                    }
+                }
+            }
+
             $item['date'] = trim((string) ($_POST['date'] ?? ''));
             $item['published_at'] = trim((string) ($_POST['published_at'] ?? date('Y-m-d')));
-            $item['gallery'] = split_lines((string) ($_POST['gallery'] ?? ''));
+            $item['gallery'] = array_values(array_unique($gallery));
             $item['videos'] = parse_videos((string) ($_POST['videos'] ?? ''));
         } else {
             $item['status'] = trim((string) ($_POST['status'] ?? 'იდეა'));
@@ -295,7 +323,7 @@ if ($action === 'edit' && $type === 'pages') {
     ?>
     <section class="admin-card">
       <div class="admin-card-heading"><h2><?php echo e($page['title'] ?? $pageKey); ?></h2><a class="inline-link" href="content.php?type=pages">← უკან</a></div>
-      <form class="admin-form" method="post">
+      <form class="admin-form" method="post" enctype="multipart/form-data">
         <?php echo csrf_field(); ?>
         <input type="hidden" name="action" value="save_page">
         <input type="hidden" name="type" value="pages">
@@ -325,7 +353,7 @@ if ($action === 'form') {
     ?>
     <section class="admin-card">
       <div class="admin-card-heading"><h2><?php echo e(($item['title'] ?? '') !== '' ? 'რედაქტირება' : 'დამატება'); ?></h2><a class="inline-link" href="content.php?type=<?php echo e($type); ?>">← უკან</a></div>
-      <form class="admin-form" method="post">
+      <form class="admin-form" method="post" enctype="multipart/form-data">
         <?php echo csrf_field(); ?>
         <input type="hidden" name="action" value="save">
         <input type="hidden" name="type" value="<?php echo e($type); ?>">
@@ -338,6 +366,7 @@ if ($action === 'form') {
         <label><span>სრული ტექსტი, აბზაცები ცარიელი ხაზით გამოყავით</span><textarea name="body" rows="9"><?php echo e(textarea_body($item['body'] ?? [])); ?></textarea></label>
         <div class="admin-form-grid">
           <label><span>სურათი / URL</span><input type="text" name="image" value="<?php echo e($item['image'] ?? ''); ?>"></label>
+          <label><span>ან ატვირთე მთავარი სურათი</span><input type="file" name="main_image" accept="image/jpeg,image/png,image/webp,image/gif"></label>
           <label><span>კატეგორია</span><input type="text" name="category" value="<?php echo e($item['category'] ?? ''); ?>"></label>
         </div>
         <?php if ($isNews): ?>
@@ -346,6 +375,7 @@ if ($action === 'form') {
             <label><span>Published date</span><input type="date" name="published_at" value="<?php echo e($item['published_at'] ?? date('Y-m-d')); ?>"></label>
           </div>
           <label><span>გალერეა, თითო URL ახალ ხაზზე</span><textarea name="gallery" rows="4"><?php echo e(gallery_text($item['gallery'] ?? [])); ?></textarea></label>
+          <label><span>ან ატვირთე გალერეის სურათები</span><input type="file" name="gallery_images[]" accept="image/jpeg,image/png,image/webp,image/gif" multiple></label>
           <label><span>ვიდეოები: title | youtube_url</span><textarea name="videos" rows="4"><?php echo e(videos_text($item['videos'] ?? [])); ?></textarea></label>
         <?php else: ?>
           <div class="admin-form-grid">
