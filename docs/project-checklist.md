@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest pushed phase: Phase 11, commit `8da6097`.
+- `[DONE]` Latest pushed phase before this checklist update: Phase 11, commit `8da6097`.
 
 ## Public Site
 
@@ -181,17 +181,17 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` `docs/project-worklog.md` records completed phases and QA.
 - `[DONE]` `docs/banza-site-prompts.md` stores the main project prompt.
 - `[DONE]` This checklist exists at `docs/project-checklist.md`.
-- `[TODO]` Update README with current setup, admin login, dev server and production notes.
-- `[TODO]` Add "continue in Codex" handoff section for workplace continuation.
-- `[TODO]` Document how to migrate runtime uploads.
-- `[TODO]` Document how to replace demo content safely.
-- `[TODO]` Document final release checklist.
+- `[DONE]` Update README with current setup, admin login, dev server and production notes.
+- `[DONE]` Add "continue in Codex" handoff section for workplace continuation.
+- `[DONE]` Document how to migrate runtime uploads.
+- `[DONE]` Document how to replace demo content safely.
+- `[DONE]` Document final release checklist.
 - `[REVIEW]` Decide whether README should stay Georgian-only or Georgian + English technical notes.
 
 ## Recommended Remaining Phase Order
 
-1. `[NEXT]` Phase 12: README/setup/handoff cleanup so workplace continuation is frictionless.
-2. `[TODO]` Phase 13: Decide storage direction: keep JSON for approval phase or wire MySQL now.
+1. `[DONE]` Phase 12: README/setup/handoff cleanup so workplace continuation is frictionless.
+2. `[NEXT]` Phase 13: Decide storage direction: keep JSON for approval phase or wire MySQL now.
 3. `[TODO]` Phase 14: If approved, implement MySQL-backed CRUD and import script.
 4. `[TODO]` Phase 15: Production config, admin password change, security hardening.
 5. `[TODO]` Phase 16: Replace demo content/assets with client-approved content.

@@ -471,6 +471,33 @@ Verification:
 - `SITE/storage/content.json` parsed successfully as JSON.
 - `git diff --check` passed with CRLF normalization warnings only.
 
+## Phase 12: README Setup And Handoff Cleanup
+
+Prepared the project for easier continuation in a new Codex session or workplace environment.
+
+Changed:
+
+- `README.md`: replaced the starter placeholder README with a practical project handoff.
+- `docs/project-checklist.md`: marked README/setup/handoff items as complete and moved the recommended next phase to Phase 13.
+
+Documented:
+
+- Current project status.
+- Local PHP dev server command.
+- Admin URL and demo credentials.
+- Development JSON storage model.
+- Runtime upload policy.
+- Verification commands.
+- Git phase workflow.
+- "Continue With Codex" handoff prompt.
+- Production before-launch checklist.
+- Why GitHub Pages is not suitable for this PHP project.
+
+Verification:
+
+- README and checklist were reviewed for consistency with the current repository layout and Phase 11 state.
+- No product PHP/CSS/JS behavior was changed in this phase.
+
 
 ## Current Known Limitations
 
@@ -480,7 +507,7 @@ Verification:
 
 ## Next Phase
 
-Phase 10: Production Backend And Deployment Prep
+Phase 13: Storage Direction Decision
 
 Planned:
 
