@@ -536,6 +536,53 @@ Verification:
 - No product PHP/CSS/JS behavior was changed in this phase.
 
 
+## Phase 14: Incremental MySQL Import Slice
+
+Started the MySQL migration in a controlled way while keeping JSON as the default runtime storage.
+
+Added:
+
+- `SITE/includes/repositories/contact-message-repository.php`
+- `SITE/scripts/import-json-to-mysql.php`
+
+Changed:
+
+- `SITE/includes/config.example.php`: added `content_storage.driver`, defaulting to `json`.
+- `SITE/database/schema.sql`: added a unique `slug` field to `contact_messages` so JSON messages can be imported idempotently.
+- `README.md`: documented the contact message import dry-run command and updated the next phase.
+- `docs/project-checklist.md`: marked the first MySQL import slice as done and moved MySQL runtime repository expansion to NEXT.
+
+How it works:
+
+- Runtime public/admin behavior still uses JSON, so the site remains easy to clone and run.
+- The new contact message repository normalizes JSON contact message records and upserts them to MySQL with prepared statements.
+- The import script currently supports `--only=contact_messages`.
+- The import script supports `--dry-run`, which validates JSON and counts importable messages without touching MySQL.
+- Real import uses a transaction and rolls back on failure.
+
+Problems found and fixed:
+
+- During QA, a temporary PowerShell JSON write used UTF-8 with BOM. PHP `json_decode` rejected that temporary BOM-prefixed file.
+- The product code was not changed for this; the QA script was corrected to write UTF-8 without BOM and to check native process exit codes.
+- Backup/restore cleanup confirmed no QA marker remained in `SITE/storage/content.json`.
+
+Verification:
+
+- `php -l SITE/includes/repositories/contact-message-repository.php` passed.
+- `php -l SITE/scripts/import-json-to-mysql.php` passed.
+- `php -l SITE/includes/config.example.php` passed.
+- Import dry-run with current content passed.
+- Import dry-run with a temporary QA contact message counted exactly one importable message.
+- Temporary QA content was restored and JSON validation passed after cleanup.
+- Route smoke passed for public home/news/contact and authenticated admin dashboard/messages pages.
+
+Next phase notes:
+
+- Keep JSON as default until a runtime MySQL slice is verified.
+- Phase 15 should wire one runtime MySQL repository path behind `content_storage.driver=mysql`, preferably contact messages first because that path is isolated and lower risk than news/pages.
+- Do not run real import against production data without explicit approval and a backup.
+
+
 ## Current Known Limitations
 
 - MySQL-backed CRUD is not wired yet; current CRUD uses JSON storage for development.
@@ -544,12 +591,13 @@ Verification:
 
 ## Next Phase
 
-Phase 14: Incremental MySQL Migration
+Phase 15: MySQL Runtime Repository Slice
 
 Planned:
 
-- Add repository structure and keep JSON as the default fallback.
-- Start MySQL-backed CRUD/import with one low-risk content area.
+- Keep JSON as the default fallback.
+- Wire one runtime MySQL repository path behind `content_storage.driver=mysql`.
+- Start with contact messages, then expand after verification.
 - Wire SMTP/email notifications for contact messages if needed.
 - Replace demo weather/live camera values with production integrations.
 - Complete manual responsive browser QA in the target browser.

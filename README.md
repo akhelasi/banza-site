@@ -137,6 +137,12 @@ JSON content storage:
 Get-Content SITE\storage\content.json -Raw | ConvertFrom-Json | Out-Null
 ```
 
+Contact message import dry-run:
+
+```powershell
+php SITE\scripts\import-json-to-mysql.php --dry-run --only=contact_messages
+```
+
 Git whitespace check:
 
 ```powershell
@@ -177,8 +183,8 @@ After each phase, run the relevant checks, update docs/project-worklog.md and do
 Recommended next phase:
 
 ```text
-Phase 14: Start MySQL migration in a controlled slice.
-Keep JSON as the default fallback, add the repository structure, then wire/import one content area first before expanding.
+Phase 15: Expand MySQL migration.
+Keep JSON as the default fallback, then wire a runtime MySQL repository slice for one content area before expanding.
 ```
 
 ## Production Before-Launch Checklist
