@@ -1655,6 +1655,20 @@ body {
   resize: vertical;
 }
 
+.admin-fieldset {
+  display: grid;
+  gap: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+}
+
+.admin-fieldset legend {
+  padding: 0 8px;
+  color: var(--green-dark);
+  font-weight: 900;
+}
+
 .checkbox-label {
   align-content: center;
   grid-template-columns: auto 1fr;

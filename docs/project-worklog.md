@@ -338,15 +338,48 @@ Verification:
 - `SITE/storage/content.json` validated as JSON.
 - End-to-end trash flow tested: create test news, soft-delete it, confirm Trash lists it, restore it, confirm public detail returns 200, soft-delete again, permanent-delete it, confirm detail returns 404 and storage record is gone.
 - QA marker scan confirmed no temporary test records remain.
+
+
+## Phase 8: Admin Settings Management
+
+Implemented admin-managed site settings for reusable public-site configuration.
+
+Changed:
+
+- `SITE/admin/settings.php`: replaced placeholder settings summary with editable forms.
+- `SITE/assets/css/style.css`: added fieldset styling for grouped admin settings fields.
+
+Implemented:
+
+- Social links management from admin panel.
+- Donation bank accounts management from admin panel.
+- Live camera title, status, preview image and description management.
+- Weather summary, temperature, wind, humidity, rain chance and nearby-place forecast management.
+- CSRF-protected settings save flow.
+- Basic validation requiring at least one social link and one donation account.
+- Settings persist into `SITE/storage/content.json` through the existing content store.
+
+Verification:
+
+- `php -l SITE/admin/settings.php` passed.
+- `node --check SITE/assets/js/main.js` passed.
+- End-to-end settings flow tested through local HTTP: admin login, settings POST, homepage reflects updated social/donation/camera/weather values.
+- Cleanup verified: temporary `SETTINGS_QA` markers were removed and the content store was restored.
+- Unauthenticated settings route returns admin redirect behavior as expected.
+
+Browser QA note:
+
+- Playwright/in-app browser automation was attempted through Node REPL but the local kernel failed with an `EPERM` filesystem permission error. This phase was verified with HTTP smoke tests, syntax checks and CSS/layout review.
+
 ## Current Known Limitations
 
 - MySQL-backed CRUD is not wired yet; current CRUD uses JSON storage for development.
 - Contact form is disabled until backend handling is added.
-- Real social links, bank accounts, weather API, live camera URL and official village data still need client-provided values.
+- Real weather API/live camera feed integration and official client-provided village data still need production values.
 
 ## Next Phase
 
-Phase 8: Final QA, Polish And Security Review
+Phase 9: Final QA, Polish And Security Review
 
 Planned:
 
