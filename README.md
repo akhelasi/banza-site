@@ -23,6 +23,7 @@ See:
 - `docs/project-worklog.md` for completed phases and verification notes.
 - `docs/project-checklist.md` for remaining work through production.
 - `docs/banza-site-prompts.md` for the original full project prompt.
+- `docs/storage-decision.md` for the JSON vs MySQL storage decision.
 
 ## Project Layout
 
@@ -97,6 +98,8 @@ Production recommendation:
 2. Implement repositories for posts, pages, settings, media and contact messages.
 3. Add an import script from `SITE/storage/content.json`.
 4. Keep uploaded media under `SITE/uploads/` and back it up separately.
+
+The current decision is documented in `docs/storage-decision.md`: keep JSON for development/content approval, then move to MySQL before public launch.
 
 ## Runtime Uploads
 
@@ -174,8 +177,8 @@ After each phase, run the relevant checks, update docs/project-worklog.md and do
 Recommended next phase:
 
 ```text
-Phase 13: Decide storage direction.
-Either keep JSON storage until content/design approval, or start wiring MySQL-backed CRUD and an import script.
+Phase 14: Start MySQL migration in a controlled slice.
+Keep JSON as the default fallback, add the repository structure, then wire/import one content area first before expanding.
 ```
 
 ## Production Before-Launch Checklist

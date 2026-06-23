@@ -499,6 +499,43 @@ Verification:
 - No product PHP/CSS/JS behavior was changed in this phase.
 
 
+## Phase 13: Storage Direction Decision
+
+Decided the storage path before starting production backend work.
+
+Added:
+
+- `docs/storage-decision.md`
+
+Changed:
+
+- `README.md`: linked the storage decision and updated the next recommended phase.
+- `docs/project-checklist.md`: marked the storage decision as complete and moved Phase 14 to NEXT.
+
+Decision:
+
+- Keep JSON storage only for development, Codex handoff and content/design approval.
+- Do not treat JSON storage as the production backend.
+- Move to MySQL before public launch.
+- Implement the MySQL migration incrementally rather than rewriting all CRUD at once.
+
+Reasoning:
+
+- JSON is fast and practical while content/design/admin behavior is still changing.
+- JSON is risky for production because of concurrency, backup, search/pagination and multi-admin editing concerns.
+- `SITE/database/schema.sql` already gives a MySQL target model, so the next phase should begin wiring repositories and an import path.
+
+Recommended next implementation:
+
+- Phase 14 should add a repository structure and keep JSON as the default fallback.
+- Implement/import one content area first, then expand to the rest after verification.
+
+Verification:
+
+- Documentation was checked against the current `content-store.php`, `schema.sql`, README and checklist.
+- No product PHP/CSS/JS behavior was changed in this phase.
+
+
 ## Current Known Limitations
 
 - MySQL-backed CRUD is not wired yet; current CRUD uses JSON storage for development.
@@ -507,11 +544,12 @@ Verification:
 
 ## Next Phase
 
-Phase 13: Storage Direction Decision
+Phase 14: Incremental MySQL Migration
 
 Planned:
 
-- Decide whether to keep JSON storage for handoff or wire MySQL-backed CRUD before production.
+- Add repository structure and keep JSON as the default fallback.
+- Start MySQL-backed CRUD/import with one low-risk content area.
 - Wire SMTP/email notifications for contact messages if needed.
 - Replace demo weather/live camera values with production integrations.
 - Complete manual responsive browser QA in the target browser.
