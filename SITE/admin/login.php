@@ -26,6 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'ელფოსტა ან პაროლი არასწორია.';
     }
 }
+
+send_security_headers();
 ?>
 <!doctype html>
 <html lang="ka">

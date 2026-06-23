@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 function render_header(array $site, array $navigation, array $socialLinks, string $currentPage, string $pageTitle, string $description = ''): void
 {
+    send_security_headers();
     $metaDescription = $description !== '' ? $description : ($site['description'] ?? '');
     ?>
 <!doctype html>

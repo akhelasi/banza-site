@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 function ensure_session(): void
 {
+    if (function_exists('app_session_start')) {
+        app_session_start();
+        return;
+    }
+
     if (session_status() !== PHP_SESSION_ACTIVE) {
         session_start();
     }

@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest pushed phase before this checklist update: Phase 11, commit `8da6097`.
+- `[DONE]` Latest pushed phase before this checklist update: Phase 15, commit `79475c0`.
 
 ## Public Site
 
@@ -121,14 +121,14 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Output escaping uses `e()` / `htmlspecialchars`.
 - `[DONE]` Upload handling validates file type/size.
 - `[DONE]` Raw stack/database errors are not intentionally shown to users.
-- `[TODO]` Change demo admin credentials before any public deployment.
-- `[TODO]` Move real config to untracked production config file or environment variables.
+- `[TODO]` Change demo admin credentials before any public deployment. Hash generator is available at `SITE/scripts/generate-password-hash.php`.
+- `[DONE]` Keep real production config in untracked `SITE/includes/config.php`.
 - `[TODO]` Add rate limiting or throttling for admin login and contact form.
 - `[TODO]` Add stronger spam protection for contact form if spam becomes likely.
-- `[TODO]` Add security headers in hosting config or PHP bootstrap.
-- `[TODO]` Review session cookie settings for production HTTPS.
+- `[DONE]` Add basic PHP security headers in public/admin layout bootstrap.
+- `[DONE]` Add configurable session cookie name, HttpOnly, SameSite and HTTPS secure flag.
 - `[TODO]` Run a final security review after MySQL wiring.
-- `[PROBLEM]` Demo admin credentials are documented and must not be used in production.
+- `[WAITING]` Real production admin email/password must be chosen by the client before deployment.
 - `[REVIEW]` Decide whether to add CAPTCHA; avoid it unless spam actually appears or the client requests it.
 
 ## Weather, Camera And External Integrations
@@ -170,7 +170,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` GitHub repo stores source code.
 - `[DONE]` GitHub Pages was intentionally not used because PHP will not run there.
 - `[TODO]` Pick production hosting that supports PHP and MySQL.
-- `[TODO]` Prepare production config instructions.
+- `[DONE]` Prepare production config instructions.
 - `[TODO]` Prepare upload folder permissions instructions.
 - `[TODO]` Prepare deployment checklist for clone/install/config/database/import/admin password.
 - `[TODO]` Add backup plan for database and uploaded media.
@@ -197,8 +197,8 @@ This checklist is the project control document for finishing the Banza village w
 2. `[DONE]` Phase 13: Decide storage direction: keep JSON for approval phase or wire MySQL now.
 3. `[DONE]` Phase 14: Start incremental MySQL-backed CRUD and import script.
 4. `[DONE]` Phase 15: Expand MySQL runtime repository slice while keeping JSON fallback.
-5. `[NEXT]` Phase 16: Production config, admin password change, security hardening.
-6. `[TODO]` Phase 17: Replace demo content/assets with client-approved content.
+5. `[DONE]` Phase 16: Production config, admin password change workflow, security hardening.
+6. `[NEXT]` Phase 17: Replace demo content/assets with client-approved content.
 7. `[TODO]` Phase 18: Real weather/camera integrations.
 8. `[TODO]` Phase 19: Responsive/manual browser QA and accessibility pass.
 9. `[TODO]` Phase 20: Hosting deployment prep and final release checklist.
@@ -208,7 +208,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[TODO]` All public pages work without PHP warnings/notices.
 - `[TODO]` Admin can manage all launch-critical content.
 - `[TODO]` Uploads, trash, contact messages and settings are verified after deployment.
-- `[TODO]` Demo credentials are replaced.
+- `[TODO]` Demo credentials are replaced with a generated password hash in untracked production config.
 - `[TODO]` Real content, real links and real donation accounts are approved by the client.
 - `[TODO]` Database and uploads have backup/restore instructions.
 - `[TODO]` Mobile and desktop manual QA is complete.

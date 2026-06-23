@@ -17,6 +17,7 @@ The current codebase includes:
 - `post_date` and `last_update` metadata for admin-managed content.
 - Development storage through `SITE/storage/content.json`.
 - SQL schema draft in `SITE/database/schema.sql`.
+- Production config hardening: untracked config file, session cookie settings, security headers and password hash helper.
 
 See:
 
@@ -82,6 +83,24 @@ Important: replace this before any public deployment.
 
 The demo password hash is stored in `SITE/includes/config.example.php`. Real production credentials must be kept outside Git, for example in an untracked `SITE/includes/config.php` or environment variables.
 
+
+## Production Config
+
+For production, do not edit or commit `SITE/includes/config.example.php` with real secrets.
+
+1. Copy `SITE/includes/config.example.php` to `SITE/includes/config.php` on the server.
+2. Generate a new admin password hash:
+
+```powershell
+php SITE\scripts\generate-password-hash.php "your-new-strong-password"
+```
+
+3. Put the generated value into `admin.password_hash` in `SITE/includes/config.php`.
+4. Replace the demo admin email with the real admin email.
+5. Set `session.secure` to `true` after the site is served through HTTPS.
+6. Keep `SITE/includes/config.php` untracked; `.gitignore` excludes it.
+
+The site sends these PHP security headers by default: `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, and `Referrer-Policy: strict-origin-when-cross-origin`.
 ## Storage Model
 
 Current development storage:
@@ -183,15 +202,14 @@ After each phase, run the relevant checks, update docs/project-worklog.md and do
 Recommended next phase:
 
 ```text
-Phase 16: Continue production hardening.
-Either expand MySQL runtime repositories beyond contact messages, or start production config/admin credential hardening if hosting details are known.
+Phase 17: Replace demo content/assets with client-approved Georgian content, or continue expanding MySQL repositories if hosting/database details are ready.
 ```
 
 ## Production Before-Launch Checklist
 
 Must be completed before public launch:
 
-- Replace demo admin credentials.
+- Replace demo admin credentials using SITE/scripts/generate-password-hash.php.
 - Replace demo content with client-approved Georgian text.
 - Replace demo contact/social/bank details with real values.
 - Decide and implement production storage, preferably MySQL.

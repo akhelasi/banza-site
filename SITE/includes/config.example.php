@@ -18,4 +18,14 @@ return [
         // Switch to mysql only after running schema.sql and import scripts.
         'driver' => 'json',
     ],
+    'session' => [
+        'name' => 'banza_admin_session',
+        // Set to true in SITE/includes/config.php after enabling HTTPS.
+        'secure' => false,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ],
+    'security' => [
+        'send_headers' => true,
+    ],
 ];

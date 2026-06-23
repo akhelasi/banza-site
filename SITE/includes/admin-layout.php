@@ -15,6 +15,7 @@ $adminNav = [
 
 function render_admin_header(string $title, string $currentKey = 'dashboard'): void
 {
+    send_security_headers();
     global $adminNav;
     $admin = current_admin();
     $flash = admin_flash();

@@ -24,11 +24,66 @@ function is_active_nav(string $current, string $target): string
     return $current === $target ? ' aria-current="page"' : '';
 }
 
+function app_config_section(string $key): array
+{
+    if (!function_exists('db_config')) {
+        return [];
+    }
+
+    $config = db_config();
+    return isset($config[$key]) && is_array($config[$key]) ? $config[$key] : [];
+}
+
+function is_https_request(): bool
+{
+    return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (($_SERVER['SERVER_PORT'] ?? '') === '443')
+        || (strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https');
+}
+
+function app_session_start(): void
+{
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        return;
+    }
+
+    $sessionConfig = app_config_section('session');
+    $sessionName = trim((string) ($sessionConfig['name'] ?? 'banza_admin_session'));
+
+    if ($sessionName !== '') {
+        session_name($sessionName);
+    }
+
+    ini_set('session.use_strict_mode', '1');
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
+        'secure' => (bool) ($sessionConfig['secure'] ?? is_https_request()),
+        'httponly' => (bool) ($sessionConfig['httponly'] ?? true),
+        'samesite' => (string) ($sessionConfig['samesite'] ?? 'Lax'),
+    ]);
+    session_start();
+}
+
+function send_security_headers(): void
+{
+    if (headers_sent()) {
+        return;
+    }
+
+    $securityConfig = app_config_section('security');
+    if (($securityConfig['send_headers'] ?? true) === false) {
+        return;
+    }
+
+    header('X-Frame-Options: SAMEORIGIN');
+    header('X-Content-Type-Options: nosniff');
+    header('Referrer-Policy: strict-origin-when-cross-origin');
+}
+
 function csrf_token(): string
 {
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-        session_start();
-    }
+    app_session_start();
 
     if (empty($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -44,9 +99,7 @@ function csrf_field(): string
 
 function verify_csrf(?string $token): bool
 {
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-        session_start();
-    }
+    app_session_start();
 
     return is_string($token)
         && isset($_SESSION['csrf_token'])
