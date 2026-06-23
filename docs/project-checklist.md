@@ -158,11 +158,13 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Public route smoke checks passed in previous phases.
 - `[DONE]` Search/filter/sort hooks verified.
 - `[DONE]` Main JS syntax checks passed.
-- `[TODO]` Manual responsive QA on desktop, tablet and mobile.
-- `[TODO]` Manual browser QA for modals, contact form, admin forms and upload UI.
-- `[TODO]` Keyboard navigation pass for header nav, modals, forms and admin actions.
+- `[DONE]` Fallback route/DOM responsive QA pass completed for public pages and admin login/settings.
+- `[DONE]` Modal/form/filter/sort hooks checked in rendered PHP/HTML.
+- `[DONE]` CSS responsive/focus/overflow rules reviewed.
+- `[TODO]` Manual visual QA in a real browser on desktop, tablet and mobile before launch.
+- `[TODO]` Full keyboard navigation pass for header nav, modals, forms and admin actions in a real browser.
 - `[TODO]` Screen reader label/heading pass.
-- `[TODO]` Check all Georgian text for overflow on small screens.
+- `[TODO]` Check all Georgian text visually for overflow on small screens.
 - `[PROBLEM]` Automated Playwright/in-app browser QA is blocked in this environment by local `EPERM` filesystem permission errors.
 - `[RETHINK]` If automated browser QA remains blocked locally, use a lightweight manual QA checklist or run Playwright from a normal terminal outside Codex.
 
@@ -201,8 +203,8 @@ This checklist is the project control document for finishing the Banza village w
 5. `[DONE]` Phase 16: Production config, admin password change workflow, security hardening.
 6. `[WAITING]` Phase 17: Replace demo content/assets with client-approved content.
 7. `[DONE]` Phase 18: Real weather/camera integration foundation.
-8. `[NEXT]` Phase 19: Responsive/manual browser QA and accessibility pass.
-9. `[TODO]` Phase 20: Hosting deployment prep and final release checklist.
+8. `[DONE]` Phase 19: Responsive/browser QA fallback pass.
+9. `[NEXT]` Phase 20: Hosting deployment prep and final release checklist.
 
 ## Definition Of Done For Production
 

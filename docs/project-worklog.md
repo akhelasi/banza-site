@@ -725,6 +725,7 @@ Next phase notes:
 - MySQL-backed runtime is only partially wired for contact messages; expanded import coverage now exists for the rest of the JSON content, but runtime repositories still need to be wired.
 - Contact form stores messages in JSON by default; MySQL runtime support is currently wired for contact messages only when `content_storage.driver=mysql`.
 - Real camera stream URL and official client-provided village data still need production values.
+- Automated screenshot/browser QA is still blocked in this Codex environment by Node/Playwright `EPERM` access to `C:\Users\User\AppData`; manual visual QA remains required before launch.
 
 ## Phase 18: Real Weather And Camera Integration Foundation
 
@@ -773,15 +774,43 @@ Next phase notes:
 - Real camera stream remains WAITING until the client provides the camera provider/embed URL.
 - Phase 19 should do manual responsive/browser/accessibility QA, unless client-approved content arrives first.
 
+## Phase 19: Responsive Browser QA Fallback Pass
+
+Ran a responsive/browser QA fallback pass after browser automation remained unavailable in this environment.
+
+Checked:
+
+- Public routes returned 200: home, news, projects, about, history, contact, football and admin login.
+- Rendered PHP/HTML contains modal hooks for camera, weather and donation.
+- Listing pages contain live filter/sort hooks.
+- Contact/admin forms contain CSRF fields where state changes happen.
+- Admin settings exposes `weather_provider` and `camera_stream_url` controls added in Phase 18.
+- CSS includes focus-visible rules, modal overflow handling, mobile breakpoints, grid collapse rules, stable aspect-ratio media and mobile overflow hardening.
+
+Problems found and fixed:
+
+- Browser automation via node_repl/Playwright still fails with `EPERM` while trying to access `C:\Users\User\AppData`. No product code was changed for this; the phase used HTTP/DOM/CSS checks and kept the manual visual QA task open for a real browser.
+
+Verification:
+
+- HTTP route smoke passed for the main public pages and admin login.
+- DOM hook scan passed for modal/filter/sort/form controls.
+- CSS responsive/focus/overflow scan passed.
+
+Next phase notes:
+
+- Phase 20 should prepare hosting/deployment instructions, upload permissions, backup/restore and final release checklist.
+- A real browser visual pass is still required before production launch.
+
 ## Next Phase
 
-Phase 19: Responsive Browser QA And Accessibility Pass
+Phase 20: Hosting Deployment Prep And Final Release Checklist
 
 Planned:
 
-- Check desktop, tablet and mobile layouts manually.
-- Verify modals, contact form, admin forms and upload UI in browser.
-- Run keyboard navigation and visible focus checks.
+- Prepare production hosting checklist for PHP/MySQL.
+- Document upload folder permissions, database import order and backup/restore.
+- Add final release checklist and rollback notes.
 
 ## Local Development
 

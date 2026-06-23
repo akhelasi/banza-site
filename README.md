@@ -211,7 +211,7 @@ After each phase, run the relevant checks, update docs/project-worklog.md and do
 Recommended next phase:
 
 ```text
-Phase 19: Responsive/manual browser QA and accessibility pass, or continue replacing demo content once client-approved values are available.
+Phase 20: Hosting deployment prep and final release checklist, or continue replacing demo content once client-approved values are available.
 ```
 
 ## Production Before-Launch Checklist
