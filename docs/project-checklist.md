@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest pushed phase before this checklist update: Phase 15, commit `79475c0`.
+- `[DONE]` Latest pushed phase before this checklist update: Phase 16, commit `f1d269b`.
 
 ## Public Site
 
@@ -95,7 +95,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[IN PROGRESS]` Implement MySQL-backed repositories for posts/pages/settings/messages/media.
 - `[DONE]` Contact messages have a runtime MySQL repository path behind `content_storage.driver=mysql`.
 - `[DONE]` Add first migration/import script from `storage/content.json` to MySQL for contact messages.
-- `[TODO]` Expand migration/import script to posts, pages, settings, social links, donation accounts and media.
+- `[DONE]` Expand migration/import script to posts, pages, settings, social links, donation accounts and media.
 - `[TODO]` Add install/setup script for creating initial admin and default settings.
 - `[TODO]` Add database backup/restore notes for production hosting.
 - `[PROBLEM]` Current JSON storage is fine for development but risky for production concurrency, backups and multi-admin editing.
@@ -198,8 +198,8 @@ This checklist is the project control document for finishing the Banza village w
 3. `[DONE]` Phase 14: Start incremental MySQL-backed CRUD and import script.
 4. `[DONE]` Phase 15: Expand MySQL runtime repository slice while keeping JSON fallback.
 5. `[DONE]` Phase 16: Production config, admin password change workflow, security hardening.
-6. `[NEXT]` Phase 17: Replace demo content/assets with client-approved content.
-7. `[TODO]` Phase 18: Real weather/camera integrations.
+6. `[WAITING]` Phase 17: Replace demo content/assets with client-approved content.
+7. `[NEXT]` Phase 18: Real weather/camera integrations.
 8. `[TODO]` Phase 19: Responsive/manual browser QA and accessibility pass.
 9. `[TODO]` Phase 20: Hosting deployment prep and final release checklist.
 

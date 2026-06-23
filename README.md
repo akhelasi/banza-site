@@ -156,10 +156,18 @@ JSON content storage:
 Get-Content SITE\storage\content.json -Raw | ConvertFrom-Json | Out-Null
 ```
 
-Contact message import dry-run:
+JSON-to-MySQL import dry-run:
 
 ```powershell
-php SITE\scripts\import-json-to-mysql.php --dry-run --only=contact_messages
+php SITE\scripts\import-json-to-mysql.php --dry-run --only=all
+```
+
+Supported `--only` targets: `all`, `pages`, `posts`, `settings`, `social_links`, `donation_accounts`, `contact_messages`.
+
+For an existing MySQL database created before the import source keys were added, run:
+
+```powershell
+mysql -u root -p banza_site < SITE\database\migrations\2026_06_24_add_import_source_keys.sql
 ```
 
 Git whitespace check:
@@ -202,7 +210,7 @@ After each phase, run the relevant checks, update docs/project-worklog.md and do
 Recommended next phase:
 
 ```text
-Phase 17: Replace demo content/assets with client-approved Georgian content, or continue expanding MySQL repositories if hosting/database details are ready.
+Phase 18: Real weather/camera integrations, or continue replacing demo content once client-approved values are available.
 ```
 
 ## Production Before-Launch Checklist

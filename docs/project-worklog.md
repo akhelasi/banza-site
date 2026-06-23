@@ -641,6 +641,7 @@ Changed:
 - `SITE/includes/helpers.php`: added shared app session startup and basic security header helpers.
 - `SITE/includes/auth.php`: admin sessions now use the shared session startup helper.
 - `SITE/includes/layout.php` and `SITE/includes/admin-layout.php`: public/admin responses send basic security headers before output.
+- `SITE/admin/login.php`: the standalone login page sends the same security headers before output.
 - `SITE/scripts/generate-password-hash.php`: added a CLI helper for generating production admin password hashes.
 - `README.md`: documented production config setup and password hash workflow.
 - `docs/project-checklist.md`: marked Phase 16 hardening items complete and moved Phase 17 to NEXT.
@@ -656,36 +657,84 @@ Problems found and fixed:
 
 - `apply_patch` partially applied the first edit, then failed under the Windows sandbox ACL helper. The affected files were inspected, duplicate `.gitignore` entries were removed and the remaining edits were applied with targeted PowerShell file writes.
 - The first HTTP smoke script used `$home`, which conflicts with PowerShell's read-only `$HOME` variable. The script was corrected to use `$homeResponse` and the header check passed.
+- A follow-up HTTP smoke test found that `SITE/admin/login.php` did not use the shared admin layout and therefore missed the new security headers. Added `send_security_headers()` before login page output and reran the checks.
 
 Verification:
 
-- Changed PHP files passed `php -l`.
+- Full PHP syntax pass across all `SITE/**/*.php` files passed.
 - `node --check SITE/assets/js/main.js` passed.
 - `SITE/storage/content.json` parsed successfully as JSON.
+- Contact message import dry-run passed.
 - Password hash generator produced a valid password hash and usage note.
 - Local HTTP smoke confirmed homepage/contact/admin login return 200 and include security headers.
 - Admin `/admin` redirect still points to `/admin/login.php`.
 - Demo admin login still works and uses the `banza_admin_session` cookie.
+- `git diff --check` passed with CRLF normalization warnings only.
 
 Next phase notes:
 
 - Phase 17 should replace demo content/assets/links/accounts with client-approved Georgian content, unless hosting/database details are ready and MySQL repository expansion is higher priority.
 - Real production admin credentials still need to be chosen by the client and placed only in untracked production config.
+
+## Phase 17: Expanded MySQL Import Coverage
+
+Client-approved replacement content is still waiting on real client values, so this phase continued the production-critical MySQL migration path instead.
+
+Added:
+
+- `SITE/includes/repositories/content-import-repository.php`
+- `SITE/database/migrations/2026_06_24_add_import_source_keys.sql`
+
+Changed:
+
+- `SITE/scripts/import-json-to-mysql.php`: supports `all`, `pages`, `posts`, `settings`, `social_links`, `donation_accounts` and `contact_messages` import targets.
+- `SITE/database/schema.sql`: added nullable unique `source_key` columns for imported media, social links and donation accounts.
+- `.gitignore`: allows SQL migration files under `SITE/database/migrations/`.
+- `README.md`: documented the expanded import dry-run and source-key migration command.
+- `docs/project-checklist.md`: marked expanded import coverage complete and moved real weather/camera integrations to NEXT while client-approved content remains WAITING.
+
+How it works:
+
+- Dry-run mode validates the JSON storage and reports importable counts without opening a database connection.
+- Real import uses one transaction and prepared statements.
+- Pages are imported as structured JSON payloads in `pages.body` so static page-specific fields can be recovered by a future runtime repository.
+- News and projects import into `posts`; gallery images and YouTube videos import into `media` with stable source keys.
+- Camera/weather import into `settings`; social links and donation accounts import into their dedicated tables.
+- Contact message import keeps the existing repository path.
+
+Verification:
+
+- Full PHP syntax pass across all `SITE/**/*.php` files passed.
+- `node --check SITE/assets/js/main.js` passed.
+- `SITE/storage/content.json` parsed successfully as JSON.
+- `php -l SITE/includes/repositories/content-import-repository.php` passed.
+- `php -l SITE/scripts/import-json-to-mysql.php` passed.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=all` passed and reported pages, posts, media, settings, social links, donation accounts and contact messages.
+- Individual dry-runs for `posts`, `pages`, `social_links` and `contact_messages` passed.
+- A normalizer assertion script confirmed expected counts and source-key shapes.
+- `git diff --check` passed with CRLF normalization warnings only.
+
+Next phase notes:
+
+- Real MySQL import was not executed because no target database was requested/provided in this phase.
+- Before importing into an existing database, run `SITE/database/migrations/2026_06_24_add_import_source_keys.sql` once or rebuild from `schema.sql`.
+- Client-approved content is still required before the demo text/links/accounts can be replaced.
+
 ## Current Known Limitations
 
-- MySQL-backed runtime is only partially wired for contact messages; most content still uses JSON storage for development.
+- MySQL-backed runtime is only partially wired for contact messages; expanded import coverage now exists for the rest of the JSON content, but runtime repositories still need to be wired.
 - Contact form stores messages in JSON by default; MySQL runtime support is currently wired for contact messages only when `content_storage.driver=mysql`.
 - Real weather API/live camera feed integration and official client-provided village data still need production values.
 
 ## Next Phase
 
-Phase 17: Client Content And Asset Replacement
+Phase 18: Real Weather And Camera Integrations
 
 Planned:
 
-- Replace demo text, images, social links, contact values and donation accounts with client-approved values.
-- Keep researched Banza facts source-backed and mark anything uncertain for client approval.
-- If client content is still unavailable, continue with the next production-critical path: expand MySQL repositories beyond contact messages.
+- Choose the weather source/API and decide server-side caching.
+- Add graceful fallback behavior for unavailable weather/camera providers.
+- Replace the demo camera preview with a real stream/embed after the client provides provider details.
 
 ## Local Development
 

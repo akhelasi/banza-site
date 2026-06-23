@@ -24,6 +24,8 @@ Thumbs.db
 # Database dumps/backups
 *.sql
 !SITE/database/schema.sql
+!SITE/database/migrations/
+!SITE/database/migrations/*.sql
 *.sqlite
 *.sqlite3
 *.db

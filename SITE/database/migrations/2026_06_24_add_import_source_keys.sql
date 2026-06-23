@@ -1,0 +1,10 @@
+USE banza_site;
+
+ALTER TABLE media
+  ADD COLUMN source_key VARCHAR(190) NULL UNIQUE AFTER id;
+
+ALTER TABLE social_links
+  ADD COLUMN source_key VARCHAR(190) NULL UNIQUE AFTER id;
+
+ALTER TABLE donation_accounts
+  ADD COLUMN source_key VARCHAR(190) NULL UNIQUE AFTER id;
