@@ -10,6 +10,7 @@ $adminNav = [
     ['label' => 'ფაილები', 'href' => 'media.php', 'key' => 'media'],
     ['label' => 'შეტყობინებები', 'href' => 'messages.php', 'key' => 'messages'],
     ['label' => 'პარამეტრები', 'href' => 'settings.php', 'key' => 'settings'],
+    ['label' => 'პროფილი', 'href' => 'profile.php', 'key' => 'profile'],
     ['label' => 'სანაგვე', 'href' => 'trash.php', 'key' => 'trash'],
 ];
 

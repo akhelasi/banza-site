@@ -20,6 +20,24 @@ function admin_credentials(): array
     return $config['admin'] ?? [];
 }
 
+function admin_runtime_config_path(): string
+{
+    return __DIR__ . '/config.php';
+}
+
+function write_admin_credentials(string $email, string $passwordHash): bool
+{
+    $config = db_config();
+    $config['admin'] = is_array($config['admin'] ?? null) ? $config['admin'] : [];
+    $config['admin']['email'] = strtolower(trim($email));
+    $config['admin']['password_hash'] = $passwordHash;
+
+    $path = admin_runtime_config_path();
+    $export = "<?php\nreturn " . var_export($config, true) . ";\n";
+
+    return file_put_contents($path, $export, LOCK_EX) !== false;
+}
+
 function is_admin_logged_in(): bool
 {
     ensure_session();
@@ -93,4 +111,16 @@ function admin_flash(?string $message = null, string $type = 'success'): ?array
     $flash = $_SESSION['flash'];
     unset($_SESSION['flash']);
     return $flash;
+}
+
+
+function update_current_admin_session(string $email): void
+{
+    ensure_session();
+
+    if (!isset($_SESSION['admin']) || !is_array($_SESSION['admin'])) {
+        return;
+    }
+
+    $_SESSION['admin']['email'] = strtolower(trim($email));
 }

@@ -1099,3 +1099,50 @@ Typical XAMPP URL may also be:
 ```text
 http://localhost/SITE/
 ```
+
+## Phase 27: Admin Profile And Password Change Flow
+
+Added an authenticated admin profile page for changing the admin email/password without committing secrets.
+
+Added:
+
+- `SITE/admin/profile.php`
+
+Changed:
+
+- `SITE/includes/auth.php`
+  - Added helpers to write admin credentials into ignored runtime `SITE/includes/config.php`.
+  - Added current session email refresh after credential changes.
+- `SITE/includes/admin-layout.php`
+  - Added `პროფილი` to the admin sidebar.
+- `README.md`
+  - Added the profile page to current status.
+- `docs/project-checklist.md`
+  - Marked admin profile/password change flow complete.
+
+How it works:
+
+- The form requires CSRF, the current password, a valid email, a new password of at least 12 characters and matching confirmation.
+- It verifies the current password with `password_verify`.
+- It hashes the new password with `password_hash`.
+- It writes the updated config array to `SITE/includes/config.php`, which is already ignored by Git.
+- It never writes real credentials to committed files.
+
+Problems found and fixed:
+
+- The flow needed to match the current config-backed auth model. It intentionally updates runtime config, not the `admins` MySQL table, because login does not read the table yet.
+- An initial patch duplicated helper functions in `auth.php`; this was caught in source scan and removed before committing.
+
+Verification:
+
+- `php -l` passed for `SITE/admin/profile.php`, `SITE/includes/auth.php` and `SITE/includes/admin-layout.php`.
+- Full PHP lint passed for all 33 PHP files under `SITE/`.
+- Source scan confirmed the profile nav entry, CSRF field, current-password check and runtime config writer exist exactly once.
+- CLI render check confirmed the profile form renders for an authenticated admin session.
+- `node --check SITE/assets/js/main.js` passed.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- DB-backed admin authentication remains a future phase if production should use the `admins` table directly.
+- Bulk actions for admin tables remain open.
