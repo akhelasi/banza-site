@@ -1041,6 +1041,41 @@ Next phase notes:
 - Image resizing/compression remains open. Dimension rejection protects the server, but it does not optimize accepted uploads.
 - Alt text/captions still need a persistence model.
 
+## Phase 26: Admin List Preview Links
+
+Added public preview links from admin content list rows.
+
+Changed:
+
+- `SITE/admin/content.php`
+  - Added `admin_preview_url()` to map admin content rows to public URLs.
+  - Static pages now include a `ნახვა` action that opens about/history/football/contact public pages.
+  - News rows now include a public preview link to `news-detail.php?slug=...`.
+  - Project rows now include a public preview link to `projects.php#slug`.
+- `docs/project-checklist.md`
+  - Marked admin preview links complete.
+
+How it works:
+
+- Preview links open in a new tab with `target="_blank"` and `rel="noopener"`.
+- URLs are generated server-side and escaped before rendering.
+
+Problems found and fixed:
+
+- No regression was found during this phase.
+
+Verification:
+
+- `php -l SITE/admin/content.php` passed.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- Source scan confirmed preview links are rendered for pages and content rows.
+- `node --check SITE/assets/js/main.js` passed.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Bulk actions and admin profile/password change flow remain open admin panel tasks.
+
 ## Next Phase
 
 Remaining Production Blockers

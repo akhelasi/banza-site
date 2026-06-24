@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 25.
+- `[DONE]` Latest completed phase before this checklist update: Phase 26.
 
 ## Public Site
 
@@ -65,7 +65,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Add admin search/filter/sort to content tables and messages table.
 - `[TODO]` Add bulk actions for messages and content lists.
 - `[TODO]` Add image alt text fields in admin forms.
-- `[TODO]` Add preview links from admin list rows to public pages.
+- `[DONE]` Add preview links from admin list rows to public pages.
 - `[TODO]` Add admin profile/password change flow.
 - `[REVIEW]` Decide whether there should be multiple admin users/roles or one shared admin account for launch.
 - `[RETHINK]` Current admin is file-backed JSON. For production, moving admin CRUD to MySQL is the cleaner long-term path.
@@ -211,6 +211,7 @@ This checklist is the project control document for finishing the Banza village w
 12. `[DONE]` Phase 23: Production setup script for initial admin and defaults.
 13. `[DONE]` Phase 24: Admin media library search, filter and sort.
 14. `[DONE]` Phase 25: Upload max-dimensions validation.
+15. `[DONE]` Phase 26: Admin list preview links.
 
 ## Definition Of Done For Production
 

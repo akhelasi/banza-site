@@ -44,6 +44,23 @@ function admin_section_nav_key(string $type): string
     };
 }
 
+function admin_preview_url(string $type, array $item = [], string $pageKey = ''): string
+{
+    if ($type === 'pages') {
+        $pagePath = match ($pageKey) {
+            'history' => 'history.php',
+            'football' => 'football.php',
+            'contact' => 'contact.php',
+            default => 'about.php',
+        };
+
+        return '../' . $pagePath;
+    }
+
+    $slug = rawurlencode((string) ($item['slug'] ?? ''));
+    return $type === 'projects' ? '../projects.php#' . $slug : '../news-detail.php?slug=' . $slug;
+}
+
 function item_by_slug(array $items, string $slug): ?array
 {
     foreach ($items as $item) {
@@ -418,7 +435,14 @@ if ($type === 'pages') {
           <thead><tr><th>გვერდი</th><th>აღწერა</th><th>ქმედება</th></tr></thead>
           <tbody id="adminPagesList">
             <?php foreach ($pages as $pageKey => $page): ?>
-              <tr class="filter-item" data-title="<?php echo e($page['title'] ?? $pageKey); ?>" data-text="<?php echo e(($page['excerpt'] ?? '') . ' ' . $pageKey); ?>" data-sort-title="<?php echo e($page['title'] ?? $pageKey); ?>"><td><?php echo e($page['title'] ?? $pageKey); ?></td><td><?php echo e($page['excerpt'] ?? ''); ?></td><td><a class="inline-link" href="content.php?type=pages&action=edit&page=<?php echo e($pageKey); ?>">რედაქტირება →</a></td></tr>
+              <tr class="filter-item" data-title="<?php echo e($page['title'] ?? $pageKey); ?>" data-text="<?php echo e(($page['excerpt'] ?? '') . ' ' . $pageKey); ?>" data-sort-title="<?php echo e($page['title'] ?? $pageKey); ?>">
+                <td><?php echo e($page['title'] ?? $pageKey); ?></td>
+                <td><?php echo e($page['excerpt'] ?? ''); ?></td>
+                <td class="admin-actions">
+                  <a class="inline-link" href="<?php echo e(admin_preview_url('pages', [], $pageKey)); ?>" target="_blank" rel="noopener">ნახვა</a>
+                  <a class="inline-link" href="content.php?type=pages&action=edit&page=<?php echo e($pageKey); ?>">რედაქტირება</a>
+                </td>
+              </tr>
             <?php endforeach; ?>
           </tbody>
         </table>
@@ -481,6 +505,7 @@ sort($itemCategories, SORT_NATURAL | SORT_FLAG_CASE);
             <td><?php echo e($item['excerpt'] ?? ''); ?></td>
             <td><?php echo e($itemCategory); ?></td>
             <td class="admin-actions">
+              <a class="inline-link" href="<?php echo e(admin_preview_url($type, $item)); ?>" target="_blank" rel="noopener">ნახვა</a>
               <a class="inline-link" href="content.php?type=<?php echo e($type); ?>&action=edit&slug=<?php echo e($item['slug'] ?? ''); ?>">რედაქტირება</a>
               <form method="post" onsubmit="return confirm('ჩანაწერი გადავიდეს სანაგვეში?');">
                 <?php echo csrf_field(); ?>
