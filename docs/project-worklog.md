@@ -1407,3 +1407,59 @@ Next phase notes:
 
 - Per-media captions remain open and need a storage model.
 - Production hosting should enable PHP GD if automatic upload optimization is desired.
+
+## Phase 34: Uploaded Media Alt And Caption Metadata
+
+Added editable metadata for uploaded media library images.
+
+Changed:
+
+- `SITE/includes/content-store.php`
+  - Added `mediaItems` to JSON storage defaults.
+- `SITE/includes/data.php`
+  - Exposes `$mediaItems` from the content store.
+- `SITE/admin/media.php`
+  - Added a `save_meta` POST action with CSRF validation.
+  - Uploaded media cards now render editable alt text and caption fields.
+  - Media preview images use saved alt text when available.
+- `SITE/assets/css/style.css`
+  - Added compact styles for per-media metadata forms.
+- `SITE/database/schema.sql`
+  - Added `media.caption`.
+- `SITE/database/migrations/2026_06_24_add_media_caption.sql`
+  - Adds the caption column to existing databases.
+- `SITE/includes/repositories/content-import-repository.php`
+  - Imports standalone `mediaItems` records into MySQL media rows.
+  - Adds caption binding for imported post gallery/video media.
+- `SITE/scripts/import-json-to-mysql.php`
+  - Added `media_items` as a supported import target.
+- `README.md`, `docs/production-deployment-checklist.md` and `docs/project-checklist.md`
+  - Documented the new migration/import target and marked the task complete.
+
+How it works:
+
+- Metadata is keyed by uploaded file path under `content.json.mediaItems`.
+- Only real uploaded `uploads/...` paths can be edited through the media metadata action.
+- Saved metadata records include `path`, `alt`, `caption` and `last_update`.
+- MySQL import stores uploaded media metadata as standalone `media` records with nullable `post_id`.
+
+Problems found and fixed:
+
+- The first implementation used `$content` in `media.php` before setting it locally. This was fixed by initializing `$content = $contentStore ?? []`.
+- The first metadata save guard accepted any `uploads/...` string. It now validates the submitted path against the actual uploaded media list before saving.
+- The production schema had `alt_text` but no caption column, so an additive schema field and migration were added.
+
+Verification:
+
+- `php -l` passed for changed PHP files.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `node --check SITE/assets/js/main.js` passed.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=media_items` passed.
+- Source scan confirmed `mediaItems`, `save_meta`, `media-meta-form`, `caption` schema/import bindings and the new migration exist.
+- Local HTTP smoke with Node `fetch` confirmed `/admin/media.php` returns `302` to `/admin/login.php` when unauthenticated, not a PHP/server error.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Media captions are now stored in the media library; public article/gallery caption rendering can be added later if the client wants captions visible on public pages.
+- Remaining production blockers mostly depend on client-approved content, production credentials, hosting and real browser QA.

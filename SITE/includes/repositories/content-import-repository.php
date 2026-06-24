@@ -181,6 +181,41 @@ function content_import_donation_accounts(array $content): array
     return $accounts;
 }
 
+function content_import_media_items(array $content): array
+{
+    $mediaItems = [];
+    $items = is_array($content['mediaItems'] ?? null) ? $content['mediaItems'] : [];
+    $index = 0;
+
+    foreach ($items as $path => $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+
+        $filePath = trim((string) ($item['path'] ?? $path));
+        if ($filePath === '' || !str_starts_with($filePath, 'uploads/')) {
+            continue;
+        }
+
+        $mediaItems[] = [
+            'source_key' => content_import_source_key('media-item', $filePath),
+            'post_id' => null,
+            'file_path' => $filePath,
+            'alt_text' => trim((string) ($item['alt'] ?? '')),
+            'caption' => trim((string) ($item['caption'] ?? '')),
+            'media_type' => 'image',
+            'youtube_url' => null,
+            'sort_order' => $index,
+            'post_date' => content_import_optional_date($item, 'post_date'),
+            'last_update' => content_import_optional_date($item, 'last_update'),
+            'deleted_at' => content_import_deleted_at($item),
+        ];
+        $index++;
+    }
+
+    return $mediaItems;
+}
+
 function content_import_summary(array $content): array
 {
     $posts = content_import_posts($content);
@@ -208,6 +243,7 @@ function content_import_summary(array $content): array
         'settings' => count(content_import_settings($content)),
         'social_links' => count(content_import_social_links($content)),
         'donation_accounts' => count(content_import_donation_accounts($content)),
+        'media_items' => count(content_import_media_items($content)),
         'contact_messages' => count($importableMessages),
     ];
 }
@@ -257,12 +293,13 @@ function import_posts_to_mysql(PDO $pdo, array $posts): array
     );
     $findPost = $pdo->prepare('SELECT id FROM posts WHERE slug = :slug LIMIT 1');
     $mediaStatement = $pdo->prepare(
-        'INSERT INTO media (source_key, post_id, file_path, alt_text, media_type, youtube_url, sort_order)
-         VALUES (:source_key, :post_id, :file_path, :alt_text, :media_type, :youtube_url, :sort_order)
+        'INSERT INTO media (source_key, post_id, file_path, alt_text, caption, media_type, youtube_url, sort_order)
+         VALUES (:source_key, :post_id, :file_path, :alt_text, :caption, :media_type, :youtube_url, :sort_order)
          ON DUPLICATE KEY UPDATE
            post_id = VALUES(post_id),
            file_path = VALUES(file_path),
            alt_text = VALUES(alt_text),
+           caption = VALUES(caption),
            media_type = VALUES(media_type),
            youtube_url = VALUES(youtube_url),
            sort_order = VALUES(sort_order),
@@ -305,6 +342,7 @@ function import_posts_to_mysql(PDO $pdo, array $posts): array
                 'post_id' => $postId,
                 'file_path' => $path,
                 'alt_text' => $post['title'],
+                'caption' => '',
                 'media_type' => 'image',
                 'youtube_url' => null,
                 'sort_order' => $index,
@@ -327,6 +365,7 @@ function import_posts_to_mysql(PDO $pdo, array $posts): array
                 'post_id' => $postId,
                 'file_path' => $url,
                 'alt_text' => trim((string) ($video['title'] ?? $post['title'])),
+                'caption' => '',
                 'media_type' => 'youtube',
                 'youtube_url' => $url,
                 'sort_order' => 1000 + $index,
@@ -336,6 +375,33 @@ function import_posts_to_mysql(PDO $pdo, array $posts): array
     }
 
     return ['posts' => $postCount, 'media' => $mediaCount];
+}
+
+function import_media_items_to_mysql(PDO $pdo, array $mediaItems): int
+{
+    $statement = $pdo->prepare(
+        'INSERT INTO media (source_key, post_id, file_path, alt_text, caption, media_type, youtube_url, sort_order, post_date, last_update, deleted_at)
+         VALUES (:source_key, :post_id, :file_path, :alt_text, :caption, :media_type, :youtube_url, :sort_order, :post_date, :last_update, :deleted_at)
+         ON DUPLICATE KEY UPDATE
+           post_id = VALUES(post_id),
+           file_path = VALUES(file_path),
+           alt_text = VALUES(alt_text),
+           caption = VALUES(caption),
+           media_type = VALUES(media_type),
+           youtube_url = VALUES(youtube_url),
+           sort_order = VALUES(sort_order),
+           post_date = COALESCE(VALUES(post_date), post_date),
+           last_update = COALESCE(VALUES(last_update), last_update),
+           deleted_at = VALUES(deleted_at)'
+    );
+
+    $count = 0;
+    foreach ($mediaItems as $item) {
+        $statement->execute($item);
+        $count++;
+    }
+
+    return $count;
 }
 
 function import_settings_to_mysql(PDO $pdo, array $settings): int

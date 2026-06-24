@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS media (
   post_id INT UNSIGNED NULL,
   file_path VARCHAR(255) NOT NULL,
   alt_text VARCHAR(255) NULL,
+  caption TEXT NULL,
   media_type ENUM('image', 'youtube') NOT NULL DEFAULT 'image',
   youtube_url VARCHAR(255) NULL,
   sort_order INT UNSIGNED NOT NULL DEFAULT 0,

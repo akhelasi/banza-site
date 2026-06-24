@@ -16,7 +16,7 @@ require __DIR__ . '/../includes/repositories/content-import-repository.php';
 $options = getopt('', ['dry-run', 'only::']);
 $dryRun = array_key_exists('dry-run', $options);
 $only = (string) ($options['only'] ?? 'all');
-$supportedTargets = ['all', 'pages', 'posts', 'settings', 'social_links', 'donation_accounts', 'contact_messages'];
+$supportedTargets = ['all', 'pages', 'posts', 'settings', 'social_links', 'donation_accounts', 'media_items', 'contact_messages'];
 
 if (!in_array($only, $supportedTargets, true)) {
     fwrite(STDERR, "Unsupported import target: {$only}\n");
@@ -78,6 +78,10 @@ try {
 
     if ($only === 'all' || $only === 'donation_accounts') {
         $results['donation_accounts'] = import_donation_accounts_to_mysql($pdo, content_import_donation_accounts($content));
+    }
+
+    if ($only === 'all' || $only === 'media_items') {
+        $results['media_items'] = import_media_items_to_mysql($pdo, content_import_media_items($content));
     }
 
     if ($only === 'all' || $only === 'contact_messages') {

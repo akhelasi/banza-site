@@ -173,7 +173,7 @@ JSON-to-MySQL import dry-run:
 php SITE\scripts\import-json-to-mysql.php --dry-run --only=all
 ```
 
-Supported `--only` targets: `all`, `pages`, `posts`, `settings`, `social_links`, `donation_accounts`, `contact_messages`.
+Supported `--only` targets: `all`, `pages`, `posts`, `settings`, `social_links`, `donation_accounts`, `media_items`, `contact_messages`.
 
 Production setup dry-run:
 
@@ -187,6 +187,7 @@ For an existing MySQL database created before the import source keys were added,
 
 ```powershell
 mysql -u root -p banza_site < SITE\database\migrations\2026_06_24_add_import_source_keys.sql
+mysql -u root -p banza_site < SITE\database\migrations\2026_06_24_add_media_caption.sql
 ```
 
 Git whitespace check:

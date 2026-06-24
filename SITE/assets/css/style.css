@@ -1813,6 +1813,38 @@ body {
   overflow-wrap: anywhere;
 }
 
+.media-meta-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.media-meta-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.media-meta-form input,
+.media-meta-form textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 9px 10px;
+  font: inherit;
+}
+
+.media-meta-form button {
+  min-height: 36px;
+  border: 1px solid var(--green);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--green-dark);
+  font-weight: 900;
+}
+
 .admin-form input[type="file"] {
   padding: 10px 13px;
 }

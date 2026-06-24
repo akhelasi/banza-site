@@ -216,6 +216,7 @@ $seedContent = [
     'bankAccounts' => $bankAccounts,
     'camera' => $camera,
     'weather' => $weather,
+    'mediaItems' => [],
     'contactMessages' => [],
 ];
 
@@ -230,4 +231,5 @@ $socialLinks = visible_content_items($contentStore['socialLinks'] ?? []);
 $bankAccounts = visible_content_items($contentStore['bankAccounts'] ?? []);
 $camera = $contentStore['camera'] ?? $camera;
 $weather = resolve_weather_data($contentStore['weather'] ?? $weather);
+$mediaItems = $contentStore['mediaItems'] ?? [];
 $contactMessages = $contentStore['contactMessages'] ?? [];

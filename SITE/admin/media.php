@@ -8,9 +8,45 @@ require __DIR__ . '/../includes/uploads.php';
 
 require_admin();
 
+$content = $contentStore ?? [];
+
+function media_meta_for(array $mediaItems, string $path): array
+{
+    $meta = $mediaItems[$path] ?? [];
+    return is_array($meta) ? $meta : [];
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verify_csrf($_POST['csrf_token'] ?? null)) {
         admin_flash('უსაფრთხოების token არასწორია.', 'error');
+        redirect('media.php');
+    }
+
+    $postAction = (string) ($_POST['action'] ?? 'upload');
+
+    if ($postAction === 'save_meta') {
+        $path = trim((string) ($_POST['path'] ?? ''));
+        if (!str_starts_with($path, 'uploads/')) {
+            admin_flash('მედია ფაილი ვერ მოიძებნა.', 'error');
+            redirect('media.php');
+        }
+
+        $knownUploadPaths = array_column(list_uploaded_images(), 'path');
+        if (!in_array($path, $knownUploadPaths, true)) {
+            admin_flash('მედია ფაილი ვერ მოიძებნა.', 'error');
+            redirect('media.php');
+        }
+
+        $content['mediaItems'] = $content['mediaItems'] ?? [];
+        $content['mediaItems'][$path] = [
+            'path' => $path,
+            'alt' => trim((string) ($_POST['alt'] ?? '')),
+            'caption' => trim((string) ($_POST['caption'] ?? '')),
+            'last_update' => content_date_today(),
+        ];
+
+        save_content_store($content);
+        admin_flash('მედია აღწერა შენახულია.');
         redirect('media.php');
     }
 
@@ -43,6 +79,7 @@ $uploadedItems = list_uploaded_images();
   <div class="admin-card-heading"><h2>სურათის ატვირთვა</h2></div>
   <form class="admin-form" method="post" enctype="multipart/form-data">
     <?php echo csrf_field(); ?>
+    <input type="hidden" name="action" value="upload">
     <label><span>სურათი JPG, PNG, WEBP ან GIF, მაქს. 5MB. დიდი JPG/PNG/WEBP ფაილები ავტომატურად შემცირდება, თუ server-ზე GD ჩართულია.</span><input type="file" name="image" accept="image/jpeg,image/png,image/webp,image/gif" required></label>
     <button class="button button-primary" type="submit">ატვირთვა</button>
   </form>
@@ -81,11 +118,23 @@ $uploadedItems = list_uploaded_images();
     <div class="admin-media-grid" id="uploadedMediaList">
       <?php foreach ($uploadedItems as $item): ?>
         <?php $extension = strtolower(pathinfo((string) $item['name'], PATHINFO_EXTENSION)); ?>
+        <?php $meta = media_meta_for($mediaItems ?? [], (string) $item['path']); ?>
         <article class="filter-item" data-title="<?php echo e($item['name']); ?>" data-text="<?php echo e($item['path']); ?>" data-category="<?php echo e($extension); ?>" data-sort-title="<?php echo e($item['name']); ?>" data-sort-date="<?php echo e($item['modified']); ?>" data-sort-size="<?php echo e((int) $item['size']); ?>">
-          <img src="<?php echo e('../' . $item['path']); ?>" alt="<?php echo e($item['name']); ?>">
+          <img src="<?php echo e('../' . $item['path']); ?>" alt="<?php echo e($meta['alt'] ?? $item['name']); ?>">
           <strong><?php echo e($item['name']); ?></strong>
           <code><?php echo e($item['path']); ?></code>
           <span><?php echo e(number_format($item['size'] / 1024, 1)); ?> KB · <?php echo e($item['modified']); ?></span>
+          <?php if (!empty($meta['caption'])): ?>
+            <p class="muted-note"><?php echo e($meta['caption']); ?></p>
+          <?php endif; ?>
+          <form class="media-meta-form" method="post">
+            <?php echo csrf_field(); ?>
+            <input type="hidden" name="action" value="save_meta">
+            <input type="hidden" name="path" value="<?php echo e($item['path']); ?>">
+            <label><span>Alt text</span><input type="text" name="alt" value="<?php echo e($meta['alt'] ?? ''); ?>" placeholder="მოკლე აღწერა"></label>
+            <label><span>Caption</span><textarea name="caption" rows="2" placeholder="სურათის წარწერა"><?php echo e($meta['caption'] ?? ''); ?></textarea></label>
+            <button type="submit">შენახვა</button>
+          </form>
         </article>
       <?php endforeach; ?>
     </div>
