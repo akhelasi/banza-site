@@ -73,11 +73,20 @@ Dry-run the JSON import first:
 php SITE/scripts/import-json-to-mysql.php --dry-run --only=all
 ```
 
+Dry-run the production setup script:
+
+```bash
+export BANZA_ADMIN_PASSWORD="replace-with-a-strong-password"
+php SITE/scripts/setup-production.php --email=admin@example.com --password-env=BANZA_ADMIN_PASSWORD --dry-run
+```
+
 After backup and review, run the import:
 
 ```bash
 php SITE/scripts/import-json-to-mysql.php --only=all
 ```
+
+After confirming the setup dry run, run the same setup command without `--dry-run`. This creates or updates the first `admins` row and seeds default settings/social/donation rows from `SITE/storage/content.json`. Use `--force` only when intentionally replacing an existing admin password/name.
 
 Important: runtime MySQL repositories are currently wired only for contact messages. Keep `content_storage.driver=json` until posts/pages/settings runtime repositories are completed and tested, or switch only for the verified contact-message path.
 

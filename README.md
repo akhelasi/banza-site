@@ -168,6 +168,14 @@ php SITE\scripts\import-json-to-mysql.php --dry-run --only=all
 
 Supported `--only` targets: `all`, `pages`, `posts`, `settings`, `social_links`, `donation_accounts`, `contact_messages`.
 
+Production setup dry-run:
+
+```powershell
+php SITE\scripts\setup-production.php --email=admin@example.com --password-env=BANZA_ADMIN_PASSWORD --dry-run
+```
+
+After `schema.sql` has been loaded into MySQL, run the same command without `--dry-run` to create or update the first admin row and seed default settings/social/donation rows. Use `--force` only when intentionally replacing an existing admin row with the same email.
+
 For an existing MySQL database created before the import source keys were added, run:
 
 ```powershell
