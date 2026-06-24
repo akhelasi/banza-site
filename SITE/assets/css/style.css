@@ -1072,6 +1072,14 @@ body {
   text-align: center;
 }
 
+.load-more-button {
+  margin: 24px auto 0;
+}
+
+.load-more-button[hidden] {
+  display: none;
+}
+
 .project-card,
 .contact-card,
 .mini-cards article {

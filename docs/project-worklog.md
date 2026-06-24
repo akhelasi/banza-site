@@ -1284,5 +1284,46 @@ Verification:
 
 Next phase notes:
 
-- Pagination or "load more" for news/projects remains open before real content grows large.
 - Richer empty states remain open for cases where admin deletes all public content.
+
+## Phase 31: News And Projects Load More
+
+Added client-side load-more pagination to public news and project listings while preserving the existing live search/filter/sort behavior.
+
+Changed:
+
+- `SITE/news.php`
+  - Added `data-page-size` and a load-more button for the news grid.
+- `SITE/projects.php`
+  - Added `data-page-size` and a load-more button for the project grid.
+- `SITE/assets/js/main.js`
+  - Extended the existing live filter controller to support optional page size and load-more controls.
+  - Filter/search/sort changes reset the visible limit so new result sets start cleanly.
+- `SITE/assets/css/style.css`
+  - Added load-more button spacing and hidden-state styling.
+- `README.md` and `docs/project-checklist.md`
+  - Documented Phase 31 and marked listing pagination complete.
+
+How it works:
+
+- The first 6 matching items are shown on news/projects pages.
+- Clicking "მეტის ჩვენება" reveals the next 6 matching items without reloading the page.
+- Search, category/status filter and sort still happen live, and changing any of them resets the load-more limit.
+
+Problems found and fixed:
+
+- The existing live filter used one `hidden` state for filtering. The implementation now computes matched rows first, then applies the page-size limit only to those matched rows, so empty-state logic stays correct.
+
+Verification:
+
+- `php -l` passed for changed PHP files.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `node --check SITE/assets/js/main.js` passed.
+- Source scan confirmed page-size/load-more hooks exist on news/projects and JS support is wired.
+- Localhost smoke checks returned 200 for news and projects pages.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Richer empty states remain open for cases where admin deletes all public content.
+- Manual real-browser QA should still verify load-more interaction visually on mobile and desktop.

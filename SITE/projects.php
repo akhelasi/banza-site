@@ -12,7 +12,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle, 'ბ�
   <main id="main-content">
     <?php render_page_hero('პროექტები', 'სოფლის საჭიროებები, იდეები და განვითარების ინიციატივები ერთ სივრცეში.', $site['hero_image'], 'განვითარება'); ?>
     <section class="page-shell-narrow">
-      <form class="filter-bar has-sort" data-live-filter data-filter-target="#projectList" aria-label="პროექტების ძებნა, ფილტრი და დალაგება">
+      <form class="filter-bar has-sort" data-live-filter data-filter-target="#projectList" data-page-size="6" data-load-more-target="#projectLoadMore" aria-label="პროექტების ძებნა, ფილტრი და დალაგება">
         <label><span>ძებნა</span><input type="search" name="search" placeholder="პროექტის სახელი ან აღწერა"></label>
         <label>
           <span>სტატუსი</span>
@@ -51,6 +51,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle, 'ბ�
         <?php endforeach; ?>
       </div>
       <p class="empty-state" data-empty-state hidden>ასეთი პროექტი ვერ მოიძებნა.</p>
+      <button class="button button-primary load-more-button" id="projectLoadMore" type="button" hidden>მეტის ჩვენება</button>
     </section>
   </main>
 

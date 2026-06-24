@@ -155,6 +155,9 @@ filterForms.forEach((form) => {
   const targetSelector = form.dataset.filterTarget;
   const target = document.querySelector(targetSelector);
   const emptyState = form.parentElement.querySelector('[data-empty-state]');
+  const pageSize = Number(form.dataset.pageSize || 0);
+  const loadMoreButton = form.dataset.loadMoreTarget ? document.querySelector(form.dataset.loadMoreTarget) : null;
+  let currentLimit = pageSize;
 
   if (!target) {
     return;
@@ -167,7 +170,7 @@ filterForms.forEach((form) => {
     const search = normalizeText(formData.get('search'));
     const category = normalizeText(formData.get('category'));
     const sort = String(formData.get('sort') || '');
-    let visibleCount = 0;
+    const matchedItems = [];
 
     items.forEach((item) => {
       const text = normalizeText([
@@ -183,7 +186,7 @@ filterForms.forEach((form) => {
 
       item.hidden = !isVisible;
       if (isVisible) {
-        visibleCount += 1;
+        matchedItems.push(item);
       }
     });
 
@@ -196,14 +199,35 @@ filterForms.forEach((form) => {
       sortedItems.forEach((item) => target.appendChild(item));
     }
 
+    if (pageSize > 0) {
+      matchedItems.forEach((item, index) => {
+        item.hidden = index >= currentLimit;
+      });
+    }
+
     if (emptyState) {
-      emptyState.hidden = visibleCount !== 0;
+      emptyState.hidden = matchedItems.length !== 0;
+    }
+
+    if (loadMoreButton) {
+      loadMoreButton.hidden = pageSize <= 0 || matchedItems.length <= currentLimit;
     }
   }
 
+  function resetAndApplyFilter() {
+    currentLimit = pageSize;
+    applyFilter();
+  }
+
   form.addEventListener('submit', (event) => event.preventDefault());
-  form.addEventListener('input', applyFilter);
-  form.addEventListener('change', applyFilter);
+  form.addEventListener('input', resetAndApplyFilter);
+  form.addEventListener('change', resetAndApplyFilter);
+  if (loadMoreButton && pageSize > 0) {
+    loadMoreButton.addEventListener('click', () => {
+      currentLimit += pageSize;
+      applyFilter();
+    });
+  }
   applyFilter();
 });
 
