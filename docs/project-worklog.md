@@ -1327,3 +1327,40 @@ Next phase notes:
 
 - Richer empty states remain open for cases where admin deletes all public content.
 - Manual real-browser QA should still verify load-more interaction visually on mobile and desktop.
+
+## Phase 32: Homepage Empty States
+
+Added explicit homepage empty states for sections that can become blank after admin deletes all public content.
+
+Changed:
+
+- `SITE/index.php`
+  - Reuses `$latestNews` and `$popularProjects` slices for cleaner rendering.
+  - Shows a reader-facing empty message if there are no latest news items.
+  - Shows a reader-facing empty message if there are no popular projects.
+- `README.md` and `docs/project-checklist.md`
+  - Documented Phase 32 and marked richer empty states complete.
+
+How it works:
+
+- The homepage still renders normally when content exists.
+- If news or projects are empty, the page shows a clear message instead of leaving a blank grid/list.
+- Messages are public-safe and do not expose private data.
+
+Problems found and fixed:
+
+- No product bug was found during this phase; this closes a known empty-content UX gap.
+
+Verification:
+
+- `php -l SITE/index.php` passed.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `node --check SITE/assets/js/main.js` passed.
+- Source scan confirmed homepage empty-state messages exist.
+- Localhost homepage smoke check returned 200.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Manual real-browser QA should verify homepage empty states after temporarily clearing content in a local/dev copy.
+- Remaining content-related blockers now mainly depend on client-approved real text, images, social links and donation accounts.

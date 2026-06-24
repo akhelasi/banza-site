@@ -17,6 +17,7 @@ The current codebase includes:
 - Admin-editable image alt text for news, projects and football content.
 - Live search/filter/sort on public listing pages.
 - Load-more pagination on news and project listings.
+- Homepage empty states for news/projects when admin content is empty.
 - Image upload support for news/projects/gallery media.
 - Upload validation includes file type, 5MB size limit and 6000x6000px max dimensions.
 - Soft delete, restore and permanent delete.

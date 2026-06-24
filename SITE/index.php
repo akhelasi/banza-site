@@ -6,6 +6,8 @@ require __DIR__ . '/includes/layout.php';
 $pageTitle = $site['title'] . ' - ' . $site['tagline'];
 $currentPage = 'home';
 render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle);
+$latestNews = array_slice($news, 0, 3);
+$popularProjects = array_slice($projects, 0, 3);
 ?>
 
   <main id="main-content">
@@ -71,7 +73,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle);
             <a class="inline-link" href="news.php">ყველა ამბავი →</a>
           </div>
           <div class="news-grid">
-            <?php foreach (array_slice($news, 0, 3) as $item): ?>
+            <?php foreach ($latestNews as $item): ?>
               <article class="news-card">
                 <img src="<?php echo e($item['image']); ?>" alt="<?php echo e($item['image_alt'] ?? $item['title']); ?>">
                 <div class="news-body">
@@ -84,6 +86,9 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle);
               </article>
             <?php endforeach; ?>
           </div>
+          <?php if ($latestNews === []): ?>
+            <p class="empty-state">სიახლეები ჯერ არ არის დამატებული. ახალი ჩანაწერები გამოჩნდება admin panel-იდან დამატების შემდეგ.</p>
+          <?php endif; ?>
         </section>
 
         <section class="section-card about-preview" aria-labelledby="about-title">
@@ -134,7 +139,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle);
             <a href="projects.php" aria-label="ყველა პროექტის ნახვა">→</a>
           </div>
           <div class="project-list">
-            <?php foreach (array_slice($projects, 0, 3) as $project): ?>
+            <?php foreach ($popularProjects as $project): ?>
               <a href="project-detail.php?slug=<?php echo e($project['slug']); ?>">
                 <span><?php echo e($project['status']); ?></span>
                 <strong><?php echo e($project['title']); ?></strong>
@@ -142,6 +147,9 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle);
               </a>
             <?php endforeach; ?>
           </div>
+          <?php if ($popularProjects === []): ?>
+            <p class="empty-state compact">პროექტები ჯერ არ არის დამატებული. ჩანაწერები გამოჩნდება admin panel-იდან დამატების შემდეგ.</p>
+          <?php endif; ?>
         </section>
 
         <section class="side-card follow-card" aria-labelledby="follow-title">
