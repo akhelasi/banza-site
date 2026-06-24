@@ -1088,6 +1088,11 @@ body {
   object-fit: cover;
 }
 
+.project-card-link {
+  display: block;
+  height: 100%;
+}
+
 .project-card div,
 .contact-card,
 .mini-cards article {

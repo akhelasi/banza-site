@@ -1240,3 +1240,49 @@ Next phase notes:
 
 - Uploaded-media captions remain open as a separate task because captions need a clearer persistence model than the current per-content image alt fields.
 - Image resizing/compression remains open for later media optimization.
+
+## Phase 30: Public Project Detail Page
+
+Added a dedicated public detail page for projects so project cards can lead to full content instead of only inline summaries on the listing page.
+
+Changed:
+
+- `SITE/project-detail.php`
+  - New project detail route with slug validation, 404 fallback, hero, status/category metadata, main image and full body paragraphs.
+- `SITE/projects.php`
+  - Project cards now link to the detail page.
+  - Listing text now safely handles both string and array project bodies.
+- `SITE/index.php`
+  - Popular-project sidebar links now open the project detail page.
+- `SITE/admin/content.php`
+  - Project preview links now point to the public project detail page.
+- `SITE/includes/helpers.php`
+  - Added `content_paragraphs()` to normalize string or array content for article rendering.
+- `SITE/assets/css/style.css`
+  - Added a small rule so linked project cards keep their existing card dimensions.
+- `README.md` and `docs/project-checklist.md`
+  - Documented Phase 30 and marked the public project detail task complete.
+
+How it works:
+
+- `project-detail.php?slug=...` accepts only lowercase Latin slugs with numbers and dashes.
+- Missing/deleted projects return HTTP 404 with a user-safe fallback page.
+- Project body content is rendered as paragraphs whether it comes from seed string content or admin-managed array content.
+
+Problems found and fixed:
+
+- Project listing previously assumed `body` was always a string. The new listing uses `plain_text()` for filter text and card summaries, preventing an `Array` rendering issue after admin-edited projects.
+
+Verification:
+
+- `php -l` passed for changed PHP files.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `node --check SITE/assets/js/main.js` passed.
+- Localhost smoke checks returned 200 for projects listing and a project detail page, and 404 for a missing project slug.
+- Source scan confirmed listing/sidebar/admin preview links target `project-detail.php`.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Pagination or "load more" for news/projects remains open before real content grows large.
+- Richer empty states remain open for cases where admin deletes all public content.

@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 29.
+- `[DONE]` Latest completed phase before this checklist update: Phase 30.
 
 ## Public Site
 
@@ -38,11 +38,11 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Football team preview on home page and football detail page.
 - `[DONE]` Latest news section on home page.
 - `[DONE]` About preview and history preview on home page.
-- `[DONE]` Public pages: news, news detail, history, projects, about, contact, football.
+- `[DONE]` Public pages: news, news detail, project detail, history, projects, about, contact, football.
 - `[DONE]` Listing pages have live search/filter/sort without page reload.
 - `[DONE]` News detail page supports gallery and YouTube modal hooks.
 - `[DONE]` Contact form submits to admin inbox.
-- `[TODO]` Add a public-facing projects detail page if the client wants full project articles instead of inline project cards.
+- `[DONE]` Add a public-facing projects detail page if the client wants full project articles instead of inline project cards.
 - `[TODO]` Add pagination or "load more" for news/projects before real content grows large.
 - `[TODO]` Add richer empty states for pages when admin deletes all content.
 - `[REVIEW]` Decide whether football content should remain a static page or become a reusable post type/team section.
@@ -216,6 +216,7 @@ This checklist is the project control document for finishing the Banza village w
 16. [DONE] Phase 27: Admin profile/password change flow.
 17. [DONE] Phase 28: Admin bulk actions for content and messages.
 18. [DONE] Phase 29: Admin image alt text fields.
+19. [DONE] Phase 30: Public project detail page.
 
 ## Definition Of Done For Production
 

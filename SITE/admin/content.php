@@ -58,7 +58,7 @@ function admin_preview_url(string $type, array $item = [], string $pageKey = '')
     }
 
     $slug = rawurlencode((string) ($item['slug'] ?? ''));
-    return $type === 'projects' ? '../projects.php#' . $slug : '../news-detail.php?slug=' . $slug;
+    return $type === 'projects' ? '../project-detail.php?slug=' . $slug : '../news-detail.php?slug=' . $slug;
 }
 
 function item_by_slug(array $items, string $slug): ?array

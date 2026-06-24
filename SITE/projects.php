@@ -35,14 +35,18 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle, 'ბ�
       </form>
       <div class="cards-grid project-cards" id="projectList">
         <?php foreach ($projects as $project): ?>
-          <article class="project-card filter-item" id="<?php echo e($project['slug']); ?>" data-title="<?php echo e($project['title']); ?>" data-text="<?php echo e($project['excerpt'] . ' ' . $project['body']); ?>" data-category="<?php echo e($project['status']); ?>" data-sort-title="<?php echo e($project['title']); ?>" data-sort-status="<?php echo e($project['status']); ?>">
-            <img src="<?php echo e($project['image']); ?>" alt="<?php echo e($project['image_alt'] ?? $project['title']); ?>">
-            <div>
-              <span class="status-pill"><?php echo e($project['status']); ?></span>
-              <p class="category"><?php echo e($project['category']); ?></p>
-              <h2><?php echo e($project['title']); ?></h2>
-              <p><?php echo e($project['body']); ?></p>
-            </div>
+          <?php $projectText = plain_text($project['body'] ?? ''); ?>
+          <article class="project-card filter-item" id="<?php echo e($project['slug']); ?>" data-title="<?php echo e($project['title']); ?>" data-text="<?php echo e(($project['excerpt'] ?? '') . ' ' . $projectText); ?>" data-category="<?php echo e($project['status']); ?>" data-sort-title="<?php echo e($project['title']); ?>" data-sort-status="<?php echo e($project['status']); ?>">
+            <a class="project-card-link" href="project-detail.php?slug=<?php echo e($project['slug']); ?>">
+              <img src="<?php echo e($project['image']); ?>" alt="<?php echo e($project['image_alt'] ?? $project['title']); ?>">
+              <div>
+                <span class="status-pill"><?php echo e($project['status']); ?></span>
+                <p class="category"><?php echo e($project['category']); ?></p>
+                <h2><?php echo e($project['title']); ?></h2>
+                <p><?php echo e($project['excerpt'] ?? $projectText); ?></p>
+                <span class="inline-link">სრულად ნახვა →</span>
+              </div>
+            </a>
           </article>
         <?php endforeach; ?>
       </div>

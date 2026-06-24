@@ -8,7 +8,7 @@ Repository: `https://github.com/akhelasi/banza-site`
 
 The current codebase includes:
 
-- Public site pages: home, news, news detail, history, projects, about, contact and football.
+- Public site pages: home, news, news detail, project detail, history, projects, about, contact and football.
 - Admin panel: content CRUD, media uploads, settings, contact messages and trash.
 - Admin table search/filter/sort for content, messages and trash.
 - Admin media library search/filter/sort.

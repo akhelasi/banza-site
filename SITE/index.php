@@ -135,7 +135,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle);
           </div>
           <div class="project-list">
             <?php foreach (array_slice($projects, 0, 3) as $project): ?>
-              <a href="projects.php#<?php echo e($project['slug']); ?>">
+              <a href="project-detail.php?slug=<?php echo e($project['slug']); ?>">
                 <span><?php echo e($project['status']); ?></span>
                 <strong><?php echo e($project['title']); ?></strong>
                 <small><?php echo e($project['excerpt']); ?></small>

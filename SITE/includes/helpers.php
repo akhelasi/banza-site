@@ -131,3 +131,18 @@ function plain_text(array|string|null $content): string
 
     return trim((string) $content);
 }
+
+function content_paragraphs(array|string|null $content): array
+{
+    if (is_array($content)) {
+        $paragraphs = [];
+        foreach ($content as $item) {
+            $paragraphs = array_merge($paragraphs, content_paragraphs($item));
+        }
+
+        return $paragraphs;
+    }
+
+    $parts = preg_split('/\R{2,}/', trim((string) $content)) ?: [];
+    return array_values(array_filter(array_map('trim', $parts), static fn (string $part): bool => $part !== ''));
+}
