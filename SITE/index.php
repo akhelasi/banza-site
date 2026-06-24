@@ -53,7 +53,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle);
     <section class="content-shell" aria-label="მთავარი კონტენტი">
       <div class="main-column">
         <a class="feature-card football-feature" href="football.php" aria-label="FC ოჯალეში ბანძას გვერდზე გადასვლა">
-          <img src="<?php echo e($football['image']); ?>" alt="<?php echo e($football['title']); ?>">
+          <img src="<?php echo e($football['image']); ?>" alt="<?php echo e($football['image_alt'] ?? $football['title']); ?>">
           <div>
             <p class="eyebrow">სოფლის გუნდი</p>
             <h2><?php echo e($football['title']); ?></h2>
@@ -73,7 +73,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle);
           <div class="news-grid">
             <?php foreach (array_slice($news, 0, 3) as $item): ?>
               <article class="news-card">
-                <img src="<?php echo e($item['image']); ?>" alt="<?php echo e($item['title']); ?>">
+                <img src="<?php echo e($item['image']); ?>" alt="<?php echo e($item['image_alt'] ?? $item['title']); ?>">
                 <div class="news-body">
                   <span class="date-badge"><?php echo e($item['date']); ?></span>
                   <p class="category"><?php echo e($item['category']); ?></p>

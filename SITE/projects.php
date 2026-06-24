@@ -36,7 +36,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle, 'áƒ‘áƒ
       <div class="cards-grid project-cards" id="projectList">
         <?php foreach ($projects as $project): ?>
           <article class="project-card filter-item" id="<?php echo e($project['slug']); ?>" data-title="<?php echo e($project['title']); ?>" data-text="<?php echo e($project['excerpt'] . ' ' . $project['body']); ?>" data-category="<?php echo e($project['status']); ?>" data-sort-title="<?php echo e($project['title']); ?>" data-sort-status="<?php echo e($project['status']); ?>">
-            <img src="<?php echo e($project['image']); ?>" alt="<?php echo e($project['title']); ?>">
+            <img src="<?php echo e($project['image']); ?>" alt="<?php echo e($project['image_alt'] ?? $project['title']); ?>">
             <div>
               <span class="status-pill"><?php echo e($project['status']); ?></span>
               <p class="category"><?php echo e($project['category']); ?></p>

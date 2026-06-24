@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 28.
+- `[DONE]` Latest completed phase before this checklist update: Phase 29.
 
 ## Public Site
 
@@ -64,7 +64,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` `post_date` and `last_update` are written in dev storage for admin-managed content.
 - `[DONE]` Add admin search/filter/sort to content tables and messages table.
 - `[DONE]` Add bulk actions for messages and content lists.
-- `[TODO]` Add image alt text fields in admin forms.
+- `[DONE]` Add image alt text fields in admin forms.
 - `[DONE]` Add preview links from admin list rows to public pages.
 - `[DONE]` Add admin profile/password change flow.
 - `[REVIEW]` Decide whether there should be multiple admin users/roles or one shared admin account for launch.
@@ -109,7 +109,8 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Uploaded filenames are randomized and stored under `SITE/uploads/YYYY/MM/`.
 - `[DONE]` Permanent delete removes unreferenced uploaded files safely.
 - `[DONE]` Add admin image library search/filter.
-- `[TODO]` Add alt text and captions for uploaded images.
+- `[DONE]` Add alt text fields for news/project main images and news galleries.
+- `[TODO]` Add per-media captions for uploaded images.
 - `[TODO]` Add image resizing/compression or document hosting-level image optimization.
 - `[DONE]` Add max dimensions check to prevent very large images from exhausting memory.
 - `[REVIEW]` Decide whether uploaded videos should remain YouTube-only or support local video files.
@@ -214,6 +215,7 @@ This checklist is the project control document for finishing the Banza village w
 15. `[DONE]` Phase 26: Admin list preview links.
 16. [DONE] Phase 27: Admin profile/password change flow.
 17. [DONE] Phase 28: Admin bulk actions for content and messages.
+18. [DONE] Phase 29: Admin image alt text fields.
 
 ## Definition Of Done For Production
 

@@ -1190,3 +1190,53 @@ Next phase notes:
 
 - Bulk select-all JavaScript can be added later, but the current implementation already supports real multi-select bulk actions without invalid nested forms.
 - Alt text/captions and image optimization remain open media tasks.
+
+## Phase 29: Admin Image Alt Text Fields
+
+Added admin-editable alternative text for content images so public pages can use meaningful image descriptions instead of always falling back to titles.
+
+Changed:
+
+- `SITE/admin/content.php`
+  - Added `image_alt` storage for news and project main images.
+  - Added `gallery_alt` storage for news gallery images.
+  - Added `image_alt` storage for the football static page image.
+  - Added admin form fields for these values.
+- `SITE/index.php`
+  - Homepage football and latest-news images now use `image_alt` when available.
+- `SITE/news.php`
+  - News cards now use `image_alt` when available.
+- `SITE/news-detail.php`
+  - Main news image uses `image_alt`.
+  - Gallery thumbnails and lightbox labels use `gallery_alt`, then `image_alt`, then title as fallback.
+- `SITE/projects.php`
+  - Project cards now use `image_alt` when available.
+- `SITE/football.php`
+  - Football page image now uses `image_alt` when available.
+- `README.md` and `docs/project-checklist.md`
+  - Documented Phase 29 and updated remaining media tasks.
+
+How it works:
+
+- Existing content remains compatible because every public render has a title fallback.
+- Admin-entered values are trimmed before storage.
+- Output remains escaped through the existing `e()` helper.
+
+Problems found and fixed:
+
+- A PowerShell write inserted a UTF-8 BOM at the start of `SITE/admin/content.php`; it was detected in `git diff` as `﻿<?php` and rewritten as UTF-8 without BOM before verification.
+- The Windows sandbox intermittently failed with ACL helper errors, so targeted workspace edits were rerun with escalation where necessary.
+
+Verification:
+
+- `php -l` passed for changed PHP files.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `node --check SITE/assets/js/main.js` passed.
+- Source scan confirmed `image_alt` and `gallery_alt` are present in admin save/forms and public render paths.
+- Localhost smoke checks returned 200 for home, news, projects and football pages.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Uploaded-media captions remain open as a separate task because captions need a clearer persistence model than the current per-content image alt fields.
+- Image resizing/compression remains open for later media optimization.

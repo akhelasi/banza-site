@@ -11,7 +11,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle, $footb
   <main id="main-content">
     <?php render_page_hero($football['title'], $football['excerpt'], $football['image'], 'სოფლის გუნდი'); ?>
     <section class="article-shell football-page">
-      <img class="article-main-image" src="<?php echo e($football['image']); ?>" alt="<?php echo e($football['title']); ?>">
+      <img class="article-main-image" src="<?php echo e($football['image']); ?>" alt="<?php echo e($football['image_alt'] ?? $football['title']); ?>">
       <div class="article-body">
         <?php foreach ($football['body'] as $paragraph): ?>
           <p><?php echo e($paragraph); ?></p>

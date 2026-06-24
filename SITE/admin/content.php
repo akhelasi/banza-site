@@ -270,6 +270,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'excerpt' => trim((string) ($_POST['excerpt'] ?? '')),
             'body' => $body !== [] ? $body : [''],
             'image' => $imagePath,
+            'image_alt' => trim((string) ($_POST['image_alt'] ?? ($existing['image_alt'] ?? ''))),
             'category' => trim((string) ($_POST['category'] ?? '')),
             'deleted_at' => '',
         ];
@@ -293,6 +294,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $item['date'] = trim((string) ($_POST['date'] ?? ''));
             $item['published_at'] = trim((string) ($_POST['published_at'] ?? date('Y-m-d')));
             $item['gallery'] = array_values(array_unique($gallery));
+            $item['gallery_alt'] = trim((string) ($_POST['gallery_alt'] ?? ($existing['gallery_alt'] ?? '')));
             $item['videos'] = parse_videos((string) ($_POST['videos'] ?? ''));
         } else {
             $item['status'] = trim((string) ($_POST['status'] ?? 'იდეა'));
@@ -330,6 +332,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['image'])) {
             $page['image'] = trim((string) $_POST['image']);
         }
+        if (isset($_POST['image_alt'])) {
+            $page['image_alt'] = trim((string) $_POST['image_alt']);
+        }
         if ($pageKey === 'about') {
             $stats = parse_stats((string) ($_POST['stats'] ?? ''));
             if ($stats !== []) {
@@ -355,8 +360,8 @@ render_admin_header($title, admin_section_nav_key($type));
 
 if ($action === 'create' && in_array($type, ['news', 'projects'], true)) {
     $item = [
-        'slug' => '', 'title' => '', 'excerpt' => '', 'body' => [], 'image' => '', 'category' => '',
-        'date' => date('d F'), 'published_at' => date('Y-m-d'), 'gallery' => [], 'videos' => [],
+        'slug' => '', 'title' => '', 'excerpt' => '', 'body' => [], 'image' => '', 'image_alt' => '', 'category' => '',
+        'date' => date('d F'), 'published_at' => date('Y-m-d'), 'gallery' => [], 'gallery_alt' => '', 'videos' => [],
         'status' => 'იდეა', 'featured' => false,
     ];
     $action = 'form';
@@ -392,6 +397,7 @@ if ($action === 'edit' && $type === 'pages') {
         <label><span>ტექსტი</span><textarea name="body" rows="9"><?php echo e(textarea_body($page['body'] ?? [])); ?></textarea></label>
         <?php if ($pageKey === 'football'): ?>
           <label><span>სურათი</span><input type="text" name="image" value="<?php echo e($page['image'] ?? ''); ?>"></label>
+          <label><span>სურათის alt ტექსტი</span><input type="text" name="image_alt" value="<?php echo e($page['image_alt'] ?? ''); ?>" placeholder="მოკლე აღწერა screen reader-ისთვის"></label>
         <?php endif; ?>
         <?php if ($pageKey === 'about'): ?>
           <label><span>სტატისტიკა: value | label | note</span><textarea name="stats" rows="5"><?php echo e(stats_text($page['stats'] ?? [])); ?></textarea></label>
@@ -425,6 +431,7 @@ if ($action === 'form') {
         <label><span>სრული ტექსტი, აბზაცები ცარიელი ხაზით გამოყავით</span><textarea name="body" rows="9"><?php echo e(textarea_body($item['body'] ?? [])); ?></textarea></label>
         <div class="admin-form-grid">
           <label><span>სურათი / URL</span><input type="text" name="image" value="<?php echo e($item['image'] ?? ''); ?>"></label>
+          <label><span>სურათის alt ტექსტი</span><input type="text" name="image_alt" value="<?php echo e($item['image_alt'] ?? ''); ?>" placeholder="მოკლე აღწერა screen reader-ისთვის"></label>
           <label><span>ან ატვირთე მთავარი სურათი</span><input type="file" name="main_image" accept="image/jpeg,image/png,image/webp,image/gif"></label>
           <label><span>კატეგორია</span><input type="text" name="category" value="<?php echo e($item['category'] ?? ''); ?>"></label>
         </div>
@@ -434,6 +441,7 @@ if ($action === 'form') {
             <label><span>Published date</span><input type="date" name="published_at" value="<?php echo e($item['published_at'] ?? date('Y-m-d')); ?>"></label>
           </div>
           <label><span>გალერეა, თითო URL ახალ ხაზზე</span><textarea name="gallery" rows="4"><?php echo e(gallery_text($item['gallery'] ?? [])); ?></textarea></label>
+          <label><span>გალერეის alt ტექსტი</span><input type="text" name="gallery_alt" value="<?php echo e($item['gallery_alt'] ?? ''); ?>" placeholder="საერთო აღწერა გალერეის სურათებისთვის"></label>
           <label><span>ან ატვირთე გალერეის სურათები</span><input type="file" name="gallery_images[]" accept="image/jpeg,image/png,image/webp,image/gif" multiple></label>
           <label><span>ვიდეოები: title | youtube_url</span><textarea name="videos" rows="4"><?php echo e(videos_text($item['videos'] ?? [])); ?></textarea></label>
         <?php else: ?>

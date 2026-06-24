@@ -34,7 +34,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle, $item[
         <span class="date-badge"><?php echo e($item['date']); ?></span>
         <h1><?php echo e($item['title']); ?></h1>
       </header>
-      <img class="article-main-image" src="<?php echo e($item['image']); ?>" alt="<?php echo e($item['title']); ?>">
+      <img class="article-main-image" src="<?php echo e($item['image']); ?>" alt="<?php echo e($item['image_alt'] ?? $item['title']); ?>">
       <div class="article-body">
         <?php foreach ($item['body'] as $paragraph): ?>
           <p><?php echo e($paragraph); ?></p>
@@ -46,8 +46,9 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle, $item[
           <h2 id="gallery-title">ფოტო გალერეა</h2>
           <div class="gallery-grid">
             <?php foreach ($item['gallery'] as $image): ?>
-              <button type="button" data-lightbox-src="<?php echo e($image); ?>" data-lightbox-alt="<?php echo e($item['title']); ?>">
-                <img src="<?php echo e($image); ?>" alt="<?php echo e($item['title']); ?>">
+              <?php $galleryAlt = $item['gallery_alt'] ?? $item['image_alt'] ?? $item['title']; ?>
+              <button type="button" data-lightbox-src="<?php echo e($image); ?>" data-lightbox-alt="<?php echo e($galleryAlt); ?>">
+                <img src="<?php echo e($image); ?>" alt="<?php echo e($galleryAlt); ?>">
               </button>
             <?php endforeach; ?>
           </div>

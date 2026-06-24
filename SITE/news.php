@@ -43,7 +43,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle, 'áƒ‘áƒ
         <?php foreach ($news as $item): ?>
           <article class="news-card filter-item" data-title="<?php echo e($item['title']); ?>" data-text="<?php echo e($item['excerpt']); ?>" data-category="<?php echo e($item['category']); ?>" data-sort-title="<?php echo e($item['title']); ?>" data-sort-date="<?php echo e($item['published_at']); ?>">
             <a href="news-detail.php?slug=<?php echo e($item['slug']); ?>">
-              <img src="<?php echo e($item['image']); ?>" alt="<?php echo e($item['title']); ?>">
+              <img src="<?php echo e($item['image']); ?>" alt="<?php echo e($item['image_alt'] ?? $item['title']); ?>">
               <div class="news-body">
                 <span class="date-badge"><?php echo e($item['date']); ?></span>
                 <p class="category"><?php echo e($item['category']); ?></p>
