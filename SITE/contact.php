@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/includes/helpers.php';
+require __DIR__ . '/includes/rate-limit.php';
 require __DIR__ . '/includes/database.php';
 require __DIR__ . '/includes/data.php';
 require __DIR__ . '/includes/layout.php';
@@ -64,6 +65,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (mb_strlen($oldContact['message']) < 10 || mb_strlen($oldContact['message']) > 3000) {
         $contactErrors[] = 'შეტყობინება უნდა იყოს 10-3000 სიმბოლოს შორის.';
+    }
+
+    if ($contactErrors === []) {
+        $limit = rate_limit_hit('contact_form', 5, 10 * 60);
+        if (!$limit['allowed']) {
+            $contactErrors[] = 'ძალიან ბევრი შეტყობინება გაიგზავნა. სცადეთ ' . rate_limit_retry_minutes((int) $limit['retry_after']) . ' წუთში.';
+        }
     }
 
     if ($contactErrors === []) {

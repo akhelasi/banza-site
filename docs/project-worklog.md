@@ -838,6 +838,49 @@ Next phase notes:
 
 - Remaining launch blockers are client-approved content, real donation/contact/social values, production credentials/domain/host, real browser visual QA and final security review after deployment decisions.
 
+## Phase 21: Admin Login And Contact Form Rate Limiting
+
+Added a lightweight file-backed throttling layer for launch-critical forms.
+
+Added:
+
+- `SITE/includes/rate-limit.php`
+
+Changed:
+
+- `SITE/admin/login.php`: admin login now allows 5 attempts per 15 minutes per client address, then shows a retry message. A successful login clears the login bucket.
+- `SITE/contact.php`: validated contact form submissions now allow 5 saved-message attempts per 10 minutes per client address.
+- `.gitignore`: ignores `SITE/storage/rate-limit.json`, because it is runtime cache state.
+- `README.md` and this checklist/worklog were updated for handoff.
+
+How it works:
+
+- The limiter stores hashed client/action keys in `SITE/storage/rate-limit.json`.
+- It does not store raw IP addresses.
+- It does not require MySQL, so it works in the current JSON development setup and on simple PHP hosting.
+- CAPTCHA remains a review item instead of a default dependency; add it only if real spam appears or the client asks for it.
+
+Problems found and fixed:
+
+- The first verification created `SITE/storage/rate-limit.json`; this is expected runtime state, so it was explicitly added to `.gitignore`.
+- No PHP syntax or route-level regression was found.
+
+Verification:
+
+- `php -l` passed for `SITE/includes/rate-limit.php`, `SITE/admin/login.php` and `SITE/contact.php`.
+- Full PHP lint passed for all 31 PHP files under `SITE/`.
+- `node --check SITE/assets/js/main.js` passed.
+- A direct PHP behavior test confirmed the limiter allows the configured number of attempts and blocks the next one.
+- HTTP smoke checks passed for `/admin/login.php` and `/contact.php`.
+- Admin login POST test confirmed repeated wrong passwords trigger the rate-limit message; the test bucket was cleared afterwards.
+- `git diff --check` passed with only the existing Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Admin list pages still need search/filter/sort before the admin UX is comfortable with more content.
+- Final security review should happen after storage/deployment decisions are settled.
+- If contact spam becomes likely, revisit stronger anti-spam options such as CAPTCHA, server-side challenge fields, or SMTP/provider-level filtering.
+
 ## Next Phase
 
 Remaining Production Blockers

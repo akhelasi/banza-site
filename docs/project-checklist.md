@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest pushed phase before this checklist update: Phase 16, commit `f1d269b`.
+- `[DONE]` Latest completed phase before this checklist update: Phase 21.
 
 ## Public Site
 
@@ -123,10 +123,11 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Raw stack/database errors are not intentionally shown to users.
 - `[TODO]` Change demo admin credentials before any public deployment. Hash generator is available at `SITE/scripts/generate-password-hash.php`.
 - `[DONE]` Keep real production config in untracked `SITE/includes/config.php`.
-- `[TODO]` Add rate limiting or throttling for admin login and contact form.
+- `[DONE]` Add rate limiting or throttling for admin login and contact form.
 - `[TODO]` Add stronger spam protection for contact form if spam becomes likely.
 - `[DONE]` Add basic PHP security headers in public/admin layout bootstrap.
 - `[DONE]` Add configurable session cookie name, HttpOnly, SameSite and HTTPS secure flag.
+- `[DONE]` Runtime rate-limit cache is ignored by Git.
 - `[TODO]` Run a final security review after MySQL wiring.
 - `[WAITING]` Real production admin email/password must be chosen by the client before deployment.
 - `[REVIEW]` Decide whether to add CAPTCHA; avoid it unless spam actually appears or the client requests it.
@@ -205,6 +206,7 @@ This checklist is the project control document for finishing the Banza village w
 7. `[DONE]` Phase 18: Real weather/camera integration foundation.
 8. `[DONE]` Phase 19: Responsive/browser QA fallback pass.
 9. `[DONE]` Phase 20: Hosting deployment prep and final release checklist.
+10. `[DONE]` Phase 21: Admin login and contact form rate limiting.
 
 ## Definition Of Done For Production
 

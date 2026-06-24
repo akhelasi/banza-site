@@ -35,3 +35,4 @@ backups/
 SITE/uploads/*
 !SITE/uploads/.gitkeep
 SITE/storage/weather-cache.json
+SITE/storage/rate-limit.json

@@ -14,6 +14,7 @@ The current codebase includes:
 - Image upload support for news/projects/gallery media.
 - Soft delete, restore and permanent delete.
 - Contact form with admin inbox.
+- Admin login and contact form rate limiting.
 - `post_date` and `last_update` metadata for admin-managed content.
 - Development storage through `SITE/storage/content.json`.
 - SQL schema draft in `SITE/database/schema.sql`.
