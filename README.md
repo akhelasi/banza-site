@@ -14,6 +14,7 @@ The current codebase includes:
 - Admin media library search/filter/sort.
 - Live search/filter/sort on public listing pages.
 - Image upload support for news/projects/gallery media.
+- Upload validation includes file type, 5MB size limit and 6000x6000px max dimensions.
 - Soft delete, restore and permanent delete.
 - Contact form with admin inbox.
 - Admin login and contact form rate limiting.

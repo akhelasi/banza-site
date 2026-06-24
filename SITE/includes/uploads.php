@@ -22,6 +22,14 @@ function allowed_upload_mimes(): array
     ];
 }
 
+function upload_max_dimensions(): array
+{
+    return [
+        'width' => 6000,
+        'height' => 6000,
+    ];
+}
+
 function sanitize_upload_name(string $name): string
 {
     $name = pathinfo($name, PATHINFO_FILENAME);
@@ -64,8 +72,17 @@ function store_uploaded_image(array $file, ?string &$error = null): ?string
         return null;
     }
 
-    if (@getimagesize($tmpName) === false) {
+    $imageSize = @getimagesize($tmpName);
+    if ($imageSize === false) {
         $error = 'ფაილი ვალიდური სურათი არ არის.';
+        return null;
+    }
+
+    $maxDimensions = upload_max_dimensions();
+    $width = (int) ($imageSize[0] ?? 0);
+    $height = (int) ($imageSize[1] ?? 0);
+    if ($width > $maxDimensions['width'] || $height > $maxDimensions['height']) {
+        $error = 'სურათის ზომები ძალიან დიდია. მაქსიმუმია ' . $maxDimensions['width'] . 'x' . $maxDimensions['height'] . ' px.';
         return null;
     }
 

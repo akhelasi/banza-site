@@ -1004,6 +1004,43 @@ Next phase notes:
 - Alt text/captions for uploaded images remain open and should be handled with a persistence decision, not only form fields.
 - Image resizing/compression and max-dimension validation are still open media hardening tasks.
 
+## Phase 25: Upload Max-Dimensions Validation
+
+Added a server-side dimensions guard for uploaded images.
+
+Changed:
+
+- `SITE/includes/uploads.php`
+  - Added `upload_max_dimensions()` with a 6000x6000px limit.
+  - Validated image width and height immediately after `getimagesize`.
+  - Rejects images that exceed the configured pixel dimensions before moving them into `SITE/uploads/`.
+- `README.md`
+  - Notes that upload validation includes type, file size and dimensions.
+- `docs/project-checklist.md`
+  - Marks max-dimensions upload protection complete.
+
+How it works:
+
+- The existing upload flow already validates upload errors, 5MB file size, MIME type and image validity.
+- The new check reads the decoded dimensions from `getimagesize` and returns a user-safe error if either side is larger than 6000px.
+
+Problems found and fixed:
+
+- No regression was found in the upload validation path during this phase.
+
+Verification:
+
+- `php -l SITE/includes/uploads.php` passed.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- A direct PHP check confirmed `upload_max_dimensions()` returns `6000x6000`.
+- `node --check SITE/assets/js/main.js` passed.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Image resizing/compression remains open. Dimension rejection protects the server, but it does not optimize accepted uploads.
+- Alt text/captions still need a persistence model.
+
 ## Next Phase
 
 Remaining Production Blockers
