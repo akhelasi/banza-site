@@ -142,14 +142,36 @@ if ($useMysqlMessages) {
       <p>წაშლილი სიახლეები, პროექტები და საკონტაქტო შეტყობინებები აქ გამოჩნდება restore და permanent delete მოქმედებებით.</p>
     </div>
   <?php else: ?>
+    <form class="filter-bar has-sort admin-filter" data-live-filter data-filter-target="#adminTrashList" aria-label="სანაგვის ძებნა, ფილტრი და დალაგება">
+      <label><span>ძებნა</span><input type="search" name="search" placeholder="სათაური, slug ან ტიპი"></label>
+      <label>
+        <span>ტიპი</span>
+        <select name="category">
+          <option value="">ყველა</option>
+          <option value="news">სიახლეები</option>
+          <option value="projects">პროექტები</option>
+          <option value="contactMessages">შეტყობინებები</option>
+        </select>
+      </label>
+      <label>
+        <span>დალაგება</span>
+        <select name="sort">
+          <option value="date-desc">წაშლის დრო: ახალი ჯერ</option>
+          <option value="date-asc">წაშლის დრო: ძველი ჯერ</option>
+          <option value="title-asc">სათაური: ზრდადობით</option>
+          <option value="title-desc">სათაური: კლებადობით</option>
+        </select>
+      </label>
+    </form>
     <div class="admin-table-wrap">
       <table class="admin-table">
         <thead><tr><th>ტიპი</th><th>სათაური</th><th>წაშლის დრო</th><th>ფაილები</th><th>ქმედება</th></tr></thead>
-        <tbody>
+        <tbody id="adminTrashList">
           <?php foreach ($items as $item): ?>
-            <tr>
+            <?php $trashTitle = $item['title'] ?? $item['subject'] ?? $item['name'] ?? ''; ?>
+            <tr class="filter-item" data-title="<?php echo e($trashTitle); ?>" data-text="<?php echo e(($item['_type_label'] ?? '') . ' ' . ($item['slug'] ?? '')); ?>" data-category="<?php echo e($item['_content_key']); ?>" data-sort-title="<?php echo e($trashTitle); ?>" data-sort-date="<?php echo e($item['deleted_at'] ?? ''); ?>">
               <td><?php echo e($item['_type_label']); ?></td>
-              <td><?php echo e($item['title'] ?? $item['subject'] ?? $item['name'] ?? ''); ?><small><?php echo e($item['slug'] ?? ''); ?></small></td>
+              <td><?php echo e($trashTitle); ?><small><?php echo e($item['slug'] ?? ''); ?></small></td>
               <td><?php echo e($item['deleted_at'] ?? ''); ?></td>
               <td><?php echo count(collect_upload_paths($item)); ?></td>
               <td class="admin-actions">
@@ -173,6 +195,7 @@ if ($useMysqlMessages) {
         </tbody>
       </table>
     </div>
+    <p class="empty-state" data-empty-state hidden>ასეთი წაშლილი ჩანაწერი ვერ მოიძებნა.</p>
   <?php endif; ?>
 </section>
 

@@ -113,9 +113,26 @@ function normalizeText(value) {
   return String(value || '').toLocaleLowerCase('ka-GE').trim();
 }
 
+function parseSortDate(value) {
+  const text = String(value || '').trim();
+  const directDate = Date.parse(text);
+
+  if (!Number.isNaN(directDate)) {
+    return directDate;
+  }
+
+  const georgianDate = text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (!georgianDate) {
+    return 0;
+  }
+
+  const [, day, month, year] = georgianDate;
+  return Date.parse(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`) || 0;
+}
+
 function getSortValue(item, field) {
   if (field === 'date') {
-    return Date.parse(item.dataset.sortDate || '') || 0;
+    return parseSortDate(item.dataset.sortDate);
   }
 
   return normalizeText(item.dataset[`sort${field.charAt(0).toUpperCase()}${field.slice(1)}`] || item.dataset[field] || item.dataset.title || item.textContent);

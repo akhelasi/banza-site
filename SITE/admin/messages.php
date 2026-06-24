@@ -104,12 +104,33 @@ render_admin_header('შეტყობინებები', 'messages');
       <p>საიტიდან გამოგზავნილი საკონტაქტო ფორმები აქ გამოჩნდება.</p>
     </div>
   <?php else: ?>
+    <form class="filter-bar has-sort admin-filter" data-live-filter data-filter-target="#adminMessagesList" aria-label="შეტყობინებების ძებნა, ფილტრი და დალაგება">
+      <label><span>ძებნა</span><input type="search" name="search" placeholder="სახელი, ელფოსტა, სათაური ან ტექსტი"></label>
+      <label>
+        <span>სტატუსი</span>
+        <select name="category">
+          <option value="">ყველა</option>
+          <option value="new">ახალი</option>
+          <option value="read">წაკითხული</option>
+        </select>
+      </label>
+      <label>
+        <span>დალაგება</span>
+        <select name="sort">
+          <option value="date-desc">თარიღი: ახალი ჯერ</option>
+          <option value="date-asc">თარიღი: ძველი ჯერ</option>
+          <option value="title-asc">გამომგზავნი: ზრდადობით</option>
+          <option value="title-desc">გამომგზავნი: კლებადობით</option>
+        </select>
+      </label>
+    </form>
     <div class="admin-table-wrap">
       <table class="admin-table">
         <thead><tr><th>სტატუსი</th><th>გამომგზავნი</th><th>სათაური</th><th>შეტყობინება</th><th>თარიღი</th><th>ქმედება</th></tr></thead>
-        <tbody>
+        <tbody id="adminMessagesList">
           <?php foreach ($messages as $message): ?>
-            <tr>
+            <?php $messageStatus = empty($message['read_at']) ? 'new' : 'read'; ?>
+            <tr class="filter-item" data-title="<?php echo e($message['name'] ?? ''); ?>" data-text="<?php echo e(($message['email'] ?? '') . ' ' . ($message['phone'] ?? '') . ' ' . ($message['subject'] ?? '') . ' ' . ($message['message'] ?? '')); ?>" data-category="<?php echo e($messageStatus); ?>" data-sort-title="<?php echo e($message['name'] ?? ''); ?>" data-sort-date="<?php echo e($message['created_at'] ?? ''); ?>">
               <td><span class="status-pill <?php echo empty($message['read_at']) ? 'status-new' : 'status-read'; ?>"><?php echo empty($message['read_at']) ? 'ახალი' : 'წაკითხული'; ?></span></td>
               <td>
                 <strong><?php echo e($message['name'] ?? ''); ?></strong>
@@ -140,6 +161,7 @@ render_admin_header('შეტყობინებები', 'messages');
         </tbody>
       </table>
     </div>
+    <p class="empty-state" data-empty-state hidden>ასეთი შეტყობინება ვერ მოიძებნა.</p>
   <?php endif; ?>
 </section>
 

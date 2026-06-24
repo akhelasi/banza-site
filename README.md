@@ -10,6 +10,7 @@ The current codebase includes:
 
 - Public site pages: home, news, news detail, history, projects, about, contact and football.
 - Admin panel: content CRUD, media uploads, settings, contact messages and trash.
+- Admin table search/filter/sort for content, messages and trash.
 - Live search/filter/sort on public listing pages.
 - Image upload support for news/projects/gallery media.
 - Soft delete, restore and permanent delete.

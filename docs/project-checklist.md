@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 21.
+- `[DONE]` Latest completed phase before this checklist update: Phase 22.
 
 ## Public Site
 
@@ -62,7 +62,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Contact messages can be marked read.
 - `[DONE]` Trash supports restore and permanent delete for news, projects and contact messages.
 - `[DONE]` `post_date` and `last_update` are written in dev storage for admin-managed content.
-- `[TODO]` Add admin search/filter/sort to content tables and messages table.
+- `[DONE]` Add admin search/filter/sort to content tables and messages table.
 - `[TODO]` Add bulk actions for messages and content lists.
 - `[TODO]` Add image alt text fields in admin forms.
 - `[TODO]` Add preview links from admin list rows to public pages.
@@ -207,6 +207,7 @@ This checklist is the project control document for finishing the Banza village w
 8. `[DONE]` Phase 19: Responsive/browser QA fallback pass.
 9. `[DONE]` Phase 20: Hosting deployment prep and final release checklist.
 10. `[DONE]` Phase 21: Admin login and contact form rate limiting.
+11. `[DONE]` Phase 22: Admin content/messages/trash search, filter and sort.
 
 ## Definition Of Done For Production
 

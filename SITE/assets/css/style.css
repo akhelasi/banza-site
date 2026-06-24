@@ -1541,6 +1541,10 @@ body {
   overflow-x: auto;
 }
 
+.admin-filter {
+  margin: 18px 0;
+}
+
 .admin-table {
   width: 100%;
   border-collapse: collapse;

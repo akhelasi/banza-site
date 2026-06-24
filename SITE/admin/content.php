@@ -403,16 +403,27 @@ if ($type === 'pages') {
     ?>
     <section class="admin-card">
       <div class="admin-card-heading"><div><p class="eyebrow">Static content</p><h2>გვერდები</h2></div></div>
+      <form class="filter-bar single admin-filter" data-live-filter data-filter-target="#adminPagesList" aria-label="გვერდების ძებნა">
+        <label><span>ძებნა</span><input type="search" name="search" placeholder="სათაური ან აღწერა"></label>
+        <label>
+          <span>დალაგება</span>
+          <select name="sort">
+            <option value="title-asc">სათაური: ზრდადობით</option>
+            <option value="title-desc">სათაური: კლებადობით</option>
+          </select>
+        </label>
+      </form>
       <div class="admin-table-wrap">
         <table class="admin-table">
           <thead><tr><th>გვერდი</th><th>აღწერა</th><th>ქმედება</th></tr></thead>
-          <tbody>
+          <tbody id="adminPagesList">
             <?php foreach ($pages as $pageKey => $page): ?>
-              <tr><td><?php echo e($page['title'] ?? $pageKey); ?></td><td><?php echo e($page['excerpt'] ?? ''); ?></td><td><a class="inline-link" href="content.php?type=pages&action=edit&page=<?php echo e($pageKey); ?>">რედაქტირება →</a></td></tr>
+              <tr class="filter-item" data-title="<?php echo e($page['title'] ?? $pageKey); ?>" data-text="<?php echo e(($page['excerpt'] ?? '') . ' ' . $pageKey); ?>" data-sort-title="<?php echo e($page['title'] ?? $pageKey); ?>"><td><?php echo e($page['title'] ?? $pageKey); ?></td><td><?php echo e($page['excerpt'] ?? ''); ?></td><td><a class="inline-link" href="content.php?type=pages&action=edit&page=<?php echo e($pageKey); ?>">რედაქტირება →</a></td></tr>
             <?php endforeach; ?>
           </tbody>
         </table>
       </div>
+      <p class="empty-state" data-empty-state hidden>ასეთი გვერდი ვერ მოიძებნა.</p>
     </section>
     <?php
     render_admin_footer();
@@ -421,6 +432,10 @@ if ($type === 'pages') {
 
 $key = admin_items_key($type);
 $items = visible_content_items($content[$key] ?? []);
+$itemCategories = array_values(array_unique(array_filter(array_map(static function (array $item) use ($type): string {
+    return trim((string) ($type === 'projects' ? ($item['status'] ?? '') : ($item['category'] ?? '')));
+}, $items))));
+sort($itemCategories, SORT_NATURAL | SORT_FLAG_CASE);
 ?>
 
 <section class="admin-card">
@@ -431,15 +446,40 @@ $items = visible_content_items($content[$key] ?? []);
     </div>
     <a class="button button-primary" href="content.php?type=<?php echo e($type); ?>&action=create">დამატება</a>
   </div>
+  <form class="filter-bar has-sort admin-filter" data-live-filter data-filter-target="#adminContentList" aria-label="კონტენტის ძებნა, ფილტრი და დალაგება">
+    <label><span>ძებნა</span><input type="search" name="search" placeholder="სათაური, slug ან აღწერა"></label>
+    <label>
+      <span><?php echo $type === 'projects' ? 'სტატუსი' : 'კატეგორია'; ?></span>
+      <select name="category">
+        <option value="">ყველა</option>
+        <?php foreach ($itemCategories as $category): ?>
+          <option value="<?php echo e($category); ?>"><?php echo e($category); ?></option>
+        <?php endforeach; ?>
+      </select>
+    </label>
+    <label>
+      <span>დალაგება</span>
+      <select name="sort">
+        <option value="date-desc">თარიღი: ახალი ჯერ</option>
+        <option value="date-asc">თარიღი: ძველი ჯერ</option>
+        <option value="title-asc">სათაური: ზრდადობით</option>
+        <option value="title-desc">სათაური: კლებადობით</option>
+      </select>
+    </label>
+  </form>
   <div class="admin-table-wrap">
     <table class="admin-table">
       <thead><tr><th>სათაური</th><th>აღწერა</th><th>სტატუსი/კატეგორია</th><th>ქმედება</th></tr></thead>
-      <tbody>
+      <tbody id="adminContentList">
         <?php foreach ($items as $item): ?>
-          <tr>
+          <?php
+          $itemCategory = $type === 'projects' ? ($item['status'] ?? '') : ($item['category'] ?? '');
+          $sortDate = $item['published_at'] ?? $item['post_date'] ?? $item['created_at'] ?? '';
+          ?>
+          <tr class="filter-item" data-title="<?php echo e($item['title'] ?? ''); ?>" data-text="<?php echo e(($item['excerpt'] ?? '') . ' ' . ($item['slug'] ?? '')); ?>" data-category="<?php echo e($itemCategory); ?>" data-sort-title="<?php echo e($item['title'] ?? ''); ?>" data-sort-date="<?php echo e($sortDate); ?>">
             <td><?php echo e($item['title'] ?? ''); ?><small><?php echo e($item['slug'] ?? ''); ?></small></td>
             <td><?php echo e($item['excerpt'] ?? ''); ?></td>
-            <td><?php echo e($type === 'projects' ? ($item['status'] ?? '') : ($item['category'] ?? '')); ?></td>
+            <td><?php echo e($itemCategory); ?></td>
             <td class="admin-actions">
               <a class="inline-link" href="content.php?type=<?php echo e($type); ?>&action=edit&slug=<?php echo e($item['slug'] ?? ''); ?>">რედაქტირება</a>
               <form method="post" onsubmit="return confirm('ჩანაწერი გადავიდეს სანაგვეში?');">
@@ -455,6 +495,7 @@ $items = visible_content_items($content[$key] ?? []);
       </tbody>
     </table>
   </div>
+  <p class="empty-state" data-empty-state hidden>ასეთი ჩანაწერი ვერ მოიძებნა.</p>
 </section>
 
 <?php render_admin_footer(); ?>

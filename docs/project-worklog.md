@@ -881,6 +881,49 @@ Next phase notes:
 - Final security review should happen after storage/deployment decisions are settled.
 - If contact spam becomes likely, revisit stronger anti-spam options such as CAPTCHA, server-side challenge fields, or SMTP/provider-level filtering.
 
+## Phase 22: Admin Table Search, Filter And Sort
+
+Added live table controls to the admin screens that become hard to use once real content grows.
+
+Changed:
+
+- `SITE/admin/content.php`
+  - Added live search/sort for static pages.
+  - Added live search, category/status filter and title/date sort for news and projects.
+- `SITE/admin/messages.php`
+  - Added live search, read/unread filter and sender/date sort for contact messages.
+- `SITE/admin/trash.php`
+  - Added live search, item type filter and title/deleted-date sort for trash.
+- `SITE/assets/js/main.js`
+  - Extended date sorting to support both ISO dates and `dd/mm/YYYY` metadata values.
+- `SITE/assets/css/style.css`
+  - Added admin filter spacing.
+
+How it works:
+
+- Reused the existing `data-live-filter` JavaScript already used by public listing pages.
+- Table rows now carry `filter-item`, `data-title`, `data-text`, `data-category`, `data-sort-title` and `data-sort-date` attributes.
+- Filtering and sorting happen in the browser, so the page does not reload and scroll position is not reset.
+
+Problems found and fixed:
+
+- Admin content could sort against `post_date` values in `dd/mm/YYYY` format. The JS sort parser now handles that format as well as normal ISO dates.
+- HTTP auth smoke with PowerShell/curl was unreliable in this Codex environment. A direct localhost header check still worked, and a PHP CLI render check confirmed the admin content list renders the filter hooks. Full real-browser admin interaction QA remains in the manual QA checklist.
+
+Verification:
+
+- `php -l` passed for changed admin PHP files.
+- Full PHP lint passed for all 31 PHP files under `SITE/`.
+- `node --check SITE/assets/js/main.js` passed.
+- Source hook scan confirmed each admin filter target has a matching table body id.
+- CLI render check confirmed the admin news list renders `data-live-filter` and `filter-item` hooks.
+
+Next phase notes:
+
+- Media library search/filter remains a separate TODO because it uses a thumbnail grid and needs a slightly different UX.
+- Bulk actions for admin tables are still open.
+- Real browser QA should confirm keyboard focus, overflow and table usability on small screens.
+
 ## Next Phase
 
 Remaining Production Blockers
