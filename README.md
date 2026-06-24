@@ -19,7 +19,7 @@ The current codebase includes:
 - Load-more pagination on news and project listings.
 - Homepage empty states for news/projects when admin content is empty.
 - Image upload support for news/projects/gallery media.
-- Upload validation includes file type, 5MB size limit and 6000x6000px max dimensions.
+- Upload validation includes file type, 5MB size limit, 6000x6000px max dimensions and optional GD-based image optimization.
 - Soft delete, restore and permanent delete.
 - Contact form with admin inbox.
 - Admin login and contact form rate limiting.

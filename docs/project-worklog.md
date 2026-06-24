@@ -1364,3 +1364,46 @@ Next phase notes:
 
 - Manual real-browser QA should verify homepage empty states after temporarily clearing content in a local/dev copy.
 - Remaining content-related blockers now mainly depend on client-approved real text, images, social links and donation accounts.
+
+## Phase 33: Optional Upload Image Optimization
+
+Added best-effort server-side optimization for uploaded images.
+
+Changed:
+
+- `SITE/includes/uploads.php`
+  - Added `upload_optimization_config()`.
+  - Added `optimize_uploaded_image()` for JPG, PNG and WEBP files when PHP GD is available.
+  - Calls optimization after a validated uploaded file is moved into `SITE/uploads/`.
+- `SITE/admin/media.php`
+  - Upload help text now notes that large JPG/PNG/WEBP files can be automatically reduced when GD is enabled.
+- `README.md` and `docs/project-checklist.md`
+  - Documented Phase 33 and marked image optimization complete.
+
+How it works:
+
+- Existing validation still runs first: upload error, file size, `is_uploaded_file`, MIME type, `getimagesize` and max dimensions.
+- GIF files are intentionally not rewritten so animation is not broken.
+- JPG/PNG/WEBP files are resized to fit within 2400x2400px when needed.
+- If an image is already small, the optimizer only replaces it when the rewritten file is smaller.
+- If GD is unavailable or optimization fails, the upload remains successful and keeps the original validated file.
+
+Problems found and fixed:
+
+- The local PHP runtime reports `gd no`, so real resizing cannot be exercised in this Codex environment. The implementation is deliberately a no-op without GD instead of blocking uploads.
+- A previous PowerShell edit attempt timed out before inserting the optimizer call; source scans confirmed the missing call and it was added with a direct patch.
+
+Verification:
+
+- `php -l` passed for changed PHP files.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `node --check SITE/assets/js/main.js` passed.
+- Source scan confirmed the optimization config, optimizer function and upload-flow call exist.
+- Local PHP runtime check confirmed GD is currently unavailable, so runtime resize/compression needs a host/dev environment with GD enabled.
+- Direct helper check confirmed `optimize_uploaded_image()` returns `false` safely when GD is unavailable.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Per-media captions remain open and need a storage model.
+- Production hosting should enable PHP GD if automatic upload optimization is desired.

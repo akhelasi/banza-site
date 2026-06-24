@@ -43,7 +43,7 @@ $uploadedItems = list_uploaded_images();
   <div class="admin-card-heading"><h2>სურათის ატვირთვა</h2></div>
   <form class="admin-form" method="post" enctype="multipart/form-data">
     <?php echo csrf_field(); ?>
-    <label><span>სურათი JPG, PNG, WEBP ან GIF, მაქს. 5MB</span><input type="file" name="image" accept="image/jpeg,image/png,image/webp,image/gif" required></label>
+    <label><span>სურათი JPG, PNG, WEBP ან GIF, მაქს. 5MB. დიდი JPG/PNG/WEBP ფაილები ავტომატურად შემცირდება, თუ server-ზე GD ჩართულია.</span><input type="file" name="image" accept="image/jpeg,image/png,image/webp,image/gif" required></label>
     <button class="button button-primary" type="submit">ატვირთვა</button>
   </form>
 </section>

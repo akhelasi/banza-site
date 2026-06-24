@@ -30,6 +30,100 @@ function upload_max_dimensions(): array
     ];
 }
 
+function upload_optimization_config(): array
+{
+    return [
+        'enabled' => true,
+        'max_width' => 2400,
+        'max_height' => 2400,
+        'jpeg_quality' => 82,
+        'webp_quality' => 82,
+        'png_compression' => 6,
+    ];
+}
+
+function optimize_uploaded_image(string $target, string $mime, int $width, int $height): bool
+{
+    $config = upload_optimization_config();
+    if (($config['enabled'] ?? true) === false || $mime === 'image/gif' || !extension_loaded('gd')) {
+        return false;
+    }
+
+    $loader = match ($mime) {
+        'image/jpeg' => function_exists('imagecreatefromjpeg') ? 'imagecreatefromjpeg' : null,
+        'image/png' => function_exists('imagecreatefrompng') ? 'imagecreatefrompng' : null,
+        'image/webp' => function_exists('imagecreatefromwebp') ? 'imagecreatefromwebp' : null,
+        default => null,
+    };
+
+    if ($loader === null) {
+        return false;
+    }
+
+    $maxWidth = max(1, (int) ($config['max_width'] ?? 2400));
+    $maxHeight = max(1, (int) ($config['max_height'] ?? 2400));
+    $scale = min($maxWidth / max(1, $width), $maxHeight / max(1, $height), 1);
+    $newWidth = max(1, (int) round($width * $scale));
+    $newHeight = max(1, (int) round($height * $scale));
+
+    $source = @$loader($target);
+    if (!$source instanceof GdImage) {
+        return false;
+    }
+
+    $output = $source;
+    if ($scale < 1) {
+        $output = imagecreatetruecolor($newWidth, $newHeight);
+        if (!$output instanceof GdImage) {
+            imagedestroy($source);
+            return false;
+        }
+
+        if (in_array($mime, ['image/png', 'image/webp'], true)) {
+            imagealphablending($output, false);
+            imagesavealpha($output, true);
+            $transparent = imagecolorallocatealpha($output, 0, 0, 0, 127);
+            if ($transparent !== false) {
+                imagefilledrectangle($output, 0, 0, $newWidth, $newHeight, $transparent);
+            }
+        }
+
+        imagecopyresampled($output, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+    }
+
+    $temporary = $target . '.tmp';
+    $saved = match ($mime) {
+        'image/jpeg' => imagejpeg($output, $temporary, (int) ($config['jpeg_quality'] ?? 82)),
+        'image/png' => imagepng($output, $temporary, (int) ($config['png_compression'] ?? 6)),
+        'image/webp' => function_exists('imagewebp') ? imagewebp($output, $temporary, (int) ($config['webp_quality'] ?? 82)) : false,
+        default => false,
+    };
+
+    if ($output !== $source) {
+        imagedestroy($output);
+    }
+    imagedestroy($source);
+
+    if (!$saved || !is_file($temporary)) {
+        @unlink($temporary);
+        return false;
+    }
+
+    $originalSize = is_file($target) ? filesize($target) : false;
+    $optimizedSize = filesize($temporary);
+    if ($optimizedSize === false || $optimizedSize <= 0 || ($scale >= 1 && $originalSize !== false && $optimizedSize >= $originalSize)) {
+        @unlink($temporary);
+        return false;
+    }
+
+    if (!rename($temporary, $target)) {
+        @unlink($temporary);
+        return false;
+    }
+
+    return true;
+}
+
 function sanitize_upload_name(string $name): string
 {
     $name = pathinfo($name, PATHINFO_FILENAME);
@@ -101,6 +195,8 @@ function store_uploaded_image(array $file, ?string &$error = null): ?string
         $error = 'ფაილის შენახვა ვერ მოხერხდა.';
         return null;
     }
+
+    optimize_uploaded_image($target, $mime, $width, $height);
 
     return upload_public_path($subdir . '/' . $fileName);
 }
