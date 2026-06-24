@@ -135,6 +135,10 @@ function getSortValue(item, field) {
     return parseSortDate(item.dataset.sortDate);
   }
 
+  if (field === 'size') {
+    return Number(item.dataset.sortSize || 0);
+  }
+
   return normalizeText(item.dataset[`sort${field.charAt(0).toUpperCase()}${field.slice(1)}`] || item.dataset[field] || item.dataset.title || item.textContent);
 }
 

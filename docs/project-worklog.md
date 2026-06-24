@@ -966,6 +966,44 @@ Next phase notes:
 - DB-backed admin authentication is still a separate future phase if production should use the `admins` table directly.
 - Demo runtime credentials still must be replaced in untracked `SITE/includes/config.php` before launch.
 
+## Phase 24: Admin Media Library Search, Filter And Sort
+
+Added live controls to the admin media library so uploaded and seed images remain usable as the file list grows.
+
+Changed:
+
+- `SITE/admin/media.php`
+  - Added uploaded-image search by filename/path.
+  - Added uploaded-image extension filter for JPG, JPEG, PNG, WEBP and GIF.
+  - Added uploaded-image sorting by date, name and file size.
+  - Added seed asset search, type filter and name sort.
+- `SITE/assets/js/main.js`
+  - Added numeric `size` sorting support for filterable items.
+- `docs/project-checklist.md`
+  - Marked admin image library search/filter complete.
+
+How it works:
+
+- Reuses the same `data-live-filter` client-side system as public listing pages and admin content tables.
+- Media cards now expose filter/sort metadata through `data-title`, `data-text`, `data-category`, `data-sort-title`, `data-sort-date` and `data-sort-size`.
+- Filtering and sorting stay client-side, with no page reload and no scroll reset.
+
+Problems found and fixed:
+
+- The existing sort helper only handled text/date fields. File-size sorting needed a numeric branch, so `main.js` now supports `size-asc` and `size-desc`.
+
+Verification:
+
+- `php -l SITE/admin/media.php` passed.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `node --check SITE/assets/js/main.js` passed.
+- Source hook scan confirmed uploaded and seed media filter targets exist.
+
+Next phase notes:
+
+- Alt text/captions for uploaded images remain open and should be handled with a persistence decision, not only form fields.
+- Image resizing/compression and max-dimension validation are still open media hardening tasks.
+
 ## Next Phase
 
 Remaining Production Blockers
