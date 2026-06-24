@@ -1146,3 +1146,47 @@ Next phase notes:
 
 - DB-backed admin authentication remains a future phase if production should use the `admins` table directly.
 - Bulk actions for admin tables remain open.
+## Phase 28: Admin Bulk Actions
+
+Added bulk operations for the admin lists that are most likely to grow during normal use.
+
+Changed:
+
+- `SITE/admin/content.php`
+  - Added `posted_slugs()` helper.
+  - Added bulk soft-delete for selected news/project rows.
+  - Added row checkboxes and a bulk delete form using HTML `form` attributes, so existing per-row forms remain valid.
+- `SITE/admin/messages.php`
+  - Added `posted_message_slugs()` helper.
+  - Added bulk mark-read and bulk soft-delete for selected contact messages.
+  - Supports both JSON storage and the existing MySQL contact-message repository path.
+- `SITE/assets/css/style.css`
+  - Added `.admin-bulk-bar` styles for compact bulk action controls.
+- `README.md`
+  - Added bulk actions to the current status.
+- `docs/project-checklist.md`
+  - Marked bulk actions complete.
+
+How it works:
+
+- Bulk forms submit selected `slugs[]` values with CSRF protection.
+- Content bulk delete sets `deleted_at`, updates content dates and sends rows to trash.
+- Message bulk mark-read sets `read_at`; message bulk delete sets `deleted_at` and sends rows to trash.
+- Empty selections and already-processed/missing rows return user-safe admin flash errors.
+
+Problems found and fixed:
+
+- The first multi-file patch failed because the Windows sandbox helper could not read `main.js`. The phase was completed with targeted replacements and follow-up source scans.
+
+Verification:
+
+- `php -l` passed for `SITE/admin/content.php` and `SITE/admin/messages.php`.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- Source scan confirmed bulk helpers, bulk forms, row checkboxes and CSRF fields exist.
+- `node --check SITE/assets/js/main.js` passed.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Bulk select-all JavaScript can be added later, but the current implementation already supports real multi-select bulk actions without invalid nested forms.
+- Alt text/captions and image optimization remain open media tasks.

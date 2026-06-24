@@ -83,6 +83,18 @@ function item_index_by_slug(array $items, string $slug): ?int
     return null;
 }
 
+function posted_slugs(): array
+{
+    $slugs = $_POST['slugs'] ?? [];
+    if (!is_array($slugs)) {
+        return [];
+    }
+
+    return array_values(array_unique(array_filter(array_map(static function (mixed $slug): string {
+        return trim((string) $slug);
+    }, $slugs))));
+}
+
 function slug_exists(array $items, string $slug, string $originalSlug = ''): bool
 {
     foreach ($items as $item) {
@@ -175,6 +187,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $postAction = (string) ($_POST['action'] ?? '');
+
+    if ($postAction === 'bulk_delete' && in_array($type, ['news', 'projects'], true)) {
+        $key = admin_items_key($type);
+        $selectedSlugs = posted_slugs();
+
+        if ($selectedSlugs === []) {
+            admin_flash('აირჩიეთ მინიმუმ ერთი ჩანაწერი.', 'error');
+            redirect('content.php?type=' . urlencode($type));
+        }
+
+        $deletedCount = 0;
+        foreach (($content[$key] ?? []) as $index => $item) {
+            if (in_array((string) ($item['slug'] ?? ''), $selectedSlugs, true) && empty($item['deleted_at'])) {
+                $content[$key][$index]['deleted_at'] = date(DATE_ATOM);
+                $content[$key][$index] = touch_content_dates($content[$key][$index]);
+                $deletedCount++;
+            }
+        }
+
+        if ($deletedCount === 0) {
+            admin_flash('არჩეული ჩანაწერები ვერ მოიძებნა ან უკვე წაშლილია.', 'error');
+            redirect('content.php?type=' . urlencode($type));
+        }
+
+        save_content_store($content);
+        admin_flash($deletedCount . ' ჩანაწერი გადავიდა სანაგვეში.');
+        redirect('content.php?type=' . urlencode($type));
+    }
 
     if ($postAction === 'delete' && in_array($type, ['news', 'projects'], true)) {
         $key = admin_items_key($type);
@@ -491,9 +531,15 @@ sort($itemCategories, SORT_NATURAL | SORT_FLAG_CASE);
       </select>
     </label>
   </form>
+  <form id="bulkContentForm" class="admin-bulk-bar" method="post" onsubmit="return confirm('არჩეული ჩანაწერები გადავიდეს სანაგვეში?');">
+    <?php echo csrf_field(); ?>
+    <input type="hidden" name="action" value="bulk_delete">
+    <input type="hidden" name="type" value="<?php echo e($type); ?>">
+    <button type="submit">მონიშნულის წაშლა</button>
+  </form>
   <div class="admin-table-wrap">
     <table class="admin-table">
-      <thead><tr><th>სათაური</th><th>აღწერა</th><th>სტატუსი/კატეგორია</th><th>ქმედება</th></tr></thead>
+      <thead><tr><th>არჩევა</th><th>სათაური</th><th>აღწერა</th><th>სტატუსი/კატეგორია</th><th>ქმედება</th></tr></thead>
       <tbody id="adminContentList">
         <?php foreach ($items as $item): ?>
           <?php
@@ -501,6 +547,7 @@ sort($itemCategories, SORT_NATURAL | SORT_FLAG_CASE);
           $sortDate = $item['published_at'] ?? $item['post_date'] ?? $item['created_at'] ?? '';
           ?>
           <tr class="filter-item" data-title="<?php echo e($item['title'] ?? ''); ?>" data-text="<?php echo e(($item['excerpt'] ?? '') . ' ' . ($item['slug'] ?? '')); ?>" data-category="<?php echo e($itemCategory); ?>" data-sort-title="<?php echo e($item['title'] ?? ''); ?>" data-sort-date="<?php echo e($sortDate); ?>">
+            <td><input type="checkbox" name="slugs[]" value="<?php echo e($item['slug'] ?? ''); ?>" form="bulkContentForm" aria-label="ჩანაწერის მონიშვნა: <?php echo e($item['title'] ?? ''); ?>"></td>
             <td><?php echo e($item['title'] ?? ''); ?><small><?php echo e($item['slug'] ?? ''); ?></small></td>
             <td><?php echo e($item['excerpt'] ?? ''); ?></td>
             <td><?php echo e($itemCategory); ?></td>

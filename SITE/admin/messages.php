@@ -24,6 +24,18 @@ function contact_message_index(array $messages, string $slug): ?int
     return null;
 }
 
+function posted_message_slugs(): array
+{
+    $slugs = $_POST['slugs'] ?? [];
+    if (!is_array($slugs)) {
+        return [];
+    }
+
+    return array_values(array_unique(array_filter(array_map(static function (mixed $slug): string {
+        return trim((string) $slug);
+    }, $slugs))));
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verify_csrf($_POST['csrf_token'] ?? null)) {
         admin_flash('უსაფრთხოების token არასწორია.', 'error');
@@ -32,6 +44,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $action = (string) ($_POST['action'] ?? '');
     $slug = (string) ($_POST['slug'] ?? '');
+
+    if (in_array($action, ['bulk_mark_read', 'bulk_soft_delete'], true)) {
+        $selectedSlugs = posted_message_slugs();
+
+        if ($selectedSlugs === []) {
+            admin_flash('აირჩიეთ მინიმუმ ერთი შეტყობინება.', 'error');
+            redirect('messages.php');
+        }
+
+        $changedCount = 0;
+        if ($useMysqlMessages) {
+            foreach ($selectedSlugs as $selectedSlug) {
+                $changed = $action === 'bulk_mark_read'
+                    ? mark_contact_message_read_in_mysql(db(), $selectedSlug)
+                    : soft_delete_contact_message_in_mysql(db(), $selectedSlug);
+                $changedCount += $changed ? 1 : 0;
+            }
+        } else {
+            foreach (($content['contactMessages'] ?? []) as $index => $message) {
+                if (!in_array((string) ($message['slug'] ?? ''), $selectedSlugs, true) || !empty($message['deleted_at'])) {
+                    continue;
+                }
+
+                if ($action === 'bulk_mark_read') {
+                    $content['contactMessages'][$index]['read_at'] = date('c');
+                } else {
+                    $content['contactMessages'][$index]['deleted_at'] = date('c');
+                }
+                $content['contactMessages'][$index] = touch_content_dates($content['contactMessages'][$index]);
+                $changedCount++;
+            }
+
+            if ($changedCount > 0) {
+                save_content_store($content);
+            }
+        }
+
+        if ($changedCount === 0) {
+            admin_flash('არჩეული შეტყობინებები ვერ მოიძებნა ან უკვე დამუშავებულია.', 'error');
+            redirect('messages.php');
+        }
+
+        admin_flash($changedCount . ' შეტყობინება დამუშავდა.');
+        redirect('messages.php');
+    }
 
     if ($useMysqlMessages) {
         $message = find_contact_message_in_mysql(db(), $slug);
@@ -124,13 +181,19 @@ render_admin_header('შეტყობინებები', 'messages');
         </select>
       </label>
     </form>
+    <form id="bulkMessagesForm" class="admin-bulk-bar" method="post">
+      <?php echo csrf_field(); ?>
+      <button type="submit" name="action" value="bulk_mark_read">მონიშნულის წაკითხულად მონიშვნა</button>
+      <button type="submit" name="action" value="bulk_soft_delete" onclick="return confirm('არჩეული შეტყობინებები გადავიდეს სანაგვეში?');">მონიშნულის წაშლა</button>
+    </form>
     <div class="admin-table-wrap">
       <table class="admin-table">
-        <thead><tr><th>სტატუსი</th><th>გამომგზავნი</th><th>სათაური</th><th>შეტყობინება</th><th>თარიღი</th><th>ქმედება</th></tr></thead>
+        <thead><tr><th>არჩევა</th><th>სტატუსი</th><th>გამომგზავნი</th><th>სათაური</th><th>შეტყობინება</th><th>თარიღი</th><th>ქმედება</th></tr></thead>
         <tbody id="adminMessagesList">
           <?php foreach ($messages as $message): ?>
             <?php $messageStatus = empty($message['read_at']) ? 'new' : 'read'; ?>
             <tr class="filter-item" data-title="<?php echo e($message['name'] ?? ''); ?>" data-text="<?php echo e(($message['email'] ?? '') . ' ' . ($message['phone'] ?? '') . ' ' . ($message['subject'] ?? '') . ' ' . ($message['message'] ?? '')); ?>" data-category="<?php echo e($messageStatus); ?>" data-sort-title="<?php echo e($message['name'] ?? ''); ?>" data-sort-date="<?php echo e($message['created_at'] ?? ''); ?>">
+              <td><input type="checkbox" name="slugs[]" value="<?php echo e($message['slug'] ?? ''); ?>" form="bulkMessagesForm" aria-label="შეტყობინების მონიშვნა: <?php echo e($message['subject'] ?? ''); ?>"></td>
               <td><span class="status-pill <?php echo empty($message['read_at']) ? 'status-new' : 'status-read'; ?>"><?php echo empty($message['read_at']) ? 'ახალი' : 'წაკითხული'; ?></span></td>
               <td>
                 <strong><?php echo e($message['name'] ?? ''); ?></strong>

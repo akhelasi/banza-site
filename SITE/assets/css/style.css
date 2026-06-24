@@ -1545,6 +1545,27 @@ body {
   margin: 18px 0;
 }
 
+.admin-bulk-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+}
+
+.admin-bulk-bar button {
+  min-height: 38px;
+  border: 1px solid var(--green);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--green-dark);
+  font-weight: 700;
+}
+
 .admin-table {
   width: 100%;
   border-collapse: collapse;

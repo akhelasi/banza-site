@@ -13,6 +13,7 @@ The current codebase includes:
 - Admin table search/filter/sort for content, messages and trash.
 - Admin media library search/filter/sort.
 - Admin profile page for changing the runtime admin email/password in untracked config.
+- Bulk actions for admin content and contact message lists.
 - Live search/filter/sort on public listing pages.
 - Image upload support for news/projects/gallery media.
 - Upload validation includes file type, 5MB size limit and 6000x6000px max dimensions.
