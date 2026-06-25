@@ -80,7 +80,43 @@ function save_content_store(array $content): bool
         return false;
     }
 
-    return file_put_contents($path, $json . PHP_EOL, LOCK_EX) !== false;
+    if (file_put_contents($path, $json . PHP_EOL, LOCK_EX) === false) {
+        return false;
+    }
+
+    return sync_content_store_to_mysql($normalized);
+}
+
+function sync_content_store_to_mysql(array $content): bool
+{
+    require_once __DIR__ . '/database.php';
+    require_once __DIR__ . '/repositories/content-import-repository.php';
+
+    if (content_storage_driver() !== 'mysql') {
+        return true;
+    }
+
+    try {
+        $pdo = db();
+        $pdo->beginTransaction();
+
+        import_pages_to_mysql($pdo, content_import_static_pages($content));
+        import_posts_to_mysql($pdo, content_import_posts($content));
+        import_settings_to_mysql($pdo, content_import_settings($content));
+        import_social_links_to_mysql($pdo, content_import_social_links($content));
+        import_donation_accounts_to_mysql($pdo, content_import_donation_accounts($content));
+        import_media_items_to_mysql($pdo, content_import_media_items($content));
+
+        $pdo->commit();
+        return true;
+    } catch (Throwable $exception) {
+        if (isset($pdo) && $pdo instanceof PDO && $pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+
+        error_log('MySQL content sync failed: ' . $exception->getMessage());
+        return false;
+    }
 }
 
 function visible_content_items(array $items): array

@@ -1777,3 +1777,41 @@ Next phase notes:
 
 - Before running a real MySQL posts import on an existing database, apply `SITE/database/migrations/2026_06_25_add_post_runtime_fields.sql`.
 - Runtime reads are now available for settings, pages, media, news and projects. Admin write-through to MySQL is still open if production should stop writing JSON.
+
+## Phase 43: MySQL Admin-Save Write-Through Sync
+
+Added a conservative write-through path so admin edits that still use JSON storage can synchronize into MySQL when production is configured with `content_storage.driver=mysql`.
+
+Changed:
+
+- `SITE/includes/content-store.php`
+  - After a successful JSON save, calls `sync_content_store_to_mysql()`.
+  - The sync is a no-op for the default `json` driver.
+  - For the `mysql` driver, syncs pages, posts, settings, social links, donation accounts and standalone media inside one transaction.
+  - Logs MySQL sync failures and returns `false` while preserving the JSON write result on disk.
+- `SITE/includes/repositories/content-import-repository.php`
+  - Soft-deletes existing media rows for each imported post before re-upserting current gallery/video rows.
+  - This prevents removed admin gallery/video items from staying visible through the MySQL runtime reader.
+- `docs/project-checklist.md`
+  - Marks MySQL admin-save write-through sync complete.
+
+Problems found and fixed:
+
+- The first sync implementation loaded repository files eagerly from `content-store.php`, which caused function redeclaration in `import-json-to-mysql.php`. I moved those dependencies into the sync function with `require_once`, so CLI imports and admin saves can share the same helpers safely.
+- Route checks again triggered the local sandbox issue that removes `SITE/scripts/setup-production.php`; the file was restored from `HEAD` before staging.
+
+Verification:
+
+- `php -l` passed for `SITE/includes/content-store.php` and `SITE/includes/repositories/content-import-repository.php`.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=all` passed and reported pages/posts/media/settings/social/donation/media_items/contact_messages counts.
+- `SITE/storage/content.json` parsed successfully.
+- `php SITE/scripts/setup-production.php --check-routes` passed for the covered routes.
+- `php SITE/scripts/setup-production.php --audit-content --allow-open` passed and reported the expected current launch blockers.
+- `node --check SITE/assets/js/main.js` passed.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Admin JSON remains the editing source in this lightweight architecture; MySQL receives synchronized copies for production reads.
+- Existing production MySQL databases still need all migrations applied before enabling `content_storage.driver=mysql`.

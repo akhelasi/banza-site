@@ -306,6 +306,7 @@ function import_posts_to_mysql(PDO $pdo, array $posts): array
            deleted_at = VALUES(deleted_at)'
     );
     $findPost = $pdo->prepare('SELECT id FROM posts WHERE slug = :slug LIMIT 1');
+    $clearPostMedia = $pdo->prepare('UPDATE media SET deleted_at = CURRENT_TIMESTAMP WHERE post_id = :post_id');
     $mediaStatement = $pdo->prepare(
         'INSERT INTO media (source_key, post_id, file_path, alt_text, caption, media_type, youtube_url, sort_order)
          VALUES (:source_key, :post_id, :file_path, :alt_text, :caption, :media_type, :youtube_url, :sort_order)
@@ -349,6 +350,8 @@ function import_posts_to_mysql(PDO $pdo, array $posts): array
         if ($postId <= 0) {
             continue;
         }
+
+        $clearPostMedia->execute(['post_id' => $postId]);
 
         foreach ($post['gallery'] as $index => $path) {
             $path = trim((string) $path);
