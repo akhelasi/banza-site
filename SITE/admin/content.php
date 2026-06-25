@@ -61,6 +61,26 @@ function admin_preview_url(string $type, array $item = [], string $pageKey = '')
     return $type === 'projects' ? '../project-detail.php?slug=' . $slug : '../news-detail.php?slug=' . $slug;
 }
 
+function source_status_options(): array
+{
+    return [
+        'demo' => 'Demo/placeholder',
+        'researched' => 'Researched seed',
+        'client_approved' => 'Client approved',
+    ];
+}
+
+function normalize_source_status(string $status): string
+{
+    return array_key_exists($status, source_status_options()) ? $status : 'demo';
+}
+
+function source_status_label(string $status): string
+{
+    $options = source_status_options();
+    return $options[normalize_source_status($status)] ?? $options['demo'];
+}
+
 function item_by_slug(array $items, string $slug): ?array
 {
     foreach ($items as $item) {
@@ -272,6 +292,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'image' => $imagePath,
             'image_alt' => trim((string) ($_POST['image_alt'] ?? ($existing['image_alt'] ?? ''))),
             'category' => trim((string) ($_POST['category'] ?? '')),
+            'source_status' => normalize_source_status((string) ($_POST['source_status'] ?? ($existing['source_status'] ?? 'demo'))),
+            'source_note' => trim((string) ($_POST['source_note'] ?? ($existing['source_note'] ?? ''))),
             'deleted_at' => '',
         ];
 
@@ -335,6 +357,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['image_alt'])) {
             $page['image_alt'] = trim((string) $_POST['image_alt']);
         }
+        $page['source_status'] = normalize_source_status((string) ($_POST['source_status'] ?? ($page['source_status'] ?? 'demo')));
+        $page['source_note'] = trim((string) ($_POST['source_note'] ?? ($page['source_note'] ?? '')));
         if ($pageKey === 'about') {
             $stats = parse_stats((string) ($_POST['stats'] ?? ''));
             if ($stats !== []) {
@@ -362,7 +386,7 @@ if ($action === 'create' && in_array($type, ['news', 'projects'], true)) {
     $item = [
         'slug' => '', 'title' => '', 'excerpt' => '', 'body' => [], 'image' => '', 'image_alt' => '', 'category' => '',
         'date' => date('d F'), 'published_at' => date('Y-m-d'), 'gallery' => [], 'gallery_alt' => '', 'videos' => [],
-        'status' => 'იდეა', 'featured' => false,
+        'status' => 'იდეა', 'featured' => false, 'source_status' => 'client_approved', 'source_note' => '',
     ];
     $action = 'form';
 }
@@ -394,6 +418,17 @@ if ($action === 'edit' && $type === 'pages') {
         <input type="hidden" name="page_key" value="<?php echo e($pageKey); ?>">
         <label><span>სათაური</span><input type="text" name="title" value="<?php echo e($page['title'] ?? ''); ?>" required></label>
         <label><span>მოკლე აღწერა</span><textarea name="excerpt" required><?php echo e($page['excerpt'] ?? ''); ?></textarea></label>
+        <div class="admin-form-grid">
+          <label>
+            <span>წყაროს სტატუსი</span>
+            <select name="source_status">
+              <?php foreach (source_status_options() as $value => $label): ?>
+                <option value="<?php echo e($value); ?>"<?php echo normalize_source_status((string) ($page['source_status'] ?? 'demo')) === $value ? ' selected' : ''; ?>><?php echo e($label); ?></option>
+              <?php endforeach; ?>
+            </select>
+          </label>
+          <label><span>წყაროს შენიშვნა</span><input type="text" name="source_note" value="<?php echo e($page['source_note'] ?? ''); ?>" placeholder="მაგ. Wikipedia + Geostat, კლიენტთან გადასამოწმებელი"></label>
+        </div>
         <label><span>ტექსტი</span><textarea name="body" rows="9"><?php echo e(textarea_body($page['body'] ?? [])); ?></textarea></label>
         <?php if ($pageKey === 'football'): ?>
           <label><span>სურათი</span><input type="text" name="image" value="<?php echo e($page['image'] ?? ''); ?>"></label>
@@ -428,6 +463,17 @@ if ($action === 'form') {
           <label><span>Slug latin ასოებით</span><input type="text" name="slug" value="<?php echo e($item['slug'] ?? ''); ?>" placeholder="my-news-slug"></label>
         </div>
         <label><span>მოკლე აღწერა</span><textarea name="excerpt" required><?php echo e($item['excerpt'] ?? ''); ?></textarea></label>
+        <div class="admin-form-grid">
+          <label>
+            <span>წყაროს სტატუსი</span>
+            <select name="source_status">
+              <?php foreach (source_status_options() as $value => $label): ?>
+                <option value="<?php echo e($value); ?>"<?php echo normalize_source_status((string) ($item['source_status'] ?? 'demo')) === $value ? ' selected' : ''; ?>><?php echo e($label); ?></option>
+              <?php endforeach; ?>
+            </select>
+          </label>
+          <label><span>წყაროს შენიშვნა</span><input type="text" name="source_note" value="<?php echo e($item['source_note'] ?? ''); ?>" placeholder="მაგ. კლიენტის ტექსტი, საჯარო წყარო, demo ჩანაწერი"></label>
+        </div>
         <label><span>სრული ტექსტი, აბზაცები ცარიელი ხაზით გამოყავით</span><textarea name="body" rows="9"><?php echo e(textarea_body($item['body'] ?? [])); ?></textarea></label>
         <div class="admin-form-grid">
           <label><span>სურათი / URL</span><input type="text" name="image" value="<?php echo e($item['image'] ?? ''); ?>"></label>
@@ -480,12 +526,13 @@ if ($type === 'pages') {
       </form>
       <div class="admin-table-wrap">
         <table class="admin-table">
-          <thead><tr><th>გვერდი</th><th>აღწერა</th><th>ქმედება</th></tr></thead>
+          <thead><tr><th>გვერდი</th><th>აღწერა</th><th>წყარო</th><th>ქმედება</th></tr></thead>
           <tbody id="adminPagesList">
             <?php foreach ($pages as $pageKey => $page): ?>
               <tr class="filter-item" data-title="<?php echo e($page['title'] ?? $pageKey); ?>" data-text="<?php echo e(($page['excerpt'] ?? '') . ' ' . $pageKey); ?>" data-sort-title="<?php echo e($page['title'] ?? $pageKey); ?>">
                 <td><?php echo e($page['title'] ?? $pageKey); ?></td>
                 <td><?php echo e($page['excerpt'] ?? ''); ?></td>
+                <td><span class="status-pill"><?php echo e(source_status_label((string) ($page['source_status'] ?? 'demo'))); ?></span><small><?php echo e($page['source_note'] ?? ''); ?></small></td>
                 <td class="admin-actions">
                   <a class="inline-link" href="<?php echo e(admin_preview_url('pages', [], $pageKey)); ?>" target="_blank" rel="noopener">ნახვა</a>
                   <a class="inline-link" href="content.php?type=pages&action=edit&page=<?php echo e($pageKey); ?>">რედაქტირება</a>
@@ -547,7 +594,7 @@ sort($itemCategories, SORT_NATURAL | SORT_FLAG_CASE);
   </form>
   <div class="admin-table-wrap">
     <table class="admin-table">
-      <thead><tr><th>არჩევა</th><th>სათაური</th><th>აღწერა</th><th>სტატუსი/კატეგორია</th><th>ქმედება</th></tr></thead>
+      <thead><tr><th>არჩევა</th><th>სათაური</th><th>აღწერა</th><th>სტატუსი/კატეგორია</th><th>წყარო</th><th>ქმედება</th></tr></thead>
       <tbody id="adminContentList">
         <?php foreach ($items as $item): ?>
           <?php
@@ -559,6 +606,7 @@ sort($itemCategories, SORT_NATURAL | SORT_FLAG_CASE);
             <td><?php echo e($item['title'] ?? ''); ?><small><?php echo e($item['slug'] ?? ''); ?></small></td>
             <td><?php echo e($item['excerpt'] ?? ''); ?></td>
             <td><?php echo e($itemCategory); ?></td>
+            <td><span class="status-pill"><?php echo e(source_status_label((string) ($item['source_status'] ?? 'demo'))); ?></span><small><?php echo e($item['source_note'] ?? ''); ?></small></td>
             <td class="admin-actions">
               <a class="inline-link" href="<?php echo e(admin_preview_url($type, $item)); ?>" target="_blank" rel="noopener">ნახვა</a>
               <a class="inline-link" href="content.php?type=<?php echo e($type); ?>&action=edit&slug=<?php echo e($item['slug'] ?? ''); ?>">რედაქტირება</a>

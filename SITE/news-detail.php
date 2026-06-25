@@ -30,6 +30,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle, $item[
 
     <article class="article-shell">
       <a class="back-link" href="news.php">← ყველა ამბავი</a>
+      <?php render_source_note($item); ?>
       <header class="article-header">
         <span class="date-badge"><?php echo e($item['date']); ?></span>
         <h1><?php echo e($item['title']); ?></h1>

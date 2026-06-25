@@ -30,6 +30,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle, $proje
 
     <article class="article-shell project-detail-page">
       <a class="back-link" href="projects.php">← ყველა პროექტი</a>
+      <?php render_source_note($project); ?>
       <header class="article-header">
         <span class="status-pill"><?php echo e($project['status'] ?? ''); ?></span>
         <p class="category"><?php echo e($project['category'] ?? ''); ?></p>

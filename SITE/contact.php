@@ -125,6 +125,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle, $conta
           </select>
         </label>
       </form>
+      <?php render_source_note($contact); ?>
       <div class="cards-grid contact-grid" id="contactList">
         <?php foreach ($contact['items'] as $item): ?>
           <article class="contact-card filter-item" data-title="<?php echo e($item['label']); ?>" data-text="<?php echo e($item['value'] . ' ' . $item['note']); ?>" data-category="კონტაქტი" data-sort-title="<?php echo e($item['label']); ?>">

@@ -188,6 +188,7 @@ For an existing MySQL database created before the import source keys were added,
 ```powershell
 mysql -u root -p banza_site < SITE\database\migrations\2026_06_24_add_import_source_keys.sql
 mysql -u root -p banza_site < SITE\database\migrations\2026_06_24_add_media_caption.sql
+mysql -u root -p banza_site < SITE\database\migrations\2026_06_25_add_content_source_metadata.sql
 ```
 
 Git whitespace check:

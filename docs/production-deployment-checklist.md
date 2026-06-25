@@ -66,6 +66,7 @@ For an existing database created before import source keys were added:
 ```bash
 mysql -u USER -p DATABASE_NAME < SITE/database/migrations/2026_06_24_add_import_source_keys.sql
 mysql -u USER -p DATABASE_NAME < SITE/database/migrations/2026_06_24_add_media_caption.sql
+mysql -u USER -p DATABASE_NAME < SITE/database/migrations/2026_06_25_add_content_source_metadata.sql
 ```
 
 Dry-run the JSON import first:

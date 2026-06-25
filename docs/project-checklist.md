@@ -1,6 +1,6 @@
 # Banza Site Project Checklist
 
-Updated: 2026-06-24
+Updated: 2026-06-25
 
 This checklist is the project control document for finishing the Banza village website. Keep it updated after every phase before committing/pushing.
 
@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 34.
+- `[DONE]` Latest completed phase before this checklist update: Phase 35.
 
 ## Public Site
 
@@ -80,7 +80,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[TODO]` Replace demo email/phone/bank/social links with real values.
 - `[TODO]` Replace generic/remote image URLs with approved local assets where possible.
 - `[TODO]` Add final real population/families/vineyard/elevation data after verification.
-- `[TODO]` Add a clear source/provenance note for every researched village fact.
+- `[DONE]` Add source/provenance status and notes for researched/demo seed content.
 - `[WAITING]` Client must provide real donation account numbers.
 - `[WAITING]` Client must provide real social network URLs.
 - `[WAITING]` Client must approve or provide final village photos.
@@ -221,6 +221,7 @@ This checklist is the project control document for finishing the Banza village w
 21. [DONE] Phase 32: Homepage empty states for missing news/projects.
 22. [DONE] Phase 33: Optional GD-based upload image optimization.
 23. [DONE] Phase 34: Uploaded media alt/caption metadata.
+24. [DONE] Phase 35: Content source/provenance metadata.
 
 ## Definition Of Done For Production
 

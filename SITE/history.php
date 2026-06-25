@@ -21,6 +21,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle, $histo
           </select>
         </label>
       </form>
+      <?php render_source_note($history); ?>
       <div class="content-stack" id="historyContent">
         <?php foreach ($history['body'] as $paragraph): ?>
           <article class="section-card filter-item" data-title="ისტორია" data-text="<?php echo e($paragraph); ?>" data-category="ისტორია" data-sort-title="ისტორია">

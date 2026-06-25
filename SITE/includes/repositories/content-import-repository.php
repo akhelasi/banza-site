@@ -57,6 +57,8 @@ function content_import_static_pages(array $content): array
             'body' => content_import_json($page),
             'hero_image' => trim((string) ($page['hero_image'] ?? $page['image'] ?? '')),
             'status' => 'published',
+            'source_status' => trim((string) ($page['source_status'] ?? 'demo')),
+            'source_note' => trim((string) ($page['source_note'] ?? '')),
             'post_date' => content_import_optional_date($page, 'post_date'),
             'last_update' => content_import_optional_date($page, 'last_update'),
             'deleted_at' => content_import_deleted_at($page),
@@ -93,6 +95,8 @@ function content_import_posts(array $content): array
                 'published_at' => content_import_datetime((string) ($item['published_at'] ?? '')),
                 'is_featured' => !empty($item['featured']) ? 1 : 0,
                 'status' => empty($item['deleted_at']) ? 'published' : 'draft',
+                'source_status' => trim((string) ($item['source_status'] ?? 'demo')),
+                'source_note' => trim((string) ($item['source_note'] ?? '')),
                 'post_date' => content_import_optional_date($item, 'post_date'),
                 'last_update' => content_import_optional_date($item, 'last_update'),
                 'deleted_at' => content_import_deleted_at($item),
@@ -251,14 +255,16 @@ function content_import_summary(array $content): array
 function import_pages_to_mysql(PDO $pdo, array $pages): int
 {
     $statement = $pdo->prepare(
-        'INSERT INTO pages (slug, title, excerpt, body, hero_image, status, post_date, last_update, deleted_at)
-         VALUES (:slug, :title, :excerpt, :body, :hero_image, :status, :post_date, :last_update, :deleted_at)
+        'INSERT INTO pages (slug, title, excerpt, body, hero_image, status, source_status, source_note, post_date, last_update, deleted_at)
+         VALUES (:slug, :title, :excerpt, :body, :hero_image, :status, :source_status, :source_note, :post_date, :last_update, :deleted_at)
          ON DUPLICATE KEY UPDATE
            title = VALUES(title),
            excerpt = VALUES(excerpt),
            body = VALUES(body),
            hero_image = VALUES(hero_image),
            status = VALUES(status),
+           source_status = VALUES(source_status),
+           source_note = VALUES(source_note),
            post_date = COALESCE(VALUES(post_date), post_date),
            last_update = COALESCE(VALUES(last_update), last_update),
            deleted_at = VALUES(deleted_at)'
@@ -276,8 +282,8 @@ function import_pages_to_mysql(PDO $pdo, array $pages): int
 function import_posts_to_mysql(PDO $pdo, array $posts): array
 {
     $postStatement = $pdo->prepare(
-        'INSERT INTO posts (type, slug, title, excerpt, body, main_image, published_at, is_featured, status, post_date, last_update, deleted_at)
-         VALUES (:type, :slug, :title, :excerpt, :body, :main_image, :published_at, :is_featured, :status, :post_date, :last_update, :deleted_at)
+        'INSERT INTO posts (type, slug, title, excerpt, body, main_image, published_at, is_featured, status, source_status, source_note, post_date, last_update, deleted_at)
+         VALUES (:type, :slug, :title, :excerpt, :body, :main_image, :published_at, :is_featured, :status, :source_status, :source_note, :post_date, :last_update, :deleted_at)
          ON DUPLICATE KEY UPDATE
            type = VALUES(type),
            title = VALUES(title),
@@ -287,6 +293,8 @@ function import_posts_to_mysql(PDO $pdo, array $posts): array
            published_at = VALUES(published_at),
            is_featured = VALUES(is_featured),
            status = VALUES(status),
+           source_status = VALUES(source_status),
+           source_note = VALUES(source_note),
            post_date = COALESCE(VALUES(post_date), post_date),
            last_update = COALESCE(VALUES(last_update), last_update),
            deleted_at = VALUES(deleted_at)'
@@ -319,6 +327,8 @@ function import_posts_to_mysql(PDO $pdo, array $posts): array
             'published_at' => $post['published_at'],
             'is_featured' => $post['is_featured'],
             'status' => $post['status'],
+            'source_status' => $post['source_status'],
+            'source_note' => $post['source_note'],
             'post_date' => $post['post_date'],
             'last_update' => $post['last_update'],
             'deleted_at' => $post['deleted_at'],

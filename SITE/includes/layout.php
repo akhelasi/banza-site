@@ -59,6 +59,35 @@ function render_page_hero(string $title, string $description, string $image, str
 <?php
 }
 
+function source_status_public_label(string $status): string
+{
+    return match ($status) {
+        'client_approved' => 'დამტკიცებული კონტენტი',
+        'researched' => 'საჯარო წყაროებზე დაყრდნობილი საწყისი ტექსტი',
+        default => 'Demo/placeholder კონტენტი',
+    };
+}
+
+function render_source_note(array $content): void
+{
+    $status = (string) ($content['source_status'] ?? '');
+    $note = trim((string) ($content['source_note'] ?? ''));
+
+    if ($status === '' && $note === '') {
+        return;
+    }
+
+    ?>
+    <aside class="source-note" aria-label="კონტენტის წყაროს შენიშვნა">
+      <strong><?php echo e(source_status_public_label($status)); ?></strong>
+      <?php if ($note !== ''): ?>
+        <span><?php echo e($note); ?></span>
+      <?php endif; ?>
+      <a class="inline-link" href="content-sources.md">წყაროები</a>
+    </aside>
+<?php
+}
+
 function render_footer(array $site): void
 {
     ?>

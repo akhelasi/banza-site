@@ -1463,3 +1463,60 @@ Next phase notes:
 
 - Media captions are now stored in the media library; public article/gallery caption rendering can be added later if the client wants captions visible on public pages.
 - Remaining production blockers mostly depend on client-approved content, production credentials, hosting and real browser QA.
+
+## Phase 35: Content Source And Provenance Metadata
+
+Added source/provenance metadata so demo, researched seed and client-approved content can be separated clearly during the approval and launch process.
+
+Changed:
+
+- `SITE/includes/data.php`
+  - Added `source_status` and `source_note` to seed news, projects and static pages.
+  - Marked researched village/history seed facts separately from demo placeholders.
+- `SITE/admin/content.php`
+  - Added `source_status` and `source_note` fields to news/project and static page forms.
+  - Added source status/note visibility to admin content lists.
+  - New admin-created content defaults to `client_approved`.
+- `SITE/includes/layout.php`
+  - Added a reusable `render_source_note()` helper.
+- `SITE/about.php`, `SITE/history.php`, `SITE/football.php`, `SITE/contact.php`, `SITE/news-detail.php` and `SITE/project-detail.php`
+  - Render source/provenance notes where content can still be researched seed or demo content.
+- `SITE/assets/css/style.css`
+  - Styled public source notes as compact non-blocking notices.
+- `SITE/database/schema.sql`
+  - Added `source_status` and `source_note` to `pages` and `posts`.
+- `SITE/database/migrations/2026_06_25_add_content_source_metadata.sql`
+  - Adds the provenance columns to existing MySQL databases.
+- `SITE/includes/repositories/content-import-repository.php`
+  - Imports source metadata for pages and posts.
+- `SITE/content-sources.md`, `README.md`, `docs/production-deployment-checklist.md` and `docs/project-checklist.md`
+  - Documented source metadata and the new migration.
+
+How it works:
+
+- `source_status` accepts `demo`, `researched` or `client_approved`.
+- `source_note` stores a short human-readable provenance/approval note.
+- Public source notes are visible on static pages and detail pages when metadata exists.
+- MySQL imports keep the metadata in first-class columns rather than only inside page body JSON.
+
+Problems found and fixed:
+
+- The schema edit partially applied before the migration file was created, so the migration was added as a separate patch and then verified by source scan.
+- Detail pages originally would have hidden provenance for demo/researched news and projects; `render_source_note()` is now called on news and project detail pages too.
+
+Verification:
+
+- `php -l` passed for the new render-smoke helper.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `node --check SITE/assets/js/main.js` passed.
+- `SITE/storage/content.json` parsed successfully.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=pages` passed.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=posts` passed.
+- Source scan confirmed `source_status`, `source_note`, `render_source_note()` and the new migration are wired through admin, public pages, seed data, imports and docs.
+- `php SITE/scripts/render-smoke.php` rendered the changed public routes and confirmed source-note markup on each route.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Real client-approved text, contact values, donation accounts and approved images still need client input.
+- When content is approved, admins should switch relevant items to `client_approved` and update `source_note`.

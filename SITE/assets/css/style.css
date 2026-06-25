@@ -468,6 +468,26 @@ button {
   line-height: 1.65;
 }
 
+.source-note {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(22, 101, 52, 0.16);
+  border-left: 4px solid var(--green);
+  border-radius: 8px;
+  background: #f8fbf6;
+  color: var(--muted);
+}
+
+.source-note strong {
+  color: var(--ink);
+}
+
+.source-note .inline-link {
+  width: fit-content;
+}
+
 .news-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

@@ -21,6 +21,7 @@ render_header($site, $navigation, $socialLinks, $currentPage, $pageTitle, $about
           </select>
         </label>
       </form>
+      <?php render_source_note($about); ?>
       <div class="stats-grid page-stats">
         <?php foreach ($about['stats'] as $stat): ?>
           <div class="stat-item"><strong><?php echo e($stat['value']); ?></strong><span><?php echo e($stat['label']); ?></span><small><?php echo e($stat['note']); ?></small></div>

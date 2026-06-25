@@ -26,3 +26,12 @@ Seed content for the first build was summarized and rewritten in Georgian from t
 
 - ოჯახების რაოდენობა და ვენახების ფართობი ამ ეტაპზე demo/placeholder მონაცემებია და უნდა გადამოწმდეს კლიენტთან.
 - ახალი ამბები, პროექტები, donation bank accounts, social links, live camera stream და weather details ამ ეტაპზე demo content-ია.
+
+## Source Metadata
+
+Admin-managed news, projects and static pages support two provenance fields:
+
+- `source_status`: `demo`, `researched`, or `client_approved`.
+- `source_note`: short note explaining where the content came from and what still needs approval.
+
+Seed village facts are marked as `researched` when they come from the public sources above. Demo records and placeholder contact/donation/project details are marked as `demo` until the client replaces or approves them.
