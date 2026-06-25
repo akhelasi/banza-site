@@ -447,7 +447,7 @@ try {
     fwrite(STDOUT, "Default settings seeded: {$seededSettings}\n");
     fwrite(STDOUT, "Social links seeded: {$seededSocialLinks}\n");
     fwrite(STDOUT, "Donation accounts seeded: {$seededDonationAccounts}\n");
-    fwrite(STDOUT, "Note: current runtime login still reads SITE/includes/config.php admin credentials until DB-backed auth is enabled.\n");
+    fwrite(STDOUT, "Note: when content_storage.driver=mysql, admin login reads the admins table with config fallback.\n");
 } catch (Throwable $exception) {
     fwrite(STDERR, "Setup failed: " . $exception->getMessage() . "\n");
     exit(1);

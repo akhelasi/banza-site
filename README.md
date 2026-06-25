@@ -93,7 +93,7 @@ Password: AdminDemo2026!
 
 Important: replace this before any public deployment.
 
-The demo password hash is stored in `SITE/includes/config.example.php`. Real production credentials must be kept outside Git, for example in an untracked `SITE/includes/config.php` or environment variables.
+The demo password hash is stored in `SITE/includes/config.example.php`. Real production credentials must be kept outside Git, for example in an untracked `SITE/includes/config.php`, or in the MySQL `admins` table after `content_storage.driver=mysql` is enabled.
 
 
 ## Production Config
@@ -182,7 +182,7 @@ Production setup dry-run:
 php SITE\scripts\setup-production.php --email=admin@example.com --password-env=BANZA_ADMIN_PASSWORD --dry-run
 ```
 
-After `schema.sql` has been loaded into MySQL, run the same command without `--dry-run` to create or update the first admin row and seed default settings/social/donation rows. Use `--force` only when intentionally replacing an existing admin row with the same email.
+After `schema.sql` has been loaded into MySQL, run the same command without `--dry-run` to create or update the first admin row and seed default settings/social/donation rows. Use `--force` only when intentionally replacing an existing admin row with the same email. When `content_storage.driver=mysql`, admin login reads the MySQL `admins` table first and falls back to config only when no matching row exists.
 
 For an existing MySQL database, dry-run and then apply migrations in filename order:
 

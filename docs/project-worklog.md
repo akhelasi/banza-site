@@ -1939,3 +1939,41 @@ Next phase notes:
 
 - A real MySQL login/profile update should be tested on the target hosting/dev database after applying schema and migrations.
 - The stale setup-script output note should be cleaned up when the local sandbox stops deleting/locking `SITE/scripts/setup-production.php`.
+
+## Phase 47: Production Auth/Deployment Note Cleanup
+
+Aligned production setup and deployment documentation with the MySQL-backed admin auth/runtime state.
+
+Changed:
+
+- `SITE/scripts/setup-production.php`
+  - Updates the final setup note to say MySQL mode reads the `admins` table with config fallback.
+- `README.md`
+  - Documents that production credentials can live in the MySQL `admins` table after `content_storage.driver=mysql` is enabled.
+  - Notes that MySQL admin login checks the `admins` table first.
+- `docs/production-deployment-checklist.md`
+  - Updates setup notes for MySQL admin login.
+  - Replaces the stale warning that only contact messages had MySQL runtime coverage.
+- `docs/project-checklist.md`
+  - Marks the production auth/deployment note cleanup complete.
+
+Problems found and fixed:
+
+- `apply_patch` still cannot write `SITE/scripts/setup-production.php` in this local sandbox. I used the known directory-swap method for the one-line note change and verified syntax immediately after.
+- The production deployment checklist still described the much older contact-message-only MySQL runtime state. It now reflects current settings/pages/posts/media/contact/admin-auth coverage while still requiring a real host/dev-database smoke test.
+
+Verification:
+
+- `php -l SITE/scripts/setup-production.php` passed.
+- `php SITE/scripts/setup-production.php --help` passed.
+- `php SITE/scripts/setup-production.php --migrate --dry-run` passed.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `SITE/storage/content.json` parsed successfully.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=all` passed.
+- `php SITE/scripts/setup-production.php --audit-content --allow-open` passed and reported the expected current launch blockers.
+- `node --check SITE/assets/js/main.js` passed.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- A real browser/admin pass and real MySQL deployment smoke test remain required before launch.

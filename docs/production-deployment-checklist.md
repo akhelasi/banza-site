@@ -87,9 +87,9 @@ After backup and review, run the import:
 php SITE/scripts/import-json-to-mysql.php --only=all
 ```
 
-After confirming the setup dry run, run the same setup command without `--dry-run`. This creates or updates the first `admins` row and seeds default settings/social/donation rows from `SITE/storage/content.json`. Use `--force` only when intentionally replacing an existing admin password/name.
+After confirming the setup dry run, run the same setup command without `--dry-run`. This creates or updates the first `admins` row and seeds default settings/social/donation rows from `SITE/storage/content.json`. Use `--force` only when intentionally replacing an existing admin password/name. When `content_storage.driver=mysql`, admin login reads the MySQL `admins` table first and falls back to config only when no matching row exists.
 
-Important: runtime MySQL repositories are currently wired only for contact messages. Keep `content_storage.driver=json` until posts/pages/settings runtime repositories are completed and tested, or switch only for the verified contact-message path.
+Important: runtime MySQL repositories now cover settings, static pages, news/projects, media metadata, contact messages and admin login. Keep `content_storage.driver=json` until schema, migrations, import, setup, and a real host/dev-database smoke test have all passed.
 
 ## 5. Uploads And Permissions
 
