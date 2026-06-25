@@ -1630,3 +1630,31 @@ Next phase notes:
 
 - Real SMTP delivery still depends on hosting/provider configuration.
 - The current implementation uses PHP `mail()` as a minimal foundation; if the host requires SMTP auth, add provider-specific transport or a small mailer dependency later.
+
+## Phase 39: Manual Browser QA Checklist
+
+Added a practical manual QA checklist for browser-only launch checks that cannot be completed reliably in the current sandbox.
+
+Changed:
+
+- `docs/manual-qa-checklist.md`
+  - Documents desktop, tablet and mobile viewport checks.
+  - Covers public pages, admin flows, keyboard behavior, Georgian text overflow and launch content blockers.
+  - Includes the `setup-production.php --audit-content` launch gate command.
+- `README.md`
+  - Links to the manual QA checklist in the documentation list.
+- `docs/project-checklist.md`
+  - Marks the checklist document complete while keeping actual manual browser QA as a TODO.
+
+Problems found and fixed:
+
+- No code bug was changed in this phase. This is a handoff/operations phase created because automated browser QA remains blocked by local filesystem permission errors.
+
+Verification:
+
+- Documentation links were updated.
+- The checklist intentionally leaves manual visual QA, keyboard pass and Georgian overflow pass open until a real browser run is completed.
+
+Next phase notes:
+
+- Run the checklist outside the current sandbox, preferably in Chrome or Edge, after final client content is loaded.

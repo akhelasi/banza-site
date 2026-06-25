@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 38.
+- `[DONE]` Latest completed phase before this checklist update: Phase 39.
 
 ## Public Site
 
@@ -165,6 +165,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Fallback route/DOM responsive QA pass completed for public pages and admin login/settings.
 - `[DONE]` Modal/form/filter/sort hooks checked in rendered PHP/HTML.
 - `[DONE]` CSS responsive/focus/overflow rules reviewed.
+- `[DONE]` Manual browser QA checklist exists at `docs/manual-qa-checklist.md`.
 - `[TODO]` Manual visual QA in a real browser on desktop, tablet and mobile before launch.
 - `[TODO]` Full keyboard navigation pass for header nav, modals, forms and admin actions in a real browser.
 - `[TODO]` Screen reader label/heading pass.
@@ -227,6 +228,7 @@ This checklist is the project control document for finishing the Banza village w
 25. [DONE] Phase 36: Public route render smoke coverage.
 26. [DONE] Phase 37: Launch content audit helper.
 27. [DONE] Phase 38: Optional contact email notification foundation.
+28. [DONE] Phase 39: Manual browser QA checklist.
 
 ## Definition Of Done For Production
 

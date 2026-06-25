@@ -36,6 +36,7 @@ See:
 - `docs/banza-site-prompts.md` for the original full project prompt.
 - `docs/storage-decision.md` for the JSON vs MySQL storage decision.
 - `docs/production-deployment-checklist.md` for production hosting/deploy steps.
+- `docs/manual-qa-checklist.md` for real-browser desktop/tablet/mobile QA.
 
 ## Project Layout
 
