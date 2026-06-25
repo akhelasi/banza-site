@@ -1520,3 +1520,31 @@ Next phase notes:
 
 - Real client-approved text, contact values, donation accounts and approved images still need client input.
 - When content is approved, admins should switch relevant items to `client_approved` and update `source_note`.
+
+## Phase 36: Public Route Render Smoke Coverage
+
+Expanded the render smoke helper into a broader public route QA check.
+
+Changed:
+
+- `SITE/scripts/render-smoke.php`
+  - Now covers `index.php`, `news.php`, `projects.php`, `about.php`, `history.php`, `football.php`, `contact.php`, `news-detail.php` and `project-detail.php`.
+  - Runs each route in a separate PHP subprocess so page-level `require` calls cannot collide through function redeclarations.
+  - Supports per-route required markup checks via `--contains`.
+  - Converts unsuppressed PHP warnings/notices into failures during smoke checks.
+  - Uses a writable temp session path for CLI smoke runs.
+
+Problems found and fixed:
+
+- The first smoke expansion failed on the Open-Meteo request because `@file_get_contents()` intentionally suppresses network/SSL warnings for fallback behavior, but the smoke error handler was converting suppressed warnings into fatal errors. The handler now ignores suppressed errors and still fails on real unsuppressed warnings/notices.
+
+Verification:
+
+- `php -l SITE/scripts/render-smoke.php` passed.
+- `php SITE/scripts/render-smoke.php` passed for all covered public routes.
+- The helper confirms `main-content` on listing/home pages and `source-note` on provenance-enabled pages/detail pages.
+
+Next phase notes:
+
+- This is still a render-level smoke check, not a replacement for final real-browser desktop/mobile QA.
+- Real browser QA remains open because the local automated browser stack has been unreliable in this environment.

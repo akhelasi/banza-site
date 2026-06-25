@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 35.
+- `[DONE]` Latest completed phase before this checklist update: Phase 36.
 
 ## Public Site
 
@@ -158,6 +158,7 @@ This checklist is the project control document for finishing the Banza village w
 ## Frontend QA And Accessibility
 
 - `[DONE]` Public route smoke checks passed in previous phases.
+- `[DONE]` Public render-smoke helper covers all major public routes and fails on unsuppressed PHP warnings/notices.
 - `[DONE]` Search/filter/sort hooks verified.
 - `[DONE]` Main JS syntax checks passed.
 - `[DONE]` Fallback route/DOM responsive QA pass completed for public pages and admin login/settings.
@@ -222,10 +223,11 @@ This checklist is the project control document for finishing the Banza village w
 22. [DONE] Phase 33: Optional GD-based upload image optimization.
 23. [DONE] Phase 34: Uploaded media alt/caption metadata.
 24. [DONE] Phase 35: Content source/provenance metadata.
+25. [DONE] Phase 36: Public route render smoke coverage.
 
 ## Definition Of Done For Production
 
-- `[TODO]` All public pages work without PHP warnings/notices.
+- `[DONE]` All major public pages render in CLI smoke without unsuppressed PHP warnings/notices.
 - `[TODO]` Admin can manage all launch-critical content.
 - `[TODO]` Uploads, trash, contact messages and settings are verified after deployment.
 - `[TODO]` Demo credentials are replaced with a generated password hash in untracked production config.
