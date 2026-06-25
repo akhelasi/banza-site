@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 44.
+- `[DONE]` Latest completed phase before this checklist update: Phase 45.
 
 ## Public Site
 
@@ -188,6 +188,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Prepare deployment checklist for clone/install/config/database/import/admin password.
 - `[DONE]` Add backup plan for database and uploaded media.
 - `[DONE]` Add rollback plan for code deploys.
+- `[DONE]` Add setup script migration runner with dry-run mode for existing MySQL databases.
 - `[WAITING]` Need hosting provider details.
 - `[WAITING]` Need production domain/subdomain.
 - `[REVIEW]` Decide whether to deploy manually first or add GitHub Actions/FTP/SSH deploy workflow later.
@@ -239,6 +240,7 @@ This checklist is the project control document for finishing the Banza village w
 31. [DONE] Phase 42: MySQL runtime news/projects reader.
 32. [DONE] Phase 43: MySQL admin-save write-through sync.
 33. [DONE] Phase 44: Admin save/sync failure visibility.
+34. [DONE] Phase 45: Production setup migration runner.
 
 ## Definition Of Done For Production
 

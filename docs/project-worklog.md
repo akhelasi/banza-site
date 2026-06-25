@@ -1856,3 +1856,44 @@ Next phase notes:
 
 - A real browser/admin manual pass is still needed before launch because this environment cannot complete Playwright browser QA reliably.
 - If the client wants multi-admin editing, a full MySQL-native admin CRUD layer is still cleaner than JSON-source write-through.
+
+## Phase 45: Production Setup Migration Runner
+
+Added a setup-script migration mode so existing MySQL databases can be updated from tracked migration files without manually copying every `mysql < file` command.
+
+Changed:
+
+- `SITE/scripts/setup-production.php`
+  - Adds `--migrate [--dry-run]`.
+  - Lists migration files from `SITE/database/migrations/*.sql` in filename order.
+  - `--migrate --dry-run` does not open a MySQL connection.
+  - `--migrate` runs each SQL statement from the migration files against the configured MySQL database.
+- `README.md`
+  - Replaces the manual migration command list with the new setup-script migration command.
+- `docs/production-deployment-checklist.md`
+  - Uses the same migration runner in the database setup section.
+- `docs/project-checklist.md`
+  - Marks the migration runner complete.
+
+Problems found and fixed:
+
+- `apply_patch` and direct writes repeatedly failed on `SITE/scripts/setup-production.php` in this local sandbox. I used the same directory-swap approach that has worked for restoring this file, then verified the exact diff and PHP syntax.
+- One documentation patch partially updated `README.md` before failing on the deployment checklist. I inspected both files and completed the remaining checklist update separately.
+
+Verification:
+
+- `php -l SITE/scripts/setup-production.php` passed.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `php SITE/scripts/setup-production.php --help` shows `--migrate`.
+- `php SITE/scripts/setup-production.php --migrate --dry-run` listed all four migration files and did not open MySQL.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=all` passed.
+- `SITE/storage/content.json` parsed successfully.
+- `php SITE/scripts/setup-production.php --check-routes` passed for all covered public routes.
+- `php SITE/scripts/setup-production.php --audit-content --allow-open` passed and reported the expected current launch blockers.
+- `node --check SITE/assets/js/main.js` passed.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Run `php SITE/scripts/setup-production.php --migrate --dry-run` before `--migrate` on any existing database.
+- The migration runner is intentionally simple and expects migration files to be run once; duplicate-column errors should stop the deploy instead of being hidden.

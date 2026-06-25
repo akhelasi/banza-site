@@ -13,6 +13,7 @@ function setup_usage(): string
         'Usage:',
         '  php SITE/scripts/setup-production.php --email=admin@example.com --password="strong password" [--name="Banza Admin"] [--dry-run] [--force] [--skip-defaults]',
         '  php SITE/scripts/setup-production.php --email=admin@example.com --password-env=BANZA_ADMIN_PASSWORD [--name="Banza Admin"] [--dry-run] [--force]',
+        '  php SITE/scripts/setup-production.php --migrate [--dry-run]',
         '  php SITE/scripts/setup-production.php --check-routes',
         '  php SITE/scripts/setup-production.php --audit-content [--allow-open]',
         '',
@@ -24,6 +25,7 @@ function setup_usage(): string
         '  --dry-run         Validate input and show planned seed counts without connecting to MySQL.',
         '  --force           Update the existing admin row when the email already exists.',
         '  --skip-defaults   Create/update admin only; do not seed settings/social/donation defaults.',
+        '  --migrate         Run SQL migration files from SITE/database/migrations in filename order.',
         '  --check-routes    Render major public routes and fail on PHP warnings/notices or missing expected markup.',
         '  --audit-content   Check launch content blockers such as demo text, generic links/accounts and unapproved source statuses.',
         '  --allow-open      Report audit blockers without failing the command.',
@@ -62,6 +64,65 @@ function setup_load_content(): array
 
     return $content;
 }
+
+function setup_migration_files(): array
+{
+    $paths = glob(dirname(__DIR__) . '/database/migrations/*.sql') ?: [];
+    sort($paths, SORT_STRING);
+
+    return $paths;
+}
+
+function setup_sql_statements(string $sql): array
+{
+    $parts = explode(';', $sql);
+
+    return array_values(array_filter(array_map('trim', $parts), static fn (string $statement): bool => $statement !== ''));
+}
+
+function setup_run_migrations(bool $dryRun): int
+{
+    $files = setup_migration_files();
+    if ($files === []) {
+        fwrite(STDOUT, "No migration files found.\n");
+
+        return 0;
+    }
+
+    fwrite(STDOUT, "Migration files:\n");
+    foreach ($files as $file) {
+        fwrite(STDOUT, '- ' . basename($file) . PHP_EOL);
+    }
+
+    if ($dryRun) {
+        fwrite(STDOUT, "Dry run OK. MySQL connection was not opened.\n");
+
+        return 0;
+    }
+
+    require __DIR__ . '/../includes/database.php';
+
+    $pdo = db();
+    foreach ($files as $file) {
+        $sql = file_get_contents($file);
+        if ($sql === false) {
+            fwrite(STDERR, 'Could not read migration: ' . basename($file) . PHP_EOL);
+
+            return 1;
+        }
+
+        foreach (setup_sql_statements($sql) as $statement) {
+            $pdo->exec($statement);
+        }
+
+        fwrite(STDOUT, 'Applied: ' . basename($file) . PHP_EOL);
+    }
+
+    fwrite(STDOUT, "Migrations complete.\n");
+
+    return 0;
+}
+
 
 function setup_text_contains_demo(mixed $value): bool
 {
@@ -288,6 +349,7 @@ $options = getopt('', [
     'dry-run',
     'force',
     'skip-defaults',
+    'migrate',
     'check-routes',
     'audit-content',
     'allow-open',
@@ -316,6 +378,10 @@ if (array_key_exists('file', $options)) {
     }
 
     exit(setup_render_route((string) $options['file'], $get, (string) ($options['contains'] ?? 'main-content')));
+}
+
+if (array_key_exists('migrate', $options)) {
+    exit(setup_run_migrations(array_key_exists('dry-run', $options)));
 }
 
 require __DIR__ . '/../includes/helpers.php';

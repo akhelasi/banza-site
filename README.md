@@ -184,12 +184,11 @@ php SITE\scripts\setup-production.php --email=admin@example.com --password-env=B
 
 After `schema.sql` has been loaded into MySQL, run the same command without `--dry-run` to create or update the first admin row and seed default settings/social/donation rows. Use `--force` only when intentionally replacing an existing admin row with the same email.
 
-For an existing MySQL database created before the import source keys were added, run:
+For an existing MySQL database, dry-run and then apply migrations in filename order:
 
 ```powershell
-mysql -u root -p banza_site < SITE\database\migrations\2026_06_24_add_import_source_keys.sql
-mysql -u root -p banza_site < SITE\database\migrations\2026_06_24_add_media_caption.sql
-mysql -u root -p banza_site < SITE\database\migrations\2026_06_25_add_content_source_metadata.sql
+php SITE\scripts\setup-production.php --migrate --dry-run
+php SITE\scripts\setup-production.php --migrate
 ```
 
 Git whitespace check:

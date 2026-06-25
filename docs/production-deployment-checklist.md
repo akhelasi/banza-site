@@ -61,12 +61,11 @@ For a new database:
 mysql -u USER -p DATABASE_NAME < SITE/database/schema.sql
 ```
 
-For an existing database created before import source keys were added:
+For an existing database, dry-run and then apply migrations in filename order:
 
 ```bash
-mysql -u USER -p DATABASE_NAME < SITE/database/migrations/2026_06_24_add_import_source_keys.sql
-mysql -u USER -p DATABASE_NAME < SITE/database/migrations/2026_06_24_add_media_caption.sql
-mysql -u USER -p DATABASE_NAME < SITE/database/migrations/2026_06_25_add_content_source_metadata.sql
+php SITE/scripts/setup-production.php --migrate --dry-run
+php SITE/scripts/setup-production.php --migrate
 ```
 
 Dry-run the JSON import first:
