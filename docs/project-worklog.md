@@ -1732,3 +1732,48 @@ Next phase notes:
 
 - Posts and projects are not switched to MySQL runtime yet because the current import/schema path does not preserve every UI-facing detail, such as category/status/featured behavior, as safely as the JSON runtime. Add those mappings before turning posts/projects reads on.
 - Admin writes still save JSON in the current dev panel; production MySQL write-through remains a later incremental phase.
+
+## Phase 42: MySQL Runtime News/Projects Reader
+
+Added the read-only MySQL runtime path for news and projects, including the extra public UI fields that would otherwise be lost when moving away from JSON.
+
+Changed:
+
+- `SITE/database/schema.sql`
+  - Adds `category`, `display_status` and `date_label` to `posts`.
+  - Keeps the existing `status` column for draft/published workflow.
+- `SITE/database/migrations/2026_06_25_add_post_runtime_fields.sql`
+  - Adds the same fields for existing MySQL installations.
+- `SITE/includes/repositories/content-import-repository.php`
+  - Imports news/project category, project display status and news date label into MySQL.
+  - Keeps gallery/video import attached to post media rows.
+- `SITE/includes/repositories/post-repository.php`
+  - Reads published, non-deleted news and project posts from MySQL.
+  - Rebuilds the runtime arrays expected by public pages: image, body paragraphs, category/status/date, featured flag, gallery and videos.
+- `SITE/includes/data.php`
+  - Loads MySQL news/projects when `content_storage.driver=mysql`, while preserving JSON fallback.
+- `docs/project-checklist.md`
+  - Marks the news/projects runtime reader complete.
+
+Problems found and fixed:
+
+- The existing posts table treated `status` as draft/published, but public project cards also need a human display status such as "იდეა" or "დაგეგმილი". Added `display_status` instead of overloading `status`.
+- News card date text, such as "20 ივნისი", was not represented in SQL. Added `date_label` so public cards can keep the same Georgian display text.
+- The first large patch partially applied before failing on context. I inspected the diff and completed the missing migration/repository/data loader pieces before verification.
+- The local sandbox again removed `SITE/scripts/setup-production.php` after route checks. It was restored from `HEAD` before staging.
+
+Verification:
+
+- `php -l` passed for `SITE/includes/repositories/post-repository.php`, `SITE/includes/repositories/content-import-repository.php` and `SITE/includes/data.php`.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `SITE/storage/content.json` parsed successfully.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=posts` passed and reported 8 posts.
+- `php SITE/scripts/setup-production.php --check-routes` passed for the covered routes.
+- `php SITE/scripts/setup-production.php --audit-content --allow-open` passed and reported the expected current launch blockers.
+- `node --check SITE/assets/js/main.js` passed after rerun with escalated permissions due a local sandbox helper error.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Before running a real MySQL posts import on an existing database, apply `SITE/database/migrations/2026_06_25_add_post_runtime_fields.sql`.
+- Runtime reads are now available for settings, pages, media, news and projects. Admin write-through to MySQL is still open if production should stop writing JSON.

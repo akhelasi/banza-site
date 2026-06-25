@@ -91,6 +91,9 @@ function content_import_posts(array $content): array
                 'title' => $title,
                 'excerpt' => trim((string) ($item['excerpt'] ?? '')),
                 'body' => plain_text($item['body'] ?? ''),
+                'category' => trim((string) ($item['category'] ?? '')),
+                'display_status' => $type === 'project' ? trim((string) ($item['status'] ?? '')) : '',
+                'date_label' => $type === 'news' ? trim((string) ($item['date'] ?? '')) : '',
                 'main_image' => trim((string) ($item['main_image'] ?? $item['image'] ?? '')),
                 'published_at' => content_import_datetime((string) ($item['published_at'] ?? '')),
                 'is_featured' => !empty($item['featured']) ? 1 : 0,
@@ -282,13 +285,16 @@ function import_pages_to_mysql(PDO $pdo, array $pages): int
 function import_posts_to_mysql(PDO $pdo, array $posts): array
 {
     $postStatement = $pdo->prepare(
-        'INSERT INTO posts (type, slug, title, excerpt, body, main_image, published_at, is_featured, status, source_status, source_note, post_date, last_update, deleted_at)
-         VALUES (:type, :slug, :title, :excerpt, :body, :main_image, :published_at, :is_featured, :status, :source_status, :source_note, :post_date, :last_update, :deleted_at)
+        'INSERT INTO posts (type, slug, title, excerpt, body, category, display_status, date_label, main_image, published_at, is_featured, status, source_status, source_note, post_date, last_update, deleted_at)
+         VALUES (:type, :slug, :title, :excerpt, :body, :category, :display_status, :date_label, :main_image, :published_at, :is_featured, :status, :source_status, :source_note, :post_date, :last_update, :deleted_at)
          ON DUPLICATE KEY UPDATE
            type = VALUES(type),
            title = VALUES(title),
            excerpt = VALUES(excerpt),
            body = VALUES(body),
+           category = VALUES(category),
+           display_status = VALUES(display_status),
+           date_label = VALUES(date_label),
            main_image = VALUES(main_image),
            published_at = VALUES(published_at),
            is_featured = VALUES(is_featured),
@@ -323,6 +329,9 @@ function import_posts_to_mysql(PDO $pdo, array $posts): array
             'title' => $post['title'],
             'excerpt' => $post['excerpt'],
             'body' => $post['body'],
+            'category' => $post['category'],
+            'display_status' => $post['display_status'],
+            'date_label' => $post['date_label'],
             'main_image' => $post['main_image'],
             'published_at' => $post['published_at'],
             'is_featured' => $post['is_featured'],

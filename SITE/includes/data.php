@@ -6,6 +6,7 @@ require_once __DIR__ . '/content-store.php';
 require_once __DIR__ . '/database.php';
 require_once __DIR__ . '/weather.php';
 require_once __DIR__ . '/repositories/page-repository.php';
+require_once __DIR__ . '/repositories/post-repository.php';
 require_once __DIR__ . '/repositories/settings-repository.php';
 
 $site = [
@@ -265,6 +266,11 @@ if (content_storage_driver() === 'mysql') {
         $mysqlPages = load_runtime_pages_from_mysql(db());
         $contentStore = array_replace($contentStore, array_filter(
             $mysqlPages,
+            static fn (mixed $value): bool => is_array($value) && $value !== []
+        ));
+        $mysqlPosts = load_runtime_posts_from_mysql(db());
+        $contentStore = array_replace($contentStore, array_filter(
+            $mysqlPosts,
             static fn (mixed $value): bool => is_array($value) && $value !== []
         ));
     } catch (Throwable $exception) {
