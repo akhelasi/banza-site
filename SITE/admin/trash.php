@@ -87,8 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'restore') {
         $content[$key][$index]['deleted_at'] = '';
         $content[$key][$index] = touch_content_dates($content[$key][$index]);
-        save_content_store($content);
-        admin_flash('ჩანაწერი აღდგენილია.');
+        if (admin_save_content_store($content)) {
+            admin_flash('ჩანაწერი აღდგენილია.');
+        }
         redirect('trash.php');
     }
 
@@ -96,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $item = $content[$key][$index];
         $paths = collect_upload_paths($item);
         array_splice($content[$key], $index, 1);
-        save_content_store($content);
+        $saved = admin_save_content_store($content);
 
         $deletedFiles = 0;
         foreach ($paths as $path) {
@@ -105,7 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        admin_flash('ჩანაწერი პერმანენტულად წაიშალა.' . ($deletedFiles > 0 ? ' წაშლილი ფაილები: ' . $deletedFiles : ''));
+        if ($saved) {
+            admin_flash('ჩანაწერი პერმანენტულად წაიშალა.' . ($deletedFiles > 0 ? ' წაშლილი ფაილები: ' . $deletedFiles : ''));
+        }
         redirect('trash.php');
     }
 

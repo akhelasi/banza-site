@@ -14,6 +14,16 @@ $adminNav = [
     ['label' => 'სანაგვე', 'href' => 'trash.php', 'key' => 'trash'],
 ];
 
+function admin_save_content_store(array $content): bool
+{
+    if (save_content_store($content)) {
+        return true;
+    }
+
+    admin_flash('კონტენტი JSON-ში შეინახა, მაგრამ MySQL სინქრონი ვერ დასრულდა. გადაამოწმე database config/logs.', 'error');
+    return false;
+}
+
 function render_admin_header(string $title, string $currentKey = 'dashboard'): void
 {
     send_security_headers();

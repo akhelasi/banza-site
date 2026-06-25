@@ -140,8 +140,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'subject_prefix' => trim((string) ($_POST['notification_subject_prefix'] ?? '[Banza Site]')),
     ];
 
-    save_content_store($content);
-    admin_flash('პარამეტრები შენახულია.');
+    if (admin_save_content_store($content)) {
+        admin_flash('პარამეტრები შენახულია.');
+    }
     redirect('settings.php');
 }
 

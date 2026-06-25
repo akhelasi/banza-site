@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 43.
+- `[DONE]` Latest completed phase before this checklist update: Phase 44.
 
 ## Public Site
 
@@ -58,6 +58,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Static page editing for about, history, football and contact info.
 - `[DONE]` Media upload page.
 - `[DONE]` Settings management for social links, donation accounts, camera and weather config.
+- `[DONE]` Admin save flows surface JSON/MySQL sync failures instead of silently showing success.
 - `[DONE]` Contact messages inbox.
 - `[DONE]` Contact messages can be marked read.
 - `[DONE]` Trash supports restore and permanent delete for news, projects and contact messages.
@@ -237,6 +238,7 @@ This checklist is the project control document for finishing the Banza village w
 30. [DONE] Phase 41: MySQL runtime pages/media reader.
 31. [DONE] Phase 42: MySQL runtime news/projects reader.
 32. [DONE] Phase 43: MySQL admin-save write-through sync.
+33. [DONE] Phase 44: Admin save/sync failure visibility.
 
 ## Definition Of Done For Production
 

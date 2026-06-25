@@ -1815,3 +1815,44 @@ Next phase notes:
 
 - Admin JSON remains the editing source in this lightweight architecture; MySQL receives synchronized copies for production reads.
 - Existing production MySQL databases still need all migrations applied before enabling `content_storage.driver=mysql`.
+
+## Phase 44: Admin Save/Sync Failure Visibility
+
+Made admin save flows report JSON/MySQL sync failures instead of always showing a success message after `save_content_store()`.
+
+Changed:
+
+- `SITE/includes/admin-layout.php`
+  - Adds `admin_save_content_store()`, a small admin helper around `save_content_store()`.
+  - Shows an error flash if JSON save or MySQL sync fails.
+- `SITE/admin/content.php`
+  - Uses the helper for bulk delete, single delete, news/project save and static page save.
+- `SITE/admin/settings.php`
+  - Uses the helper for settings saves.
+- `SITE/admin/media.php`
+  - Uses the helper for media metadata saves.
+- `SITE/admin/messages.php`
+  - Uses the helper for JSON-backed message bulk/single actions.
+- `SITE/admin/trash.php`
+  - Uses the helper for restore and permanent delete flows.
+
+Problems found and fixed:
+
+- Because `save_content_store()` now returns `false` when MySQL sync fails, existing admin pages could overwrite the error with a success flash. The new helper keeps success messages conditional.
+- The local sandbox again removed `SITE/scripts/setup-production.php` after route checks. It was restored from `HEAD` before staging.
+
+Verification:
+
+- `php -l` passed for `SITE/includes/admin-layout.php` and the touched admin files.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=all` passed.
+- `SITE/storage/content.json` parsed successfully.
+- `php SITE/scripts/setup-production.php --check-routes` passed for the covered routes.
+- `php SITE/scripts/setup-production.php --audit-content --allow-open` passed and reported the expected current launch blockers.
+- `node --check SITE/assets/js/main.js` passed.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- A real browser/admin manual pass is still needed before launch because this environment cannot complete Playwright browser QA reliably.
+- If the client wants multi-admin editing, a full MySQL-native admin CRUD layer is still cleaner than JSON-source write-through.

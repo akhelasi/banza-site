@@ -45,8 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'last_update' => content_date_today(),
         ];
 
-        save_content_store($content);
-        admin_flash('მედია აღწერა შენახულია.');
+        if (admin_save_content_store($content)) {
+            admin_flash('მედია აღწერა შენახულია.');
+        }
         redirect('media.php');
     }
 

@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($changedCount > 0) {
-                save_content_store($content);
+                $bulkSaved = admin_save_content_store($content);
             }
         }
 
@@ -86,7 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('messages.php');
         }
 
-        admin_flash($changedCount . ' შეტყობინება დამუშავდა.');
+        if (!isset($bulkSaved) || $bulkSaved) {
+            admin_flash($changedCount . ' შეტყობინება დამუშავდა.');
+        }
         redirect('messages.php');
     }
 
@@ -123,16 +125,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'mark_read') {
         $content['contactMessages'][$index]['read_at'] = date('c');
         $content['contactMessages'][$index] = touch_content_dates($content['contactMessages'][$index]);
-        save_content_store($content);
-        admin_flash('შეტყობინება მოინიშნა წაკითხულად.');
+        if (admin_save_content_store($content)) {
+            admin_flash('შეტყობინება მოინიშნა წაკითხულად.');
+        }
         redirect('messages.php');
     }
 
     if ($action === 'soft_delete') {
         $content['contactMessages'][$index]['deleted_at'] = date('c');
         $content['contactMessages'][$index] = touch_content_dates($content['contactMessages'][$index]);
-        save_content_store($content);
-        admin_flash('შეტყობინება გადავიდა სანაგვეში.');
+        if (admin_save_content_store($content)) {
+            admin_flash('შეტყობინება გადავიდა სანაგვეში.');
+        }
         redirect('messages.php');
     }
 

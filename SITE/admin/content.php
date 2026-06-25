@@ -231,8 +231,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('content.php?type=' . urlencode($type));
         }
 
-        save_content_store($content);
-        admin_flash($deletedCount . ' ჩანაწერი გადავიდა სანაგვეში.');
+        if (admin_save_content_store($content)) {
+            admin_flash($deletedCount . ' ჩანაწერი გადავიდა სანაგვეში.');
+        }
         redirect('content.php?type=' . urlencode($type));
     }
 
@@ -248,8 +249,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $content[$key][$index]['deleted_at'] = date(DATE_ATOM);
         $content[$key][$index] = touch_content_dates($content[$key][$index]);
-        save_content_store($content);
-        admin_flash('ჩანაწერი გადავიდა სანაგვეში.');
+        if (admin_save_content_store($content)) {
+            admin_flash('ჩანაწერი გადავიდა სანაგვეში.');
+        }
         redirect('content.php?type=' . urlencode($type));
     }
 
@@ -332,8 +334,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $content[$key] = $items;
-        save_content_store($content);
-        admin_flash('ჩანაწერი შენახულია.');
+        if (admin_save_content_store($content)) {
+            admin_flash('ჩანაწერი შენახულია.');
+        }
         redirect('content.php?type=' . urlencode($type));
     }
 
@@ -373,8 +376,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $content[$pageKey] = touch_content_dates($page, empty($page['post_date']));
-        save_content_store($content);
-        admin_flash('გვერდი შენახულია.');
+        if (admin_save_content_store($content)) {
+            admin_flash('გვერდი შენახულია.');
+        }
         redirect('content.php?type=pages');
     }
 }
