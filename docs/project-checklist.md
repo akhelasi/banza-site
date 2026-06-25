@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 45.
+- `[DONE]` Latest completed phase before this checklist update: Phase 46.
 
 ## Public Site
 
@@ -51,6 +51,7 @@ This checklist is the project control document for finishing the Banza village w
 ## Admin Panel
 
 - `[DONE]` Admin login/logout with password hash and sessions.
+- `[DONE]` Admin login supports MySQL `admins` table when `content_storage.driver=mysql`, with config fallback.
 - `[DONE]` `/admin` no-trailing-slash redirect bug fixed.
 - `[DONE]` Admin dashboard.
 - `[DONE]` News CRUD with image upload, gallery uploads and videos.
@@ -241,13 +242,14 @@ This checklist is the project control document for finishing the Banza village w
 32. [DONE] Phase 43: MySQL admin-save write-through sync.
 33. [DONE] Phase 44: Admin save/sync failure visibility.
 34. [DONE] Phase 45: Production setup migration runner.
+35. [DONE] Phase 46: MySQL-backed admin authentication.
 
 ## Definition Of Done For Production
 
 - `[DONE]` All major public pages render in CLI smoke without unsuppressed PHP warnings/notices.
 - `[TODO]` Admin can manage all launch-critical content.
 - `[TODO]` Uploads, trash, contact messages and settings are verified after deployment.
-- `[TODO]` Demo credentials are replaced with a generated password hash in untracked production config.
+- `[TODO]` Demo credentials are replaced with a generated password hash in MySQL `admins` table or untracked production config.
 - `[TODO]` Real content, real links and real donation accounts are approved by the client.
 - `[DONE]` Launch content audit command documents remaining client/content blockers.
 - `[DONE]` Database and uploads have backup/restore instructions.

@@ -1897,3 +1897,45 @@ Next phase notes:
 
 - Run `php SITE/scripts/setup-production.php --migrate --dry-run` before `--migrate` on any existing database.
 - The migration runner is intentionally simple and expects migration files to be run once; duplicate-column errors should stop the deploy instead of being hidden.
+
+## Phase 46: MySQL-Backed Admin Authentication
+
+Connected production admin login to the MySQL `admins` table when `content_storage.driver=mysql`, while keeping the existing config-based login for local JSON development.
+
+Changed:
+
+- `SITE/includes/auth.php`
+  - Adds MySQL admin lookup by email and id using prepared statements.
+  - `attempt_admin_login()` checks the `admins` table first in MySQL mode.
+  - A matching MySQL admin row is authoritative; wrong MySQL password does not fall through to config credentials.
+  - Keeps config credentials as fallback when MySQL mode is off or no MySQL admin row exists.
+  - `write_admin_credentials()` updates the active MySQL admin row when the current session came from MySQL; otherwise it keeps writing untracked `SITE/includes/config.php`.
+- `SITE/admin/profile.php`
+  - Reads active credentials from MySQL or config depending on the session/source.
+  - Shows storage-specific notes and success/error messages.
+- `docs/project-checklist.md`
+  - Marks MySQL-backed admin authentication complete.
+
+Problems found and fixed:
+
+- The first CLI login smoke hit a local `C:\xampp\tmp` session permission warning. Re-running with `session.save_path` set to `sys_get_temp_dir()` confirmed config fallback login still works.
+- `SITE/scripts/setup-production.php` disappeared again after route checks. It was restored from `HEAD` before staging so this phase does not accidentally commit a deletion.
+- A stale note in `setup-production.php` still says runtime login reads config until DB-backed auth is enabled. Direct edits to this unstable file failed in the sandbox, so the note remains as documentation debt; the auth code itself now supports MySQL login.
+
+Verification:
+
+- `php -l` passed for `SITE/includes/auth.php`, `SITE/admin/profile.php` and `SITE/admin/login.php`.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- Config fallback login smoke passed with the demo local credentials and a writable temp session path.
+- `php SITE/scripts/setup-production.php --migrate --dry-run` passed.
+- `SITE/storage/content.json` parsed successfully.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=all` passed.
+- `php SITE/scripts/setup-production.php --check-routes` passed for all covered public routes after restoring the locally deleted setup script.
+- `php SITE/scripts/setup-production.php --audit-content --allow-open` passed and reported the expected current launch blockers.
+- `node --check SITE/assets/js/main.js` passed.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- A real MySQL login/profile update should be tested on the target hosting/dev database after applying schema and migrations.
+- The stale setup-script output note should be cleaned up when the local sandbox stops deleting/locking `SITE/scripts/setup-production.php`.

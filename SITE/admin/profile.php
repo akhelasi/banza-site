@@ -6,9 +6,13 @@ require __DIR__ . '/../includes/admin-layout.php';
 
 require_admin();
 
-$credentials = admin_credentials();
+$credentials = active_admin_credentials();
 $currentEmail = strtolower(trim((string) ($credentials['email'] ?? '')));
 $configPath = admin_runtime_config_path();
+$credentialSource = (string) ($credentials['source'] ?? 'config');
+$credentialStorageNote = $credentialSource === 'mysql'
+    ? 'ცვლილება შეინახება MySQL admins table-ში.'
+    : 'ცვლილება ინახება untracked SITE/includes/config.php ფაილში. ეს ფაილი Git-ში არ იტვირთება და production credential-ებისთვისაა განკუთვნილი.';
 $errors = [];
 $oldEmail = $currentEmail;
 
@@ -45,10 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($errors === []) {
             $newHash = password_hash($newPassword, PASSWORD_DEFAULT);
             if (!write_admin_credentials($oldEmail, $newHash)) {
-                $errors[] = 'config.php ვერ ჩაიწერა. გადაამოწმეთ SITE/includes ფოლდერის write permission.';
+                $errors[] = $credentialSource === 'mysql'
+                    ? 'MySQL admins table-ში credential ვერ განახლდა. გადაამოწმეთ database config/logs.'
+                    : 'config.php ვერ ჩაიწერა. გადაამოწმეთ SITE/includes ფოლდერის write permission.';
             } else {
                 update_current_admin_session($oldEmail);
-                admin_flash('Admin credential განახლდა. ახალი მონაცემები ჩაიწერა untracked SITE/includes/config.php ფაილში.');
+                admin_flash($credentialSource === 'mysql'
+                    ? 'Admin credential განახლდა MySQL admins table-ში.'
+                    : 'Admin credential განახლდა. ახალი მონაცემები ჩაიწერა untracked SITE/includes/config.php ფაილში.');
                 redirect('profile.php');
             }
         }
@@ -66,8 +74,10 @@ render_admin_header('პროფილი', 'profile');
     </div>
   </div>
 
-  <p class="muted-note">ცვლილება ინახება <code>SITE/includes/config.php</code> ფაილში. ეს ფაილი Git-ში არ იტვირთება და production credential-ებისთვისაა განკუთვნილი.</p>
-  <p class="muted-note">Config path: <code><?php echo e($configPath); ?></code></p>
+  <p class="muted-note"><?php echo e($credentialStorageNote); ?></p>
+  <?php if ($credentialSource !== 'mysql'): ?>
+    <p class="muted-note">Config path: <code><?php echo e($configPath); ?></code></p>
+  <?php endif; ?>
 
   <?php if ($errors !== []): ?>
     <div class="flash flash-error">
