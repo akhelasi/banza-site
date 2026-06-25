@@ -199,6 +199,15 @@ git diff --check
 
 Expected note on Windows: Git may warn that LF will be replaced by CRLF. That is not a functional failure.
 
+Public render smoke and launch content audit:
+
+```powershell
+php SITE\scripts\setup-production.php --check-routes
+php SITE\scripts\setup-production.php --audit-content --allow-open
+```
+
+Before public launch, run `php SITE\scripts\setup-production.php --audit-content` without `--allow-open`. It exits with a non-zero status while demo content, placeholder contact/social/bank values or unapproved source statuses remain.
+
 ## Git Workflow
 
 After each completed phase:

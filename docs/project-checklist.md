@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 36.
+- `[DONE]` Latest completed phase before this checklist update: Phase 37.
 
 ## Public Site
 
@@ -81,6 +81,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[TODO]` Replace generic/remote image URLs with approved local assets where possible.
 - `[TODO]` Add final real population/families/vineyard/elevation data after verification.
 - `[DONE]` Add source/provenance status and notes for researched/demo seed content.
+- `[DONE]` Add launch content audit script for demo placeholders, generic links/accounts and unapproved content statuses.
 - `[WAITING]` Client must provide real donation account numbers.
 - `[WAITING]` Client must provide real social network URLs.
 - `[WAITING]` Client must approve or provide final village photos.
@@ -158,7 +159,7 @@ This checklist is the project control document for finishing the Banza village w
 ## Frontend QA And Accessibility
 
 - `[DONE]` Public route smoke checks passed in previous phases.
-- `[DONE]` Public render-smoke helper covers all major public routes and fails on unsuppressed PHP warnings/notices.
+- `[DONE]` Production setup QA modes cover all major public routes and fail on unsuppressed PHP warnings/notices.
 - `[DONE]` Search/filter/sort hooks verified.
 - `[DONE]` Main JS syntax checks passed.
 - `[DONE]` Fallback route/DOM responsive QA pass completed for public pages and admin login/settings.
@@ -224,6 +225,7 @@ This checklist is the project control document for finishing the Banza village w
 23. [DONE] Phase 34: Uploaded media alt/caption metadata.
 24. [DONE] Phase 35: Content source/provenance metadata.
 25. [DONE] Phase 36: Public route render smoke coverage.
+26. [DONE] Phase 37: Launch content audit helper.
 
 ## Definition Of Done For Production
 
@@ -232,6 +234,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[TODO]` Uploads, trash, contact messages and settings are verified after deployment.
 - `[TODO]` Demo credentials are replaced with a generated password hash in untracked production config.
 - `[TODO]` Real content, real links and real donation accounts are approved by the client.
+- `[DONE]` Launch content audit command documents remaining client/content blockers.
 - `[DONE]` Database and uploads have backup/restore instructions.
 - `[TODO]` Mobile and desktop manual QA is complete.
 - `[TODO]` Security review is complete after final storage/deployment decisions.
