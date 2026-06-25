@@ -1658,3 +1658,39 @@ Verification:
 Next phase notes:
 
 - Run the checklist outside the current sandbox, preferably in Chrome or Edge, after final client content is loaded.
+
+## Phase 40: MySQL Runtime Settings Reader
+
+Added the first read-only MySQL runtime path for site settings while keeping JSON storage as the development fallback.
+
+Changed:
+
+- `SITE/includes/repositories/settings-repository.php`
+  - Adds readers for the `settings`, `social_links` and `donation_accounts` MySQL tables.
+  - Maps MySQL rows back to the existing runtime array shapes used by public pages.
+- `SITE/includes/data.php`
+  - Loads MySQL camera, weather, notification, social link and donation account settings when `content_storage.driver=mysql`.
+  - Falls back to JSON content storage if MySQL settings loading fails.
+- `docs/project-checklist.md`
+  - Marks the settings/social/donation runtime reader complete under database/storage work.
+
+Problems found and fixed:
+
+- The local sandbox repeatedly removed `SITE/scripts/setup-production.php` while running checks. The file was restored from `HEAD` before verification and staging so the phase would not accidentally commit a deletion.
+- A SQLite-based repository smoke check was attempted but the local PHP/PowerShell combination hung in this environment, so validation stayed with PHP lint, import dry-run and public route smoke checks.
+
+Verification:
+
+- `php -l` passed for `SITE/includes/repositories/settings-repository.php` and `SITE/includes/data.php`.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `SITE/storage/content.json` parsed successfully.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=settings` passed.
+- `php SITE/scripts/setup-production.php --check-routes` passed.
+- `php SITE/scripts/setup-production.php --audit-content --allow-open` passed and reported the expected current launch blockers.
+- `node --check SITE/assets/js/main.js` passed.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Posts/pages/media runtime MySQL readers are still open if production needs to stop using JSON for all content.
+- Admin settings writes still save JSON in the current dev panel; production MySQL write-through can be added as the next incremental database phase.

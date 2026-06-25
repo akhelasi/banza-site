@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/content-store.php';
+require_once __DIR__ . '/database.php';
 require_once __DIR__ . '/weather.php';
+require_once __DIR__ . '/repositories/settings-repository.php';
 
 $site = [
     'title' => 'ბანძა',
@@ -252,6 +254,17 @@ $seedContent = [
 ];
 
 $contentStore = load_content_store($seedContent);
+if (content_storage_driver() === 'mysql') {
+    try {
+        $mysqlSettings = load_runtime_settings_from_mysql(db());
+        $contentStore = array_replace($contentStore, array_filter(
+            $mysqlSettings,
+            static fn (mixed $value): bool => is_array($value) && $value !== []
+        ));
+    } catch (Throwable $exception) {
+        error_log('MySQL settings fallback to JSON: ' . $exception->getMessage());
+    }
+}
 $news = visible_content_items($contentStore['news'] ?? []);
 $projects = visible_content_items($contentStore['projects'] ?? []);
 $about = $contentStore['about'] ?? $about;
