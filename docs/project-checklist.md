@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 37.
+- `[DONE]` Latest completed phase before this checklist update: Phase 38.
 
 ## Public Site
 
@@ -150,9 +150,9 @@ This checklist is the project control document for finishing the Banza village w
 ## Email And Notifications
 
 - `[DONE]` Contact messages are stored and visible in admin.
-- `[TODO]` Add optional SMTP email notification when a contact message is submitted.
-- `[TODO]` Add admin setting for notification recipient email.
-- `[TODO]` Add failure-safe behavior if SMTP fails but message storage succeeds.
+- `[DONE]` Add optional email notification when a contact message is submitted.
+- `[DONE]` Add admin setting for notification recipient email.
+- `[DONE]` Add failure-safe behavior if email delivery fails but message storage succeeds.
 - `[WAITING]` Client/host must provide SMTP credentials or email provider.
 - `[REVIEW]` Decide whether email notification is required for launch or admin inbox is enough initially.
 
@@ -226,6 +226,7 @@ This checklist is the project control document for finishing the Banza village w
 24. [DONE] Phase 35: Content source/provenance metadata.
 25. [DONE] Phase 36: Public route render smoke coverage.
 26. [DONE] Phase 37: Launch content audit helper.
+27. [DONE] Phase 38: Optional contact email notification foundation.
 
 ## Definition Of Done For Production
 

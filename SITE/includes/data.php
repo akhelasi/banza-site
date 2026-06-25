@@ -229,6 +229,12 @@ $contact = [
         ['label' => 'ლოკაცია', 'value' => 'ბანძა, მარტვილის მუნიციპალიტეტი', 'note' => 'სამეგრელო-ზემო სვანეთი'],
     ],
 ];
+$notifications = [
+    'enabled' => false,
+    'recipient_email' => '',
+    'from_email' => '',
+    'subject_prefix' => '[Banza Site]',
+];
 $seedContent = [
     'news' => $news,
     'projects' => $projects,
@@ -240,6 +246,7 @@ $seedContent = [
     'bankAccounts' => $bankAccounts,
     'camera' => $camera,
     'weather' => $weather,
+    'notifications' => $notifications,
     'mediaItems' => [],
     'contactMessages' => [],
 ];
@@ -255,5 +262,6 @@ $socialLinks = visible_content_items($contentStore['socialLinks'] ?? []);
 $bankAccounts = visible_content_items($contentStore['bankAccounts'] ?? []);
 $camera = $contentStore['camera'] ?? $camera;
 $weather = resolve_weather_data($contentStore['weather'] ?? $weather);
+$notifications = $contentStore['notifications'] ?? $notifications;
 $mediaItems = $contentStore['mediaItems'] ?? [];
 $contactMessages = $contentStore['contactMessages'] ?? [];

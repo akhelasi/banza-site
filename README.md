@@ -21,7 +21,7 @@ The current codebase includes:
 - Image upload support for news/projects/gallery media.
 - Upload validation includes file type, 5MB size limit, 6000x6000px max dimensions and optional GD-based image optimization.
 - Soft delete, restore and permanent delete.
-- Contact form with admin inbox.
+- Contact form with admin inbox and optional email notification settings.
 - Admin login and contact form rate limiting.
 - `post_date` and `last_update` metadata for admin-managed content.
 - Development storage through `SITE/storage/content.json`.

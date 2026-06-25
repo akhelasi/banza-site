@@ -1589,3 +1589,44 @@ Next phase notes:
 
 - Current blockers are expected because the client still needs to provide approved text, donation accounts, social links, contact values and final assets.
 - After replacing content, rerun the audit without `--allow-open`; the blocker count should fall to zero before launch.
+
+## Phase 38: Optional Contact Email Notification Foundation
+
+Added optional contact form email notifications while keeping admin inbox storage as the source of truth.
+
+Changed:
+
+- `SITE/includes/notifications.php`
+  - Adds a small dependency-free notification helper around PHP `mail()`.
+  - Sanitizes email headers and supports recipient, from email and subject prefix settings.
+  - Logs failed delivery attempts without exposing raw mail errors to users.
+- `SITE/contact.php`
+  - Sends the optional notification only after the contact message is successfully saved.
+  - Keeps the contact form success path intact even when email delivery fails.
+- `SITE/admin/settings.php`
+  - Adds admin-editable email notification settings.
+  - Validates recipient/from addresses before saving.
+- `SITE/includes/data.php`, `SITE/includes/content-store.php`, `SITE/storage/content.json`
+  - Add default `notifications` config for JSON/dev storage.
+- `SITE/includes/repositories/content-import-repository.php`
+  - Includes notifications in the generic MySQL settings import slice.
+- `docs/project-checklist.md`
+  - Marks optional notification foundation complete while leaving real SMTP/provider credentials as waiting.
+
+Problems found and fixed:
+
+- The first settings UI patch failed because the Georgian text encoding made patch context matching unreliable. The final insertion uses ASCII anchors and keeps the existing Georgian content unchanged.
+
+Verification:
+
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `SITE/storage/content.json` parsed successfully.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=settings` passed and now reports 3 settings.
+- `php SITE/scripts/setup-production.php --file=contact.php --contains=main-content` passed.
+- `node --check SITE/assets/js/main.js` passed.
+- Notification helper smoke check passed for enabled/disabled recipient validation.
+
+Next phase notes:
+
+- Real SMTP delivery still depends on hosting/provider configuration.
+- The current implementation uses PHP `mail()` as a minimal foundation; if the host requires SMTP auth, add provider-specific transport or a small mailer dependency later.

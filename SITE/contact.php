@@ -4,6 +4,7 @@ require __DIR__ . '/includes/rate-limit.php';
 require __DIR__ . '/includes/database.php';
 require __DIR__ . '/includes/data.php';
 require __DIR__ . '/includes/layout.php';
+require __DIR__ . '/includes/notifications.php';
 require __DIR__ . '/includes/repositories/contact-message-repository.php';
 
 $contactErrors = [];
@@ -99,6 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($saved) {
+            send_contact_notification($notifications ?? [], $message);
             $_SESSION['contact_flash'] = 'შეტყობინება გაიგზავნა. ადმინისტრატორი ნახავს მას მართვის პანელში.';
             redirect('contact.php#contactForm');
         }

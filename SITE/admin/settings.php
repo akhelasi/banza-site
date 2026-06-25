@@ -10,6 +10,7 @@ require_admin();
 
 $content = $contentStore ?? [];
 $weather = is_array($content['weather'] ?? null) ? $content['weather'] : $weather;
+$notifications = is_array($content['notifications'] ?? null) ? $content['notifications'] : ($notifications ?? []);
 
 function parse_social_links(string $value): array
 {
@@ -83,9 +84,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $social = parse_social_links((string) ($_POST['social_links'] ?? ''));
     $banks = parse_bank_accounts((string) ($_POST['bank_accounts'] ?? ''));
     $nearby = parse_nearby_weather((string) ($_POST['nearby_weather'] ?? ''));
+    $notificationEnabled = !empty($_POST['notifications_enabled']);
+    $notificationRecipient = trim((string) ($_POST['notification_recipient_email'] ?? ''));
+    $notificationFrom = trim((string) ($_POST['notification_from_email'] ?? ''));
 
     if ($social === [] || $banks === []) {
         admin_flash('Social links და donation accounts მინიმუმ ერთი ჩანაწერით უნდა იყოს შევსებული.', 'error');
+        redirect('settings.php');
+    }
+
+    if ($notificationEnabled && !filter_var($notificationRecipient, FILTER_VALIDATE_EMAIL)) {
+        admin_flash('Notification recipient email is required when email notifications are enabled.', 'error');
+        redirect('settings.php');
+    }
+
+    if ($notificationFrom !== '' && !filter_var($notificationFrom, FILTER_VALIDATE_EMAIL)) {
+        admin_flash('Notification from email must be valid.', 'error');
         redirect('settings.php');
     }
 
@@ -117,6 +131,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'longitude' => (float) ($_POST['weather_longitude'] ?? 42.28417),
             'cache_minutes' => max(5, (int) ($_POST['weather_cache_minutes'] ?? 30)),
         ],
+    ];
+
+    $content['notifications'] = [
+        'enabled' => $notificationEnabled,
+        'recipient_email' => $notificationRecipient,
+        'from_email' => $notificationFrom,
+        'subject_prefix' => trim((string) ($_POST['notification_subject_prefix'] ?? '[Banza Site]')),
     ];
 
     save_content_store($content);
@@ -170,6 +191,16 @@ render_admin_header('პარამეტრები', 'settings');
     </fieldset>
 
     <button class="button button-primary" type="submit">შენახვა</button>
+    <fieldset class="admin-fieldset">
+      <legend>Email notifications</legend>
+      <label class="checkbox-label"><input type="checkbox" name="notifications_enabled" value="1"<?php echo !empty($notifications['enabled']) ? ' checked' : ''; ?>> Contact form email notification enabled</label>
+      <div class="admin-form-grid">
+        <label><span>Recipient email</span><input type="email" name="notification_recipient_email" value="<?php echo e($notifications['recipient_email'] ?? ''); ?>"></label>
+        <label><span>From email</span><input type="email" name="notification_from_email" value="<?php echo e($notifications['from_email'] ?? ''); ?>"></label>
+        <label><span>Subject prefix</span><input type="text" name="notification_subject_prefix" value="<?php echo e($notifications['subject_prefix'] ?? '[Banza Site]'); ?>"></label>
+      </div>
+      <p class="form-hint">If email delivery fails, the contact message is still saved in the admin inbox.</p>
+    </fieldset>
   </form>
 </section>
 

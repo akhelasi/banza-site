@@ -112,7 +112,7 @@ function content_import_posts(array $content): array
 function content_import_settings(array $content): array
 {
     $settings = [];
-    foreach (['camera', 'weather'] as $key) {
+    foreach (['camera', 'weather', 'notifications'] as $key) {
         if (is_array($content[$key] ?? null)) {
             $settings[] = [
                 'setting_key' => $key,

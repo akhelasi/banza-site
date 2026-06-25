@@ -244,5 +244,11 @@
                 "temperature": "19°C"
             }
         ]
+    },
+    "notifications": {
+        "enabled": false,
+        "recipient_email": "",
+        "from_email": "",
+        "subject_prefix": "[Banza Site]"
     }
 }
