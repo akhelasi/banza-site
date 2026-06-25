@@ -5,6 +5,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/content-store.php';
 require_once __DIR__ . '/database.php';
 require_once __DIR__ . '/weather.php';
+require_once __DIR__ . '/repositories/page-repository.php';
 require_once __DIR__ . '/repositories/settings-repository.php';
 
 $site = [
@@ -261,8 +262,13 @@ if (content_storage_driver() === 'mysql') {
             $mysqlSettings,
             static fn (mixed $value): bool => is_array($value) && $value !== []
         ));
+        $mysqlPages = load_runtime_pages_from_mysql(db());
+        $contentStore = array_replace($contentStore, array_filter(
+            $mysqlPages,
+            static fn (mixed $value): bool => is_array($value) && $value !== []
+        ));
     } catch (Throwable $exception) {
-        error_log('MySQL settings fallback to JSON: ' . $exception->getMessage());
+        error_log('MySQL runtime content fallback to JSON: ' . $exception->getMessage());
     }
 }
 $news = visible_content_items($contentStore['news'] ?? []);

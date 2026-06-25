@@ -1694,3 +1694,41 @@ Next phase notes:
 
 - Posts/pages/media runtime MySQL readers are still open if production needs to stop using JSON for all content.
 - Admin settings writes still save JSON in the current dev panel; production MySQL write-through can be added as the next incremental database phase.
+
+## Phase 41: MySQL Runtime Pages/Media Reader
+
+Added the next read-only MySQL runtime slice for static pages and standalone media metadata, while keeping JSON storage as the fallback for development and partial database setups.
+
+Changed:
+
+- `SITE/includes/repositories/page-repository.php`
+  - Adds readers for published, non-deleted rows in the `pages` table.
+  - Maps MySQL page rows back to the runtime page arrays used by `about`, `history`, `football` and `contact`.
+  - Reads standalone `media` rows as reusable media library metadata.
+- `SITE/includes/data.php`
+  - Loads MySQL static pages and media metadata when `content_storage.driver=mysql`.
+  - Keeps JSON fallback if the MySQL runtime content path throws.
+- `docs/project-checklist.md`
+  - Marks the pages/media runtime reader complete under database/storage work.
+
+Problems found and fixed:
+
+- The fallback log message still mentioned only settings, even though the MySQL branch now loads settings, pages and media. It was renamed to `MySQL runtime content fallback to JSON` so production logs are clearer.
+- The local sandbox again removed `SITE/scripts/setup-production.php` after route/content checks. The file was restored from `HEAD` before staging so no accidental deletion is included.
+
+Verification:
+
+- `php -l` passed for `SITE/includes/repositories/page-repository.php` and `SITE/includes/data.php`.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `SITE/storage/content.json` parsed successfully.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=pages` passed and reported 4 pages.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=media_items` passed and reported 0 media items for the current seed data.
+- `php SITE/scripts/setup-production.php --check-routes` passed.
+- `php SITE/scripts/setup-production.php --audit-content --allow-open` passed and reported the expected current launch blockers.
+- `node --check SITE/assets/js/main.js` passed.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Posts and projects are not switched to MySQL runtime yet because the current import/schema path does not preserve every UI-facing detail, such as category/status/featured behavior, as safely as the JSON runtime. Add those mappings before turning posts/projects reads on.
+- Admin writes still save JSON in the current dev panel; production MySQL write-through remains a later incremental phase.
