@@ -2218,3 +2218,26 @@ Verification:
 Next phase notes:
 
 - On production, switch untracked `SITE/includes/config.php` to `content_storage.driver=mysql`, run `check-mysql-smoke.php`, then rerun `check-launch-readiness.php --strict`.
+
+## Phase 56: Storage Blocker Status Normalization
+
+Updated the project checklist so the JSON storage item reflects the current state after the Phase 55 launch readiness gate.
+
+Changed:
+
+- `docs/project-checklist.md`
+  - Marks Phase 56 complete.
+  - Changes the old JSON storage `PROBLEM` item into a `WAITING` production configuration item because strict readiness now explicitly gates production launch until `content_storage.driver=mysql`.
+
+Problems found and fixed:
+
+- The checklist still described JSON storage as an open code problem even after the readiness checker started enforcing MySQL for launch. The status now matches the implementation: local/demo JSON remains allowed, production launch waits on MySQL config and smoke testing.
+
+Verification:
+
+- Documentation-only change.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Remaining blockers are client/hosting/manual-QA dependent rather than local code defects.
