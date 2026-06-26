@@ -2394,3 +2394,36 @@ Verification:
 Next phase notes:
 
 - Remaining work is now mostly external: host choice, client-approved real content/assets/accounts, production config, MySQL smoke and manual browser QA.
+
+## Phase 62: Dedicated Codex Continuation Prompt
+
+Added a copy/paste-ready prompt for continuing the project in a new Codex session or on another computer.
+
+Changed:
+
+- `docs/codex-continuation-prompt.md`
+  - Tells the next Codex session which project docs to read first.
+  - Summarizes the current implemented state and remaining production blockers.
+  - Preserves the phase workflow: inspect status, continue from checklist, verify/fix/reverify, update worklog/checklist, commit and push.
+  - Lists safe local checks and host-only checks.
+  - Warns not to commit secrets, production config, database dumps, real credentials, private payment/contact data or runtime uploads.
+  - Includes first local commands and demo admin login notes.
+- `README.md`
+  - Links the continuation prompt from the main handoff section.
+- `docs/project-checklist.md`
+  - Marks Phase 62 complete and tracks the new continuation prompt.
+
+Problems found and fixed:
+
+- README had a short continuation note, but a new Codex session on another computer would still need to reconstruct the full working context from several documents. The dedicated prompt reduces that handoff risk.
+- No app runtime code was changed.
+
+Verification:
+
+- Documentation-only change.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+- `php SITE/scripts/check-local-handoff.php` passed after the documentation update.
+
+Next phase notes:
+
+- The remaining actionable local work is now thin; the main next steps require client content, hosting/domain choice, production config, MySQL smoke checks and real-browser QA.

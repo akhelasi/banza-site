@@ -34,6 +34,7 @@ See:
 - `docs/project-worklog.md` for completed phases and verification notes.
 - `docs/project-checklist.md` for remaining work through production.
 - `docs/banza-site-prompts.md` for the original full project prompt.
+- `docs/codex-continuation-prompt.md` for continuing the project in a new Codex session.
 - `docs/storage-decision.md` for the JSON vs MySQL storage decision.
 - `docs/hosting-requirements.md` for selecting a PHP/MySQL production host.
 - `docs/production-deployment-checklist.md` for production hosting/deploy steps.
@@ -245,6 +246,8 @@ Read AGENTS.md, docs/project-worklog.md and docs/project-checklist.md.
 Continue from the next unchecked phase in docs/project-checklist.md.
 After each phase, run the relevant checks, update docs/project-worklog.md and docs/project-checklist.md, commit, and push to origin/main.
 ```
+
+For a copy/paste-ready continuation prompt, use `docs/codex-continuation-prompt.md`.
 
 Recommended next phase:
 

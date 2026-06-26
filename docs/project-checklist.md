@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 61.
+- `[DONE]` Latest completed phase before this checklist update: Phase 62.
 
 ## Public Site
 
@@ -209,6 +209,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Update README with current setup, admin login, dev server and production notes.
 - `[DONE]` Add "continue in Codex" handoff section for workplace continuation.
 - `[DONE]` README storage/deployment status reflects completed MySQL runtime work and remaining production switch steps.
+- `[DONE]` Dedicated new-session Codex continuation prompt exists at `docs/codex-continuation-prompt.md`.
 - `[DONE]` Document how to migrate runtime uploads.
 - `[DONE]` Document how to replace demo content safely.
 - `[DONE]` Document final release checklist.
@@ -272,6 +273,7 @@ This checklist is the project control document for finishing the Banza village w
 48. [DONE] Phase 59: Launch signoff template.
 49. [DONE] Phase 60: Production hosting requirements.
 50. [DONE] Phase 61: README handoff accuracy cleanup.
+51. [DONE] Phase 62: Dedicated Codex continuation prompt.
 
 ## Definition Of Done For Production
 
