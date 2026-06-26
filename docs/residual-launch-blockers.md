@@ -44,6 +44,8 @@ php SITE/scripts/check-launch-readiness.php --strict
 php SITE/scripts/setup-production.php --audit-content
 ```
 
+Strict readiness also checks that `content_storage.driver=mysql`; keep the local/demo `json` driver only before production.
+
 ## Hosting Blockers
 
 Required:
@@ -121,6 +123,7 @@ Email:
 ## Known Residual Risk
 
 - JSON remains the local editing source with MySQL sync. This is acceptable for handoff/demo, but production multi-admin editing should be treated carefully.
+- `SITE/scripts/check-launch-readiness.php --strict` reports the JSON driver as a launch blocker until production config switches to MySQL.
 - A fully MySQL-native admin CRUD rewrite should wait until the host, editor count and production workflow are known.
 
 ## Recommended Next Human Step

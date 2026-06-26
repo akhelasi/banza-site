@@ -21,6 +21,8 @@ $siteRoot = dirname(__DIR__);
 $projectRoot = dirname($siteRoot);
 $checks = [];
 
+require_once $siteRoot . '/includes/database.php';
+
 function readiness_path(string $relative): string
 {
     global $siteRoot;
@@ -170,6 +172,13 @@ if (is_file(readiness_path('includes/config.php'))) {
     readiness_add($checks, 'WARN', 'config.production', 'Untracked production config exists locally. Confirm it contains no demo credentials before deployment.');
 } else {
     readiness_add($checks, 'WAITING', 'config.production', 'Production config is not present in this repo, which is correct for Git; create it on the host.');
+}
+
+$storageDriver = content_storage_driver();
+if ($storageDriver === 'mysql') {
+    readiness_add($checks, 'OK', 'config.storage_driver', 'content_storage.driver is mysql.');
+} else {
+    readiness_add($checks, 'WAITING', 'config.storage_driver', 'content_storage.driver is ' . $storageDriver . '; set it to mysql before production launch.');
 }
 
 readiness_add($checks, 'WAITING', 'hosting.provider', 'Production PHP/MySQL hosting and domain details are still required.');

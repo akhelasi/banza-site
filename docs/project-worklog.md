@@ -2188,3 +2188,33 @@ Verification:
 Next phase notes:
 
 - Code-side work is now mostly waiting on client-approved content, production hosting/config, host MySQL smoke testing and manual browser QA.
+
+## Phase 55: Launch Readiness Storage Gate
+
+Added a storage-driver gate to the launch readiness checker so production launch checks explicitly fail until the host is configured for MySQL.
+
+Changed:
+
+- `SITE/scripts/check-launch-readiness.php`
+  - Loads the existing database config helper.
+  - Reports `config.storage_driver` as `OK` when `content_storage.driver=mysql`.
+  - Reports `config.storage_driver` as `WAITING` when the current driver is `json`, which makes `--strict` launch checks fail without treating local/demo mode as a code blocker.
+- `docs/project-checklist.md`
+  - Marks Phase 55 complete.
+  - Tracks the storage-driver readiness gate under database/storage.
+- `docs/residual-launch-blockers.md`
+  - Notes that strict launch readiness requires MySQL storage mode.
+
+Problems found and fixed:
+
+- JSON storage risk was documented in the checklist, but the general readiness checker did not explicitly report the storage driver. This is now part of the launch gate.
+
+Verification:
+
+- `php -l SITE/scripts/check-launch-readiness.php` passed.
+- `php SITE/scripts/check-launch-readiness.php` passed in local handoff mode and reported `config.storage_driver` as `WAITING`.
+- `php SITE/scripts/check-launch-readiness.php --strict` failed intentionally while local config remains `json`.
+
+Next phase notes:
+
+- On production, switch untracked `SITE/includes/config.php` to `content_storage.driver=mysql`, run `check-mysql-smoke.php`, then rerun `check-launch-readiness.php --strict`.
