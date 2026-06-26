@@ -35,6 +35,7 @@ See:
 - `docs/project-checklist.md` for remaining work through production.
 - `docs/banza-site-prompts.md` for the original full project prompt.
 - `docs/storage-decision.md` for the JSON vs MySQL storage decision.
+- `docs/hosting-requirements.md` for selecting a PHP/MySQL production host.
 - `docs/production-deployment-checklist.md` for production hosting/deploy steps.
 - `docs/manual-qa-checklist.md` for real-browser desktop/tablet/mobile QA.
 
@@ -123,12 +124,13 @@ SITE/storage/content.json
 
 This is useful for fast local development and Codex handoff, but it is not the preferred production storage for multi-admin editing.
 
-Production recommendation:
+Production path:
 
-1. Use MySQL.
-2. Implement repositories for posts, pages, settings, media and contact messages.
-3. Add an import script from `SITE/storage/content.json`.
-4. Keep uploaded media under `SITE/uploads/` and back it up separately.
+1. Use MySQL by setting `content_storage.driver => mysql` in untracked `SITE/includes/config.php`.
+2. Load `SITE/database/schema.sql` and run any migrations through `SITE/scripts/setup-production.php --migrate`.
+3. Import approved JSON content with `SITE/scripts/import-json-to-mysql.php --only=all`.
+4. Run `SITE/scripts/check-mysql-smoke.php --admin-email=REAL_ADMIN_EMAIL --strict`.
+5. Keep uploaded media under `SITE/uploads/` and back it up separately.
 
 The current decision is documented in `docs/storage-decision.md`: keep JSON for development/content approval, then move to MySQL before public launch.
 
@@ -247,7 +249,7 @@ After each phase, run the relevant checks, update docs/project-worklog.md and do
 Recommended next phase:
 
 ```text
-Next: complete remaining production blockers, especially client-approved content, real donation/contact/social values, and final real-browser visual QA.
+Next: choose PHP/MySQL hosting, replace demo content with client-approved values, switch production config to MySQL, run host smoke checks, and complete real-browser QA.
 ```
 
 ## Production Before-Launch Checklist
@@ -257,7 +259,7 @@ Must be completed before public launch:
 - Replace demo admin credentials using SITE/scripts/generate-password-hash.php.
 - Replace demo content with client-approved Georgian text.
 - Replace demo contact/social/bank details with real values.
-- Decide and implement production storage, preferably MySQL.
+- Switch production storage to MySQL after schema/import/smoke checks pass.
 - Configure production PHP settings and database credentials outside Git.
 - Configure upload folder permissions.
 - Add backup plan for database and `SITE/uploads/`.

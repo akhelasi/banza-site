@@ -2365,3 +2365,32 @@ Verification:
 Next phase notes:
 
 - Pick a PHP/MySQL host using `docs/hosting-requirements.md`, then run production config, MySQL smoke, strict readiness, content audit and manual browser QA on the selected host.
+
+## Phase 61: README Handoff Accuracy Cleanup
+
+Updated README handoff text so it reflects the current project state after the MySQL runtime/import/admin-auth phases.
+
+Changed:
+
+- `README.md`
+  - Adds `docs/hosting-requirements.md` to the key handoff document list.
+  - Replaces the old "implement MySQL repositories" wording with the current production path: switch config to MySQL, load schema/migrations, import content, run MySQL smoke checks and back up uploads.
+  - Updates the recommended next phase to focus on hosting, approved content, MySQL production config and real-browser QA.
+  - Changes the before-launch checklist from "decide and implement production storage" to "switch production storage to MySQL after schema/import/smoke checks pass."
+- `docs/project-checklist.md`
+  - Marks Phase 61 complete and tracks the README accuracy cleanup.
+
+Problems found and fixed:
+
+- README still contained stale storage wording from before the MySQL runtime work was completed. That could mislead the next Codex session into thinking repository implementation was still open.
+- No app runtime code was changed.
+
+Verification:
+
+- Documentation-only change.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+- `php SITE/scripts/check-local-handoff.php` passed after the documentation update.
+
+Next phase notes:
+
+- Remaining work is now mostly external: host choice, client-approved real content/assets/accounts, production config, MySQL smoke and manual browser QA.
