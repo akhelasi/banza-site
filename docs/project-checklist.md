@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 53.
+- `[DONE]` Latest completed phase before this checklist update: Phase 54.
 
 ## Public Site
 
@@ -211,6 +211,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Document final release checklist.
 - `[DONE]` Document launch-scope decisions at `docs/launch-decisions.md`.
 - `[DONE]` Document client launch intake requirements at `docs/client-launch-intake.md`.
+- `[DONE]` Document residual launch blockers at `docs/residual-launch-blockers.md`.
 - `[DONE]` Launch decision: keep README primarily Georgian with English commands, paths and config identifiers.
 
 ## Recommended Remaining Phase Order
@@ -257,6 +258,7 @@ This checklist is the project control document for finishing the Banza village w
 40. [DONE] Phase 51: Production MySQL smoke helper.
 41. [DONE] Phase 52: Launch decision log.
 42. [DONE] Phase 53: Client launch intake checklist.
+43. [DONE] Phase 54: Residual launch blockers report.
 
 ## Definition Of Done For Production
 
