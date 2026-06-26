@@ -1977,3 +1977,36 @@ Verification:
 Next phase notes:
 
 - A real browser/admin pass and real MySQL deployment smoke test remain required before launch.
+
+## Phase 48: Post-MySQL Security Review
+
+Completed a targeted security review after MySQL runtime/auth wiring.
+
+Changed:
+
+- `docs/security-review-phase48.md`
+  - Records reviewed areas, findings, remaining launch requirements and verification commands.
+- `docs/project-checklist.md`
+  - Marks the post-MySQL security review complete.
+  - Marks contact spam protection complete based on the existing CSRF, rate limit and honeypot controls.
+
+Problems found and fixed:
+
+- No code-level blocker was found in the reviewed SQL/auth/upload/form paths during this phase.
+- Earlier searches confirmed one dynamic contact-message SQL branch, but it is built only from fixed internal booleans and does not include request input.
+
+Verification:
+
+- Reviewed SQL access, CSRF usage, upload validation, contact spam controls and delete constraints.
+- Full PHP lint passed for all PHP files under `SITE/`.
+- `SITE/storage/content.json` parsed successfully.
+- `php SITE/scripts/import-json-to-mysql.php --dry-run --only=all` passed.
+- `php SITE/scripts/setup-production.php --check-routes` passed for all covered public routes after restoring the locally deleted setup script.
+- `php SITE/scripts/setup-production.php --audit-content --allow-open` passed and reported the expected current launch blockers.
+- `node --check SITE/assets/js/main.js` passed.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- A host-like MySQL smoke test remains open because this local environment does not have the production database.
+- Manual browser QA remains open.

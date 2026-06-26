@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 47.
+- `[DONE]` Latest completed phase before this checklist update: Phase 48.
 
 ## Public Site
 
@@ -132,11 +132,11 @@ This checklist is the project control document for finishing the Banza village w
 - `[TODO]` Change demo admin credentials before any public deployment. Hash generator is available at `SITE/scripts/generate-password-hash.php`.
 - `[DONE]` Keep real production config in untracked `SITE/includes/config.php`.
 - `[DONE]` Add rate limiting or throttling for admin login and contact form.
-- `[TODO]` Add stronger spam protection for contact form if spam becomes likely.
+- `[DONE]` Add stronger spam protection for contact form with rate limiting and honeypot.
 - `[DONE]` Add basic PHP security headers in public/admin layout bootstrap.
 - `[DONE]` Add configurable session cookie name, HttpOnly, SameSite and HTTPS secure flag.
 - `[DONE]` Runtime rate-limit cache is ignored by Git.
-- `[TODO]` Run a final security review after MySQL wiring.
+- `[DONE]` Run a final security review after MySQL wiring.
 - `[WAITING]` Real production admin email/password must be chosen by the client before deployment.
 - `[REVIEW]` Decide whether to add CAPTCHA; avoid it unless spam actually appears or the client requests it.
 
@@ -199,6 +199,7 @@ This checklist is the project control document for finishing the Banza village w
 
 - `[DONE]` `docs/project-worklog.md` records completed phases and QA.
 - `[DONE]` `docs/banza-site-prompts.md` stores the main project prompt.
+- `[DONE]` `docs/security-review-phase48.md` records post-MySQL security review findings.
 - `[DONE]` This checklist exists at `docs/project-checklist.md`.
 - `[DONE]` Update README with current setup, admin login, dev server and production notes.
 - `[DONE]` Add "continue in Codex" handoff section for workplace continuation.
@@ -245,6 +246,7 @@ This checklist is the project control document for finishing the Banza village w
 34. [DONE] Phase 45: Production setup migration runner.
 35. [DONE] Phase 46: MySQL-backed admin authentication.
 36. [DONE] Phase 47: Production auth/deployment note cleanup.
+37. [DONE] Phase 48: Post-MySQL security review.
 
 ## Definition Of Done For Production
 
@@ -256,5 +258,5 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Launch content audit command documents remaining client/content blockers.
 - `[DONE]` Database and uploads have backup/restore instructions.
 - `[TODO]` Mobile and desktop manual QA is complete.
-- `[TODO]` Security review is complete after final storage/deployment decisions.
+- `[DONE]` Security review is complete after final storage/deployment decisions.
 - `[TODO]` GitHub `main` contains final source and worklog/checklist are updated.
