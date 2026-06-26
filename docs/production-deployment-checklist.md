@@ -143,6 +143,16 @@ Then restore the database/uploads only if the failed deploy changed data in a no
 
 ## 8. Launch Smoke Checks
 
+CLI checks:
+
+```bash
+php SITE/scripts/setup-production.php --check-routes
+php SITE/scripts/check-launch-readiness.php
+php SITE/scripts/setup-production.php --audit-content --allow-open
+```
+
+Use `php SITE/scripts/check-launch-readiness.php --strict` and `php SITE/scripts/setup-production.php --audit-content` without `--allow-open` for final launch gating after real content, host config and manual QA are complete.
+
 Public:
 
 - `/index.php`

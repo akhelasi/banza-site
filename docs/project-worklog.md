@@ -2036,3 +2036,38 @@ Next phase notes:
 
 - Run `docs/manual-qa-checklist.md` in a normal Chrome/Edge browser outside this sandbox before launch.
 - Continue with work that can be verified from PHP/CLI until a real browser/manual QA pass is available.
+
+## Phase 50: Launch Readiness Checker
+
+Added a CLI readiness checker to make the current launch state explicit and repeatable during handoff.
+
+Changed:
+
+- `SITE/scripts/check-launch-readiness.php`
+  - Checks launch-critical admin coverage for content, settings, media, messages, trash and profile/password management.
+  - Checks required content sections and basic visible news/project/social/donation data.
+  - Separates code-level `BLOCKER` items from `WAITING` items that require client content, hosting, MySQL smoke testing or real browser QA.
+  - Supports `--strict` so final launch gating can fail while any `WARN` or `WAITING` item remains.
+- `README.md`
+  - Adds the readiness checker to verification commands.
+- `docs/production-deployment-checklist.md`
+  - Adds the readiness checker to launch smoke checks.
+- `docs/project-checklist.md`
+  - Marks Phase 50 complete.
+  - Marks admin launch-critical content management complete based on the checker coverage.
+
+Problems found and fixed:
+
+- The first checker run used an incorrect media upload needle, `upload_image`. The actual admin media implementation calls `store_uploaded_image`, so the checker was corrected and re-run.
+- Browser/manual QA and real MySQL smoke testing remain waiting items, not code blockers.
+
+Verification:
+
+- `php -l SITE/scripts/check-launch-readiness.php` passed.
+- `php SITE/scripts/check-launch-readiness.php` passed with `OK: 18 | WARN: 0 | WAITING: 5 | BLOCKER: 0`.
+- `php SITE/scripts/check-launch-readiness.php --strict` failed intentionally because the remaining waiting items are real config/content/hosting/manual-QA blockers.
+
+Next phase notes:
+
+- Use the readiness checker together with `setup-production.php --audit-content` before launch.
+- The remaining launch work is now mostly client/hosting/manual-browser dependent unless we add more production convenience tooling.

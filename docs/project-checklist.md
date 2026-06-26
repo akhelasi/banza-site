@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 49.
+- `[DONE]` Latest completed phase before this checklist update: Phase 50.
 
 ## Public Site
 
@@ -248,15 +248,17 @@ This checklist is the project control document for finishing the Banza village w
 36. [DONE] Phase 47: Production auth/deployment note cleanup.
 37. [DONE] Phase 48: Post-MySQL security review.
 38. [DONE] Phase 49: Browser QA reattempt and handoff update.
+39. [DONE] Phase 50: Launch readiness checker.
 
 ## Definition Of Done For Production
 
 - `[DONE]` All major public pages render in CLI smoke without unsuppressed PHP warnings/notices.
-- `[TODO]` Admin can manage all launch-critical content.
+- `[DONE]` Admin can manage all launch-critical content.
 - `[TODO]` Uploads, trash, contact messages and settings are verified after deployment.
 - `[TODO]` Demo credentials are replaced with a generated password hash in MySQL `admins` table or untracked production config.
 - `[TODO]` Real content, real links and real donation accounts are approved by the client.
 - `[DONE]` Launch content audit command documents remaining client/content blockers.
+- `[DONE]` Launch readiness checker reports admin coverage, content readiness and host/manual-QA waiting items.
 - `[DONE]` Database and uploads have backup/restore instructions.
 - `[TODO]` Mobile and desktop manual QA is complete.
 - `[DONE]` Security review is complete after final storage/deployment decisions.
