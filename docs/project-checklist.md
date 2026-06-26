@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 59.
+- `[DONE]` Latest completed phase before this checklist update: Phase 60.
 
 ## Public Site
 
@@ -188,6 +188,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` GitHub repo stores source code.
 - `[DONE]` GitHub Pages was intentionally not used because PHP will not run there.
 - `[TODO]` Pick production hosting that supports PHP and MySQL.
+- `[DONE]` Document concrete production hosting requirements at `docs/hosting-requirements.md`.
 - `[DONE]` Prepare production config instructions.
 - `[DONE]` Prepare upload folder permissions instructions.
 - `[DONE]` Prepare deployment checklist for clone/install/config/database/import/admin password.
@@ -215,6 +216,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Document residual launch blockers at `docs/residual-launch-blockers.md`.
 - `[DONE]` Document completion evidence matrix at `docs/completion-evidence-matrix.md`.
 - `[DONE]` Document launch signoff template at `docs/launch-signoff-template.md`.
+- `[DONE]` Document production hosting requirements at `docs/hosting-requirements.md`.
 - `[DONE]` Launch decision: keep README primarily Georgian with English commands, paths and config identifiers.
 
 ## Recommended Remaining Phase Order
@@ -267,6 +269,7 @@ This checklist is the project control document for finishing the Banza village w
 46. [DONE] Phase 57: Completion evidence matrix.
 47. [DONE] Phase 58: Local handoff evidence runner.
 48. [DONE] Phase 59: Launch signoff template.
+49. [DONE] Phase 60: Production hosting requirements.
 
 ## Definition Of Done For Production
 

@@ -4,6 +4,8 @@ Use this checklist before deploying the Banza site to a real PHP/MySQL host.
 
 ## 1. Hosting Requirements
 
+Detailed selection requirements are documented in `docs/hosting-requirements.md`.
+
 - PHP host with MySQL/MariaDB support.
 - PHP extensions: `pdo_mysql`, `fileinfo`, `mbstring`, `json`, `openssl`.
 - HTTPS enabled before public launch.

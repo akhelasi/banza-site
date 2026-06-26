@@ -57,6 +57,8 @@ Required:
 - Upload/storage write permissions.
 - Backup method for MySQL and `SITE/uploads/`.
 
+Use `docs/hosting-requirements.md` to confirm the host supports the required PHP version, extensions, MySQL access, PHP CLI checks, writable runtime folders, HTTPS and backups.
+
 Validation commands on host:
 
 ```bash

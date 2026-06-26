@@ -2332,3 +2332,36 @@ Verification:
 Next phase notes:
 
 - Fill this template outside Git when real client, hosting and QA evidence exists.
+
+## Phase 60: Production Hosting Requirements
+
+Added a focused hosting requirements document so the production host can be selected and checked without guessing which PHP/MySQL capabilities the project needs.
+
+Changed:
+
+- `docs/hosting-requirements.md`
+  - Lists required PHP/MySQL versions, PHP extensions, writable runtime folders, HTTPS, config, CLI, backup and deploy needs.
+  - Adds concrete questions to ask the hosting provider before launch.
+  - Lists the minimum command sequence the host should support for setup and verification.
+  - Calls out unsuitable hosting types such as static-only hosting and GitHub Pages.
+- `docs/production-deployment-checklist.md`
+  - Points the hosting section to the detailed requirements document.
+- `docs/residual-launch-blockers.md`
+  - Links the hosting blocker section to the requirements document.
+- `docs/project-checklist.md`
+  - Marks Phase 60 complete and tracks the hosting requirements document.
+
+Problems found and fixed:
+
+- Hosting requirements existed inside the deployment checklist, but they were too compressed for real provider selection. The new document makes the production hosting blocker easier to resolve without exposing credentials or choosing a provider prematurely.
+- No app runtime code was changed.
+
+Verification:
+
+- Documentation-only change.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+- `php SITE/scripts/check-local-handoff.php` passed after the documentation update.
+
+Next phase notes:
+
+- Pick a PHP/MySQL host using `docs/hosting-requirements.md`, then run production config, MySQL smoke, strict readiness, content audit and manual browser QA on the selected host.
