@@ -1,6 +1,6 @@
 # Banza Site Project Checklist
 
-Updated: 2026-06-25
+Updated: 2026-06-26
 
 This checklist is the project control document for finishing the Banza village website. Keep it updated after every phase before committing/pushing.
 
@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 48.
+- `[DONE]` Latest completed phase before this checklist update: Phase 49.
 
 ## Public Site
 
@@ -176,7 +176,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[TODO]` Full keyboard navigation pass for header nav, modals, forms and admin actions in a real browser.
 - `[TODO]` Screen reader label/heading pass.
 - `[TODO]` Check all Georgian text visually for overflow on small screens.
-- `[PROBLEM]` Automated Playwright/in-app browser QA is blocked in this environment by local `EPERM` filesystem permission errors.
+- `[PROBLEM]` Automated Playwright/in-app browser/Node REPL QA is blocked in this environment by local `EPERM` filesystem permission errors.
 - `[RETHINK]` If automated browser QA remains blocked locally, use a lightweight manual QA checklist or run Playwright from a normal terminal outside Codex.
 
 ## Deployment And Operations
@@ -247,6 +247,7 @@ This checklist is the project control document for finishing the Banza village w
 35. [DONE] Phase 46: MySQL-backed admin authentication.
 36. [DONE] Phase 47: Production auth/deployment note cleanup.
 37. [DONE] Phase 48: Post-MySQL security review.
+38. [DONE] Phase 49: Browser QA reattempt and handoff update.
 
 ## Definition Of Done For Production
 

@@ -2010,3 +2010,29 @@ Next phase notes:
 
 - A host-like MySQL smoke test remains open because this local environment does not have the production database.
 - Manual browser QA remains open.
+
+## Phase 49: Browser QA Reattempt And Handoff Update
+
+Retried automated browser QA after the post-MySQL security pass and documented the remaining environment blocker.
+
+Changed:
+
+- `docs/project-checklist.md`
+  - Updates the current completed phase to Phase 49.
+  - Clarifies that Playwright, in-app browser automation and Node REPL browser-control attempts are blocked by the same local `EPERM` filesystem permission issue.
+  - Adds Phase 49 to the completed phase list.
+
+Problems found and fixed:
+
+- The browser-control tool path is still not usable in this Codex desktop environment. Tool discovery exposed Node REPL-based browser support, but the Node kernel exited before browser inspection with `EPERM: operation not permitted, lstat 'C:\Users\User\AppData'`.
+- No site code was changed in this phase because the blocker is environmental, not an app bug.
+
+Verification:
+
+- Confirmed `SITE/scripts/setup-production.php` is present before documentation-only staging.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Run `docs/manual-qa-checklist.md` in a normal Chrome/Edge browser outside this sandbox before launch.
+- Continue with work that can be verified from PHP/CLI until a real browser/manual QA pass is available.
