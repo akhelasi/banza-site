@@ -2106,3 +2106,30 @@ Verification:
 Next phase notes:
 
 - On hosting or a real dev database, run `php SITE/scripts/check-mysql-smoke.php --admin-email=REAL_ADMIN_EMAIL --strict` after schema, migrations, import, setup and `content_storage.driver=mysql` are complete.
+
+## Phase 52: Launch Decision Log
+
+Closed launch-scope REVIEW/RETHINK items that can be decided without client data or hosting access.
+
+Changed:
+
+- `docs/launch-decisions.md`
+  - Records launch decisions for football structure, admin account model, YouTube-only videos, CAPTCHA, server-side weather cache, optional email notifications, manual deployment, documentation language, UI CSS scope, storage architecture, seed content status, migration strategy and browser QA strategy.
+- `docs/project-checklist.md`
+  - Marks Phase 52 complete.
+  - Converts the resolved REVIEW/RETHINK items into explicit launch decisions.
+  - Adds the decision log to documentation/handoff tracking.
+
+Problems found and fixed:
+
+- Several checklist items were waiting for a decision even though the practical launch answer was already clear. They are now documented as decisions with revisit conditions instead of remaining open-ended.
+- No app runtime code was changed.
+
+Verification:
+
+- Documentation-only change.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Remaining blockers are mostly client/hosting/manual-QA items: real content, real links/accounts, production credentials, production MySQL smoke, hosting/domain and real browser QA.

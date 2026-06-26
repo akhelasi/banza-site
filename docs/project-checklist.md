@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 51.
+- `[DONE]` Latest completed phase before this checklist update: Phase 52.
 
 ## Public Site
 
@@ -45,8 +45,8 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Add a public-facing projects detail page if the client wants full project articles instead of inline project cards.
 - `[DONE]` Add pagination or "load more" for news/projects before real content grows large.
 - `[DONE]` Add richer empty states for pages when admin deletes all content.
-- `[REVIEW]` Decide whether football content should remain a static page or become a reusable post type/team section.
-- `[RETHINK]` Current public design is hand-built CSS. Before adding many more UI states, consider extracting reusable components/classes more aggressively.
+- `[DONE]` Launch decision: football remains a static managed page; revisit reusable team post type only if recurring team content is needed.
+- `[DONE]` Launch decision: keep current hand-built CSS; extract reusable components only if future UI scope grows.
 
 ## Admin Panel
 
@@ -69,8 +69,8 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Add image alt text fields in admin forms.
 - `[DONE]` Add preview links from admin list rows to public pages.
 - `[DONE]` Add admin profile/password change flow.
-- `[REVIEW]` Decide whether there should be multiple admin users/roles or one shared admin account for launch.
-- `[RETHINK]` Current admin is file-backed JSON. For production, moving admin CRUD to MySQL is the cleaner long-term path.
+- `[DONE]` Launch decision: use one production admin account for launch; revisit roles when multiple editors need access.
+- `[DONE]` Launch decision: keep JSON editing source with MySQL sync for handoff; revisit fully MySQL-native admin CRUD after hosting/multi-admin needs are clear.
 
 ## Content And Data
 
@@ -87,7 +87,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[WAITING]` Client must provide real donation account numbers.
 - `[WAITING]` Client must provide real social network URLs.
 - `[WAITING]` Client must approve or provide final village photos.
-- `[REVIEW]` Decide whether internet-researched content is acceptable for launch or should be treated only as draft seed content.
+- `[DONE]` Launch decision: internet-researched content is draft seed content until the client approves final copy/data/assets.
 
 ## Database And Storage
 
@@ -108,7 +108,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Add production MySQL smoke-check helper for host/dev database verification.
 - `[WAITING]` Run `SITE/scripts/check-mysql-smoke.php` on the production host or a real dev MySQL database.
 - `[PROBLEM]` Current JSON storage is fine for development but risky for production concurrency, backups and multi-admin editing.
-- `[RETHINK]` MySQL migration should be incremental, not an all-at-once rewrite.
+- `[DONE]` Launch decision: keep MySQL migration incremental; avoid full admin CRUD rewrite until hosting/multi-admin needs are clear.
 
 ## Uploads And Media
 
@@ -122,7 +122,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Add per-media captions for uploaded images.
 - `[DONE]` Add image resizing/compression or document hosting-level image optimization.
 - `[DONE]` Add max dimensions check to prevent very large images from exhausting memory.
-- `[REVIEW]` Decide whether uploaded videos should remain YouTube-only or support local video files.
+- `[DONE]` Launch decision: keep videos YouTube-link based; revisit local video hosting only if explicitly needed.
 
 ## Security
 
@@ -140,7 +140,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Runtime rate-limit cache is ignored by Git.
 - `[DONE]` Run a final security review after MySQL wiring.
 - `[WAITING]` Real production admin email/password must be chosen by the client before deployment.
-- `[REVIEW]` Decide whether to add CAPTCHA; avoid it unless spam actually appears or the client requests it.
+- `[DONE]` Launch decision: do not add CAPTCHA now; revisit only if spam appears or the client requests it.
 
 ## Weather, Camera And External Integrations
 
@@ -152,8 +152,8 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Add graceful fallback when weather/camera provider is unavailable.
 - `[WAITING]` Client must provide camera stream URL/provider.
 - `[WAITING]` Client must approve weather provider/API key approach.
-- `[REVIEW]` Decide whether live weather should be server-side cached or browser-side fetched.
-- `[RETHINK]` For weather, server-side caching is likely better than direct browser API calls because it protects API keys and reduces rate-limit risk.
+- `[DONE]` Launch decision: keep live weather server-side cached.
+- `[DONE]` Launch decision: server-side weather cache protects provider details and reduces rate-limit pressure.
 
 ## Email And Notifications
 
@@ -162,7 +162,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Add admin setting for notification recipient email.
 - `[DONE]` Add failure-safe behavior if email delivery fails but message storage succeeds.
 - `[WAITING]` Client/host must provide SMTP credentials or email provider.
-- `[REVIEW]` Decide whether email notification is required for launch or admin inbox is enough initially.
+- `[DONE]` Launch decision: admin inbox is enough initially; optional email notifications remain available when SMTP/provider details exist.
 
 ## Frontend QA And Accessibility
 
@@ -179,7 +179,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[TODO]` Screen reader label/heading pass.
 - `[TODO]` Check all Georgian text visually for overflow on small screens.
 - `[PROBLEM]` Automated Playwright/in-app browser/Node REPL QA is blocked in this environment by local `EPERM` filesystem permission errors.
-- `[RETHINK]` If automated browser QA remains blocked locally, use a lightweight manual QA checklist or run Playwright from a normal terminal outside Codex.
+- `[DONE]` Launch decision: use `docs/manual-qa-checklist.md` or browser automation outside this sandbox while local Codex browser QA is blocked.
 
 ## Deployment And Operations
 
@@ -195,7 +195,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Add setup script migration runner with dry-run mode for existing MySQL databases.
 - `[WAITING]` Need hosting provider details.
 - `[WAITING]` Need production domain/subdomain.
-- `[REVIEW]` Decide whether to deploy manually first or add GitHub Actions/FTP/SSH deploy workflow later.
+- `[DONE]` Launch decision: deploy manually first; add GitHub Actions/FTP/SSH only after hosting provider/access method is known.
 
 ## Documentation And Handoff
 
@@ -208,7 +208,8 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Document how to migrate runtime uploads.
 - `[DONE]` Document how to replace demo content safely.
 - `[DONE]` Document final release checklist.
-- `[REVIEW]` Decide whether README should stay Georgian-only or Georgian + English technical notes.
+- `[DONE]` Document launch-scope decisions at `docs/launch-decisions.md`.
+- `[DONE]` Launch decision: keep README primarily Georgian with English commands, paths and config identifiers.
 
 ## Recommended Remaining Phase Order
 
@@ -252,6 +253,7 @@ This checklist is the project control document for finishing the Banza village w
 38. [DONE] Phase 49: Browser QA reattempt and handoff update.
 39. [DONE] Phase 50: Launch readiness checker.
 40. [DONE] Phase 51: Production MySQL smoke helper.
+41. [DONE] Phase 52: Launch decision log.
 
 ## Definition Of Done For Production
 
