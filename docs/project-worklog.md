@@ -2304,3 +2304,31 @@ Verification:
 Next phase notes:
 
 - Production completion still requires client content, host config, MySQL smoke, strict readiness, zero content-audit blockers and manual browser QA.
+
+## Phase 59: Launch Signoff Template
+
+Added a launch signoff template so final production evidence can be collected consistently without committing secrets.
+
+Changed:
+
+- `docs/launch-signoff-template.md`
+  - Provides sections for project metadata, client content approval, hosting, production credentials, command evidence, manual browser QA, backup/rollback and final launch decision.
+  - Explicitly warns not to commit passwords, private host credentials, database dumps or private contact/payment data.
+- `docs/completion-evidence-matrix.md`
+  - Points final evidence collection to the signoff template.
+- `docs/project-checklist.md`
+  - Marks Phase 59 complete.
+
+Problems found and fixed:
+
+- The evidence matrix described required proof, but there was no structured template for collecting final external signoff. The new template closes that handoff gap.
+- No app runtime code was changed.
+
+Verification:
+
+- Documentation-only change.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Fill this template outside Git when real client, hosting and QA evidence exists.

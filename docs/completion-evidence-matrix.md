@@ -10,6 +10,7 @@ Use this matrix before marking the Banza website project complete. A checklist i
 - Use screenshots, command output copies, signed notes, or issue links as evidence outside the repository when they include private data.
 - Keep this repository limited to templates, public notes and non-secret status updates.
 - Treat `WAITING` as not complete until the named evidence exists.
+- Use `docs/launch-signoff-template.md` outside the repository to collect final non-secret launch signoff evidence.
 
 ## Production Definition Of Done
 
