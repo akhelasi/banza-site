@@ -175,6 +175,11 @@ php SITE\scripts\import-json-to-mysql.php --dry-run --only=all
 ```
 
 Supported `--only` targets: `all`, `pages`, `posts`, `settings`, `social_links`, `donation_accounts`, `media_items`, `contact_messages`.
+Production MySQL smoke check, after host config, schema, migrations, import and setup are complete:
+
+```powershell
+php SITE\scripts\check-mysql-smoke.php --admin-email=admin@example.com --strict
+```
 
 Production setup dry-run:
 

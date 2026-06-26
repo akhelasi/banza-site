@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 50.
+- `[DONE]` Latest completed phase before this checklist update: Phase 51.
 
 ## Public Site
 
@@ -105,6 +105,8 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Add MySQL runtime reader for static pages and standalone media metadata with JSON fallback.
 - `[DONE]` Add MySQL runtime reader for news/projects, including category, display status, date label, gallery and video metadata.
 - `[DONE]` Add MySQL write-through sync after admin JSON content saves.
+- `[DONE]` Add production MySQL smoke-check helper for host/dev database verification.
+- `[WAITING]` Run `SITE/scripts/check-mysql-smoke.php` on the production host or a real dev MySQL database.
 - `[PROBLEM]` Current JSON storage is fine for development but risky for production concurrency, backups and multi-admin editing.
 - `[RETHINK]` MySQL migration should be incremental, not an all-at-once rewrite.
 
@@ -249,6 +251,7 @@ This checklist is the project control document for finishing the Banza village w
 37. [DONE] Phase 48: Post-MySQL security review.
 38. [DONE] Phase 49: Browser QA reattempt and handoff update.
 39. [DONE] Phase 50: Launch readiness checker.
+40. [DONE] Phase 51: Production MySQL smoke helper.
 
 ## Definition Of Done For Production
 

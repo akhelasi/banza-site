@@ -2071,3 +2071,38 @@ Next phase notes:
 
 - Use the readiness checker together with `setup-production.php --audit-content` before launch.
 - The remaining launch work is now mostly client/hosting/manual-browser dependent unless we add more production convenience tooling.
+
+## Phase 51: Production MySQL Smoke Helper
+
+Added a production-oriented MySQL smoke script so the host/dev database can be checked with one command after schema, migrations, import and setup are complete.
+
+Changed:
+
+- `SITE/scripts/check-mysql-smoke.php`
+  - Verifies `content_storage.driver=mysql` unless `--allow-json-driver` is explicitly passed.
+  - Opens the configured PDO connection and checks all expected schema tables.
+  - Checks active admin rows, published pages, news/projects, settings, social links and donation accounts.
+  - Optionally verifies the exact production admin row via `--admin-email=...`.
+  - Reads runtime settings/pages/posts through the MySQL repository helpers.
+  - Supports `--strict` so warnings, such as omitting `--admin-email`, can fail a launch gate.
+- `README.md`
+  - Adds the MySQL smoke command to verification notes.
+- `docs/production-deployment-checklist.md`
+  - Adds the smoke helper to database setup and launch smoke checks.
+- `docs/project-checklist.md`
+  - Marks Phase 51 complete and records the real host/dev MySQL run as waiting.
+
+Problems found and fixed:
+
+- The local environment is intentionally not configured for production MySQL, so the script reports expected local blockers: `content_storage.driver` is `json` and the MySQL connection is refused.
+- No app runtime code was changed.
+
+Verification:
+
+- `php -l SITE/scripts/check-mysql-smoke.php` passed.
+- `php SITE/scripts/check-mysql-smoke.php --help` passed without opening a database connection.
+- `php SITE/scripts/check-mysql-smoke.php` failed locally with the expected production-config/MySQL-connection blockers.
+
+Next phase notes:
+
+- On hosting or a real dev database, run `php SITE/scripts/check-mysql-smoke.php --admin-email=REAL_ADMIN_EMAIL --strict` after schema, migrations, import, setup and `content_storage.driver=mysql` are complete.
