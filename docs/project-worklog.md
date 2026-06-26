@@ -2133,3 +2133,30 @@ Verification:
 Next phase notes:
 
 - Remaining blockers are mostly client/hosting/manual-QA items: real content, real links/accounts, production credentials, production MySQL smoke, hosting/domain and real browser QA.
+
+## Phase 53: Client Launch Intake Checklist
+
+Added a client-facing intake checklist so the remaining launch blockers can be collected without guessing or mixing real values into Git.
+
+Changed:
+
+- `docs/client-launch-intake.md`
+  - Lists required client/host information for launch: hosting, domain, production admin, donation accounts, social links, contact details, village facts, page copy, news, projects, football content, camera, weather, deployment and manual QA signoff.
+  - Includes host-side command sequence for migrations, import, setup and launch checks.
+- `docs/project-checklist.md`
+  - Marks Phase 53 complete.
+  - Tracks the intake checklist under content/data and handoff documentation.
+
+Problems found and fixed:
+
+- Remaining blockers were spread across content, credentials, hosting, QA and integrations. The intake checklist consolidates them into one handoff document.
+- No app runtime code was changed.
+
+Verification:
+
+- Documentation-only change.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Use the intake checklist with the client before replacing demo content or attempting production launch.

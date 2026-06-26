@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 52.
+- `[DONE]` Latest completed phase before this checklist update: Phase 53.
 
 ## Public Site
 
@@ -83,6 +83,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[TODO]` Replace generic/remote image URLs with approved local assets where possible.
 - `[TODO]` Add final real population/families/vineyard/elevation data after verification.
 - `[DONE]` Add source/provenance status and notes for researched/demo seed content.
+- `[DONE]` Add client launch intake checklist for real content, credentials, assets, hosting and QA signoff.
 - `[DONE]` Add launch content audit script for demo placeholders, generic links/accounts and unapproved content statuses.
 - `[WAITING]` Client must provide real donation account numbers.
 - `[WAITING]` Client must provide real social network URLs.
@@ -209,6 +210,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Document how to replace demo content safely.
 - `[DONE]` Document final release checklist.
 - `[DONE]` Document launch-scope decisions at `docs/launch-decisions.md`.
+- `[DONE]` Document client launch intake requirements at `docs/client-launch-intake.md`.
 - `[DONE]` Launch decision: keep README primarily Georgian with English commands, paths and config identifiers.
 
 ## Recommended Remaining Phase Order
@@ -254,6 +256,7 @@ This checklist is the project control document for finishing the Banza village w
 39. [DONE] Phase 50: Launch readiness checker.
 40. [DONE] Phase 51: Production MySQL smoke helper.
 41. [DONE] Phase 52: Launch decision log.
+42. [DONE] Phase 53: Client launch intake checklist.
 
 ## Definition Of Done For Production
 
