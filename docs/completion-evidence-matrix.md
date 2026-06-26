@@ -29,6 +29,12 @@ Use this matrix before marking the Banza website project complete. A checklist i
 
 ## Required Final Command Set
 
+For local/demo handoff evidence before production credentials exist:
+
+```bash
+php SITE/scripts/check-local-handoff.php
+```
+
 Run after client content, production config and hosting are in place:
 
 ```bash

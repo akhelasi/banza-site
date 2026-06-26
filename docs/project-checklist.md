@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 57.
+- `[DONE]` Latest completed phase before this checklist update: Phase 58.
 
 ## Public Site
 
@@ -264,6 +264,7 @@ This checklist is the project control document for finishing the Banza village w
 44. [DONE] Phase 55: Launch readiness storage gate.
 45. [DONE] Phase 56: Storage blocker status normalization.
 46. [DONE] Phase 57: Completion evidence matrix.
+47. [DONE] Phase 58: Local handoff evidence runner.
 
 ## Definition Of Done For Production
 
@@ -274,6 +275,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[TODO]` Real content, real links and real donation accounts are approved by the client.
 - `[DONE]` Launch content audit command documents remaining client/content blockers.
 - `[DONE]` Launch readiness checker reports admin coverage, content readiness and host/manual-QA waiting items.
+- `[DONE]` Local handoff evidence runner covers non-destructive local verification commands.
 - `[DONE]` Database and uploads have backup/restore instructions.
 - `[TODO]` Mobile and desktop manual QA is complete.
 - `[DONE]` Security review is complete after final storage/deployment decisions.

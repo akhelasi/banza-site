@@ -2269,3 +2269,38 @@ Verification:
 Next phase notes:
 
 - Use `docs/completion-evidence-matrix.md` before deciding the full project goal is complete.
+
+## Phase 58: Local Handoff Evidence Runner
+
+Added a local evidence runner that executes the non-destructive verification commands needed for demo/handoff confidence before production credentials or hosting exist.
+
+Changed:
+
+- `SITE/scripts/check-local-handoff.php`
+  - Runs PHP syntax checks for all `SITE` PHP files.
+  - Parses `SITE/storage/content.json`.
+  - Runs JavaScript syntax check unless `--skip-js` is passed.
+  - Runs import dry-run and launch readiness in default handoff mode.
+  - Skips `setup-production.php` checks by default in this sandbox; `--include-setup` runs migration dry-run and content audit, and `--include-routes` runs route smoke in a normal terminal or host preview.
+- `README.md`
+  - Adds the local handoff runner to verification commands.
+- `docs/completion-evidence-matrix.md`
+  - Adds the local/demo handoff evidence command.
+- `docs/project-checklist.md`
+  - Marks Phase 58 complete.
+
+Problems found and fixed:
+
+- The local verification command set existed across several docs, but there was no single command to run it for handoff evidence. The new runner consolidates those checks without opening a production database connection.
+- The first runner attempts included `setup-production.php` checks by default and this Codex sandbox removed `SITE/scripts/setup-production.php` after those subprocesses. I restored the file from `HEAD` and changed all setup-production based checks to opt-in modes.
+
+Verification:
+
+- `php -l SITE/scripts/check-local-handoff.php` passed.
+- `php SITE/scripts/check-local-handoff.php` passed.
+- `php SITE/scripts/check-local-handoff.php --help` passed.
+- Setup-production based checks remain available through `php SITE/scripts/check-local-handoff.php --include-setup --include-routes`, but should be run from a normal terminal or host preview in this environment.
+
+Next phase notes:
+
+- Production completion still requires client content, host config, MySQL smoke, strict readiness, zero content-audit blockers and manual browser QA.

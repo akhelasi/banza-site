@@ -207,6 +207,7 @@ Expected note on Windows: Git may warn that LF will be replaced by CRLF. That is
 Public render smoke, launch readiness and launch content audit:
 
 ```powershell
+php SITE\scripts\check-local-handoff.php
 php SITE\scripts\setup-production.php --check-routes
 php SITE\scripts\check-launch-readiness.php
 php SITE\scripts\setup-production.php --audit-content --allow-open
