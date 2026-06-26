@@ -2241,3 +2241,31 @@ Verification:
 Next phase notes:
 
 - Remaining blockers are client/hosting/manual-QA dependent rather than local code defects.
+
+## Phase 57: Completion Evidence Matrix
+
+Added a completion evidence matrix so the project cannot be marked complete without concrete proof for each remaining production Definition of Done item.
+
+Changed:
+
+- `docs/completion-evidence-matrix.md`
+  - Maps each production Definition of Done item to current status, required evidence, verification action and evidence location.
+  - Lists the final command set for production host/config/client-content validation.
+  - Defines the concrete conditions required before the project can be marked complete.
+- `docs/project-checklist.md`
+  - Marks Phase 57 complete.
+  - Tracks the completion evidence matrix under documentation/handoff.
+
+Problems found and fixed:
+
+- The remaining items were known, but the exact proof needed for completion was spread across several docs. The evidence matrix now gives a single completion audit path.
+- No app runtime code was changed.
+
+Verification:
+
+- Documentation-only change.
+- `git diff --check` passed with only Windows LF/CRLF warnings.
+
+Next phase notes:
+
+- Use `docs/completion-evidence-matrix.md` before deciding the full project goal is complete.

@@ -24,7 +24,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Worklog exists at `docs/project-worklog.md`.
 - `[DONE]` Original full build prompt exists at `docs/banza-site-prompts.md`.
 - `[DONE]` GitHub repo is public: `https://github.com/akhelasi/banza-site`.
-- `[DONE]` Latest completed phase before this checklist update: Phase 56.
+- `[DONE]` Latest completed phase before this checklist update: Phase 57.
 
 ## Public Site
 
@@ -213,6 +213,7 @@ This checklist is the project control document for finishing the Banza village w
 - `[DONE]` Document launch-scope decisions at `docs/launch-decisions.md`.
 - `[DONE]` Document client launch intake requirements at `docs/client-launch-intake.md`.
 - `[DONE]` Document residual launch blockers at `docs/residual-launch-blockers.md`.
+- `[DONE]` Document completion evidence matrix at `docs/completion-evidence-matrix.md`.
 - `[DONE]` Launch decision: keep README primarily Georgian with English commands, paths and config identifiers.
 
 ## Recommended Remaining Phase Order
@@ -262,6 +263,7 @@ This checklist is the project control document for finishing the Banza village w
 43. [DONE] Phase 54: Residual launch blockers report.
 44. [DONE] Phase 55: Launch readiness storage gate.
 45. [DONE] Phase 56: Storage blocker status normalization.
+46. [DONE] Phase 57: Completion evidence matrix.
 
 ## Definition Of Done For Production
 
